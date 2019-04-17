@@ -1,5 +1,21 @@
 export { createStore, combineReducers, bindActionCreators, ActionTypes as __DO_NOT_USE__ActionTypes };
 
+
+/**
+ * @typedef {Function} Listener
+ * @typedef {Function} Dispatch
+ * @typedef {Function} Reducer
+ * @typedef {(Object) => *} ActionCreator 
+ */
+
+/**
+ * @typedef {Object} Store - see below
+ * @property {()=>object} getState
+ * @property {(Listener)=> Listener} subscribe - A function to remove this change listener.
+ * @property {(ActionCreator)=> ActionCreator} dispatch
+ */
+
+
 /**
  * These are private action types reserved by Redux.
  * For any unknown actions, you must return the current state.
@@ -92,7 +108,7 @@ function createStore(reducer, preloadedState) {
     if (isDispatching) {
       throw new Error('You may not call store.getState() while the reducer is executing. ' + 'The reducer has already received the state as an argument. ' + 'Pass it down from the top reducer instead of reading it from the store.');
     }
-    
+
     return currentState;
   }
 
@@ -132,7 +148,7 @@ function createStore(reducer, preloadedState) {
     let isSubscribed = true;
     ensureCanMutateNextListeners();
     nextListeners.push(listener);
-    
+
     return function unsubscribe() {
       if (!isSubscribed) {
         return;
@@ -205,7 +221,7 @@ function createStore(reducer, preloadedState) {
     return action;
   }
 
-  
+
   /**
    * Replaces the reducer currently used by the store to calculate the state.
    *
@@ -329,10 +345,10 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
   }
 
-  let unexpectedKeys = Object.keys(inputState).filter(function (key) {
+  let unexpectedKeys = Object.keys(inputState).filter(function(key) {
     return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
   });
-  unexpectedKeys.forEach(function (key) {
+  unexpectedKeys.forEach(function(key) {
     unexpectedKeyCache[key] = true;
   });
   if (action && action.type === ActionTypes.REPLACE) return;
@@ -343,7 +359,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
 }
 
 function assertReducerShape(reducers) {
-  Object.keys(reducers).forEach(function (key) {
+  Object.keys(reducers).forEach(function(key) {
     let reducer = reducers[key];
     let initialState = reducer(undefined, {
       type: ActionTypes.INIT
@@ -354,8 +370,8 @@ function assertReducerShape(reducers) {
     }
 
     if (typeof reducer(undefined, {
-      type: ActionTypes.PROBE_UNKNOWN_ACTION()
-    }) === 'undefined') {
+        type: ActionTypes.PROBE_UNKNOWN_ACTION()
+      }) === 'undefined') {
       throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ("Don't try to handle " + ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined, but can be null.');
     }
   });
@@ -385,11 +401,11 @@ function combineReducers(reducers) {
   for (let i = 0; i < reducerKeys.length; i++) {
     let key = reducerKeys[i];
 
-    
+
     // if (process.env.NODE_ENV !== 'production') {
-      if (typeof reducers[key] === 'undefined') {
-        warning('No reducer provided for key "' + key + '"');
-      }
+    if (typeof reducers[key] === 'undefined') {
+      warning('No reducer provided for key "' + key + '"');
+    }
     // }
 
     if (typeof reducers[key] === 'function') {
@@ -452,7 +468,7 @@ function combineReducers(reducers) {
 }
 
 function bindActionCreator(actionCreator, dispatch) {
-  return function () {
+  return function() {
     return dispatch(actionCreator.apply(this, arguments));
   };
 }
@@ -525,17 +541,15 @@ function _objectSpread(target) {
     let ownKeys = Object.keys(source);
 
     if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
         return Object.getOwnPropertyDescriptor(source, sym).enumerable;
       }));
     }
 
-    ownKeys.forEach(function (key) {
+    ownKeys.forEach(function(key) {
       _defineProperty(target, key, source[key]);
     });
   }
 
   return target;
 }
-
-
