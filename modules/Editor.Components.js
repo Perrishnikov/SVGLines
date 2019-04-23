@@ -68,4 +68,55 @@ function Point(props) {
   `;
 }
 
-export { Point, Quadratic, Cubic };
+function Grid(props) {
+  console.log(props);
+  const { show, snap, size } = props.grid;
+  const { h, w } = props;
+
+  // let grid = [];
+  let grid = '';
+
+  for (let i = 1; i < (w / size); i++) {
+    grid +=
+      `<line
+          class="ad-Anchor-line"
+          x1="${i * size }"
+          y1="0"
+          x2="${i * size }"
+          y2="${ h }"/>
+        `;
+  }
+
+  for (let i = 1; i < (h / size); i++) {
+    grid +=
+      `<line
+        class="ad-Anchor-line"
+        x1="0"
+        y1="${i * size}"
+        x2="${w }"
+        y2="${i * size}"/>
+      `;
+    // grid.push(
+    //     <line
+    //         x1={ 0 }
+    //         y1={ i * size }
+    //         x2={ props.w }
+    //         y2={ i * size } />
+    // );
+  }
+  return `
+    <g class="ad-Grid ${!show ? ' is-hidden"' : '"'}>
+      ${grid}
+    </g>
+  `;
+  // return (
+  //     <g className={
+  //         "ad-Grid" +
+  //         ( ! show ? "  is-hidden" : "")
+  //     }>
+  //         { grid }
+  //     </g>
+  // );
+}
+
+export { Point, Quadratic, Cubic, Grid };

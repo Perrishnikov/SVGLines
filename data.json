@@ -19,6 +19,7 @@
   "h": 600,
   "grid": {
     "snap": true,
-    "size": 50
+    "size": 50,
+    "show": true
   }
 }

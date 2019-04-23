@@ -1,10 +1,10 @@
 //@ts-check
 // import store from './store/index.js'; //use store INSTANCE to get State
-import Controls from './Editor.Controls.js';
-import { Point, Quadratic, Cubic } from './Editor.Components.js';
+import { Controls } from './Editor.Controls.js';
+import { Point, Quadratic, Cubic, Grid } from './Editor.Components.js';
 /**
  * @typedef {object} Editor.state
- * @typedef {HTMLBaseElement} Editor.id
+ * @typedef {HTMLBaseElement} id
  * @typedef {function} Editor.setState
  */
 export default class Editor {
@@ -15,22 +15,8 @@ export default class Editor {
     let { state, id } = props;
 
     this.state = state;
+    /**@type {HTMLDivElement} */
     this.id = id;
-
-    // this.setState = this.setState.bind(this); //change this to Editor if state moves outside
-    // this.handleKeyDown = this.handleKeyDown.bind(this);
-    // this.handleKeyUp = this.handleKeyUp.bind(this);
-    // this.cancelDragging = this.cancelDragging.bind(this);
-    // this.generatePath = this.generatePath.bind(this);
-    this.addPoint = this.addPoint.bind(this);
-    this.setDraggedCubic = this.setDraggedCubic.bind(this);
-    this.setDraggedPoint = this.setDraggedPoint.bind(this);
-    this.setDraggedQuadratic = this.setDraggedQuadratic.bind(this);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.setPointCoords = this.setPointCoords.bind(this);
-    this.setCubicCoords = this.setCubicCoords.bind(this);
-    this.setQuadraticCoords = this.setQuadraticCoords.bind(this);
-    this.getMouseCoords = this.getMouseCoords.bind(this);
 
     /** controls */
     // this.reset = this.reset.bind(this);
@@ -47,10 +33,10 @@ export default class Editor {
     document.addEventListener('keyup', this.handleKeyUp, false);
     document.addEventListener('mouseup', this.cancelDragging, false);
 
-    document.addEventListener('mousedown', e => {
+    document.addEventListener('mousedown', (e) => {
       //Quadrratic
       // console.log(`mousedown`);
-      // console.dir(e.target);
+      /**@type {String[]} */
       const classList = [...e.target.classList];
       // console.log(classList);
 
@@ -71,8 +57,8 @@ export default class Editor {
       }
 
       //e.target.dataset.index
-      // handleMouseMove(e);
-      // addPoint(e);
+      this.handleMouseMove(e);
+      // this.addPoint(e);
     });
 
     document.addEventListener('click', e => {
@@ -109,7 +95,7 @@ export default class Editor {
   setState = (obj) => {
     // console.log(`this.setState`);
 
-    this.state = Object.assign(this.state, obj);
+    this.state = Object.assign({}, this.state, obj);
     // console.log(this.state);
     this.Render();
   }
@@ -167,6 +153,7 @@ export default class Editor {
     return Object.assign({}, src);
   }
 
+  /**@param {number} index */
   setDraggedPoint = (index) => {
     console.log(`draggedPoint`);
 
@@ -180,8 +167,9 @@ export default class Editor {
 
   /**
    * Sets the active point to this
+   * @param {number} index 
    */
-  setDraggedQuadratic = (index) =>{
+  setDraggedQuadratic = (index) => {
     console.log(`setDraggedQuadratic`);
     if (!this.state.ctrl) {
       this.setState({
@@ -194,7 +182,7 @@ export default class Editor {
   /**
    * Sets the active point to this, and draggedCubic to the anchor
    */
-  setDraggedCubic = (index, anchor) =>{
+  setDraggedCubic = (index, anchor) => {
     if (!this.state.ctrl) {
       this.setState({
         activePoint: index,
@@ -203,7 +191,7 @@ export default class Editor {
     }
   }
 
-  setPointCoords = (coords) =>{
+  setPointCoords = (coords) => {
     const cstate = this.bestCopyEver(this.state);
 
     const points = cstate.points;
@@ -215,7 +203,7 @@ export default class Editor {
     this.setState({ points });
   }
 
-  setCubicCoords = (coords, anchor) =>{
+  setCubicCoords = (coords, anchor) => {
     const cstate = this.bestCopyEver(this.state);
 
     const points = cstate.points;
@@ -227,7 +215,7 @@ export default class Editor {
     this.setState({ points });
   }
 
-  setQuadraticCoords = (coords) =>{
+  setQuadraticCoords = (coords) => {
     const cstate = this.bestCopyEver(this.state);
 
     const points = cstate.points;
@@ -239,9 +227,11 @@ export default class Editor {
     this.setState({ points });
   }
 
-  getMouseCoords = (e) =>{
+  /**@param {MouseEvent} e */
+  getMouseCoords = (e) => {
     // const rect = ReactDOM.findDOMNode(this.refs.svg).getBoundingClientRect()
     const rect = this.id.getBoundingClientRect();
+    console.log(rect);
     // console.log(`e.pageX ${e.pageX}, rect.left ${rect.left}`);
     let x = Math.round(e.pageX - rect.left);
     let y = Math.round(e.pageY - rect.top);
@@ -255,7 +245,7 @@ export default class Editor {
   }
 
 
-  handleMouseMove = (e) =>{
+  handleMouseMove = (e) => {
     console.log(`mousemove`);
     if (!this.state.ctrl) {
       if (this.state.draggedPoint) {
@@ -268,8 +258,43 @@ export default class Editor {
     }
   }
 
-  Render = (props) => {
-    console.log(`renderSVG()`);
+
+  positiveNumber(n) {
+    n = parseInt(n);
+    if (isNaN(n) || n < 0) n = 0;
+
+    return n;
+  }
+  setGridSize = (e) => {
+    let grid = this.state.grid;
+    let v = this.positiveNumber(e.target.value);
+    let min = 1;
+    let max = Math.min(this.state.w, this.state.h);
+
+    if (v < min) v = min;
+    if (v >= max) v = max / 2;
+
+    grid.size = v;
+
+    this.setState({ grid });
+  };
+
+  setGridSnap = (e) => {
+    let grid = this.state.grid;
+    grid.snap = e.target.checked;
+
+    this.setState({ grid });
+  };
+
+  setGridShow = (e) => {
+    let grid = this.state.grid;
+    grid.show = e.target.checked;
+
+    this.setState({ grid });
+  };
+
+  Render = () => {
+    // console.log(`renderSVG()`);
     //console.log(this.bestCopyEver(this.state));
 
     Editor.SVGRender({
@@ -287,16 +312,19 @@ export default class Editor {
 
 /** 
  * @param {object} props
- * @param {number} props.id
+ * @param {HTMLElement} props.id
  * @param {string} props.path
  * @param {function} props.addPoint
- * param {setDraggedCubic} props.setDraggedCubic
- * param {setDraggedQuadratic} props.setDraggedQuadratic
+ * @param {function} props.setDraggedPoint
+ * @param {function} props.setDraggedCubic
+ * @param {function} props.setDraggedQuadratic
+ * @param {object} props.state
+ * @param {function} props.handleMouseMove
  */
 Editor.SVGRender = (props) => {
   const { id, path, addPoint, handleMouseMove, setDraggedPoint, setDraggedQuadratic, setDraggedCubic } = props;
 
-  const { w, h, grid, points, activePoint } = props.state;
+  const { w, h, points, activePoint } = props.state;
 
   const circles = points.map((p, i, a) => {
     let anchors = [];
@@ -311,7 +339,7 @@ Editor.SVGRender = (props) => {
           p2y: p.y,
           x: p.q.x,
           y: p.q.y,
-          // setDraggedQuadratic: setDraggedQuadratic
+          // setDraggedQuadratic: setDraggedQuadratic //needs to be caslled higher up
         })
       );
     } else if (p.c) {
@@ -326,7 +354,7 @@ Editor.SVGRender = (props) => {
           y1: p.c[0].y,
           x2: p.c[1].x,
           y2: p.c[1].y,
-          // setDraggedCubic: setDraggedCubic
+          // setDraggedCubic: setDraggedCubic //needs to be caslled higher up
         })
       );
     }
@@ -341,33 +369,35 @@ Editor.SVGRender = (props) => {
             x:p.x,
             y:p.y,
             rad: 16,
-            // setDraggedPoint:setDraggedPoint
+            // setDraggedPoint:setDraggedPoint //needs to be caslled higher up
           })}
           ${anchors}
       </g>`
     );
   }).join('');
 
+  const grid = Grid(props.state);
+
+  const controls = Controls(props.state);
 
   id.innerHTML =
-    `<svg class="ad-SVG" width="${w}" height="${h}">
-      <path class="ad-Path" d="${path}"></path>
-      <g class="ad-Points">
-        ${circles}
-      </g>
-    </svg>`;
-
-  // id.addEventListener('click', e => {
-  //   addPoint(e);
-  // });
-
-
-  // id.addEventListener('mousedown', e => {
-  //   //Quadrratic
-  //   // console.log(`mousedown`);
-  //   // console.dir(e.target);
-  //   const classList = [...e.target.classList];
-  //   // console.log(classList);
+    `<div class="ad-Container">
+      <div class="ad-Container-main">
+        <div class="ad-Container-svg">
+          <svg class="ad-SVG" width="${w}" height="${h}">
+            <path class="ad-Path" d="${path}"></path>
+            <g class="ad-Points">
+            ${circles}
+            </g>
+            ${grid}
+          </svg>
+            ${controls}
+        </div>
+      </div>
+      <div class="ad-Container-controls">
+        <div id="controls" class=""></div>
+      </div>
+    </div>`;
 
 
   //   if (classList.includes('ad-Anchor-point')) {
@@ -384,15 +414,6 @@ Editor.SVGRender = (props) => {
   //       setDraggedPoint(index);
   //     }
   //   }
-
-  //   //e.target.dataset.index
-  //   // handleMouseMove(e);
-  //   // addPoint(e);
-  // });
-
-  // id.addEventListener('click', e => {
-  //   addPoint(e);
-  // });
 
 };
 
