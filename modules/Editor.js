@@ -391,11 +391,11 @@ Editor.SVGRender = (props) => {
             </g>
             ${grid}
           </svg>
-            ${controls}
         </div>
       </div>
       <div class="ad-Container-controls">
         <div id="controls" class=""></div>
+        ${controls}
       </div>
     </div>`;
 

@@ -154,6 +154,7 @@ body {
     overflow: auto;
     flex: 1;
     padding: 2rem;
+    color: #fff; /*TODO:*/
 }
 .ad-Controls :first-child {
     margin-top: 0;
