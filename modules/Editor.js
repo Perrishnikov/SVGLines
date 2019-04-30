@@ -53,10 +53,13 @@ export default class Editor {
       else if (classList.includes('ad-Point')) {
         this.setDraggedPoint(index);
       }
+      
+      else{
+        this.addPoint(e);
+      }
 
-      //TODO:
-      // this.handleMouseMove(e);
-      // this.addPoint(e);
+      
+
     });
 
     document.addEventListener('mousemove', e => {
@@ -64,6 +67,7 @@ export default class Editor {
     });
 
     document.addEventListener('click', e => {
+      console.log('click');
       this.addPoint(e);
     });
 
@@ -135,13 +139,12 @@ export default class Editor {
   addPoint = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('click');
+    console.log('addPoint');
 
     if (this.state.ctrl) {
-      console.log(`addPoint ok`);
       const coords = this.getMouseCoords(e);
       const { points } = this.bestCopyEver(this.state);
-      console.log(points);
+      // console.log(points);
       points.push(coords);
 
       this.setState({
@@ -329,7 +332,7 @@ export default class Editor {
  * @param {function} props.handleMouseMove
  */
 Editor.SVGRender = (props) => {
-  const { id, path, addPoint, handleMouseMove, setDraggedPoint, setDraggedQuadratic, setDraggedCubic } = props;
+  const { id, path, addPoint, handleMouseMove } = props;
 
   const { w, h, points, activePoint } = props.state;
 
