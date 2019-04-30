@@ -34,31 +34,33 @@ export default class Editor {
     document.addEventListener('mouseup', this.cancelDragging, false);
 
     document.addEventListener('mousedown', (e) => {
-      //Quadrratic
-      // console.log(`mousedown`);
       /**@type {String[]} */
       const classList = [...e.target.classList];
-      // console.log(classList);
-
+      const index = e.target.dataset.index;
 
       if (classList.includes('ad-Anchor-point')) {
         //if the target has an anchor, it is Cubic
         const anchor = e.target.dataset.anchor ? e.target.dataset.anchor : null;
-        const index = e.target.dataset.index;
 
-        //if this is a Cubic Point, get the 'data-anchor attribute
         if (anchor) {
           /** for Cubic - props = index, anchor */
           this.setDraggedCubic(index, anchor);
         } else {
           /** for Quadratic - props = index */
-          this.setDraggedPoint(index);
+          this.setDraggedQuadratic(index);
         }
+      } /** This is a regular Point */
+      else if (classList.includes('ad-Point')) {
+        this.setDraggedPoint(index);
       }
 
-      //e.target.dataset.index
-      this.handleMouseMove(e);
+      //TODO:
+      // this.handleMouseMove(e);
       // this.addPoint(e);
+    });
+
+    document.addEventListener('mousemove', e => {
+      this.handleMouseMove(e)
     });
 
     document.addEventListener('click', e => {
@@ -125,7 +127,7 @@ export default class Editor {
       d += `${ p.x } ${ p.y } `;
     });
 
-    if (closePath) d += 'Z';
+    // if (closePath) d += 'Z';
 
     return d;
   }
@@ -134,6 +136,7 @@ export default class Editor {
     e.preventDefault();
     e.stopPropagation();
     console.log('click');
+
     if (this.state.ctrl) {
       console.log(`addPoint ok`);
       const coords = this.getMouseCoords(e);
@@ -183,6 +186,7 @@ export default class Editor {
    * Sets the active point to this, and draggedCubic to the anchor
    */
   setDraggedCubic = (index, anchor) => {
+    console.log(`setDraggedCubic`);
     if (!this.state.ctrl) {
       this.setState({
         activePoint: index,
@@ -231,7 +235,7 @@ export default class Editor {
   getMouseCoords = (e) => {
     // const rect = ReactDOM.findDOMNode(this.refs.svg).getBoundingClientRect()
     const rect = this.id.getBoundingClientRect();
-    console.log(rect);
+    // console.log(rect);
     // console.log(`e.pageX ${e.pageX}, rect.left ${rect.left}`);
     let x = Math.round(e.pageX - rect.left);
     let y = Math.round(e.pageY - rect.top);
@@ -246,13 +250,16 @@ export default class Editor {
 
 
   handleMouseMove = (e) => {
-    console.log(`mousemove`);
+    // console.log(`mousemove`);
     if (!this.state.ctrl) {
       if (this.state.draggedPoint) {
+
         this.setPointCoords(this.getMouseCoords(e));
       } else if (this.state.draggedQuadratic) {
+
         this.setQuadraticCoords(this.getMouseCoords(e));
       } else if (this.state.draggedCubic !== false) {
+
         this.setCubicCoords(this.getMouseCoords(e), this.state.draggedCubic);
       }
     }
@@ -310,6 +317,7 @@ export default class Editor {
   }
 }
 
+
 /** 
  * @param {object} props
  * @param {HTMLElement} props.id
@@ -326,6 +334,7 @@ Editor.SVGRender = (props) => {
 
   const { w, h, points, activePoint } = props.state;
 
+  // console.log(`ap: ${activePoint}, index:`);
   const circles = points.map((p, i, a) => {
     let anchors = [];
 
@@ -339,7 +348,7 @@ Editor.SVGRender = (props) => {
           p2y: p.y,
           x: p.q.x,
           y: p.q.y,
-          // setDraggedQuadratic: setDraggedQuadratic //needs to be caslled higher up
+          //setDraggedQuadratic: setDraggedQuadratic //needs to be caslled higher up
         })
       );
     } else if (p.c) {
@@ -360,7 +369,7 @@ Editor.SVGRender = (props) => {
     }
 
     const isFirst = i === 0 ? ' ad-PointGroup--first' : '';
-    const ap = activePoint === i ? ' is-active' : '';
+    const ap = activePoint === i.toString() ? ' is-active' : '';
 
     return (
       `<g class="ad-PointGroup${isFirst}${ap}">

@@ -177,16 +177,18 @@ function reset(e) {
 function Controls(props) {
   const active = props.points[props.activePoint];
   const step = props.grid.snap ? props.grid.size : 1;
-  console.log(props);
+  // console.log(props);
 
   let params = [];
 
   if (active.q) {
-    console.log(`Hello World!`);
+    // console.log(`Hello World!`);
   } else if (active.c) {
-    console.log(`Hello World!`);
+    // console.log(`Hello World!`);
   } else if (active.a) {
-    console.log(`Hello World!`);
+    // console.log(`Hello World!`);
+
+
     // params.push(
     //     <div className="ad-Controls-container">
     //         <Control

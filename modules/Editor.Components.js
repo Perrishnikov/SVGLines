@@ -61,15 +61,15 @@ function Cubic(props) {
 
 /** Event needed  */
 function Point(props) {
-  const { x, y, rad = 4 } = props;
+  const { index, x, y, rad = 4 } = props;
   //onMouseDown = { (e) => props.setDraggedPoint(props.index) }
   return `
-    <circle class="ad-Point"  cx="${x}" cy="${y}" r="${rad}"/>
+    <circle class="ad-Point" data-index="${index}" cx="${x}" cy="${y}" r="${rad}"/>
   `;
 }
 
 function Grid(props) {
-  console.log(props);
+  // console.log(props);
   const { show, snap, size } = props.grid;
   const { h, w } = props;
 
