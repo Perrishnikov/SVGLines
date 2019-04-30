@@ -158,8 +158,7 @@ export default class Editor {
 
   /**@param {number} index */
   setDraggedPoint = (index) => {
-    console.log(`draggedPoint`);
-
+    // console.log(`draggedPoint`);
     if (!this.state.ctrl) {
       this.setState({
         activePoint: index,
@@ -173,7 +172,7 @@ export default class Editor {
    * @param {number} index 
    */
   setDraggedQuadratic = (index) => {
-    console.log(`setDraggedQuadratic`);
+    // console.log(`setDraggedQuadratic`);
     if (!this.state.ctrl) {
       this.setState({
         activePoint: index,
@@ -186,7 +185,7 @@ export default class Editor {
    * Sets the active point to this, and draggedCubic to the anchor
    */
   setDraggedCubic = (index, anchor) => {
-    console.log(`setDraggedCubic`);
+    // console.log(`setDraggedCubic`);
     if (!this.state.ctrl) {
       this.setState({
         activePoint: index,
@@ -369,7 +368,7 @@ Editor.SVGRender = (props) => {
     }
 
     const isFirst = i === 0 ? ' ad-PointGroup--first' : '';
-    const ap = activePoint === i.toString() ? ' is-active' : '';
+    const ap = activePoint.toString() === i.toString() ? ' is-active' : '';
 
     return (
       `<g class="ad-PointGroup${isFirst}${ap}">
