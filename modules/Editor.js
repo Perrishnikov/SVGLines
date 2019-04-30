@@ -52,25 +52,15 @@ export default class Editor {
       } /** This is a regular Point */
       else if (classList.includes('ad-Point')) {
         this.setDraggedPoint(index);
-      }
-      
-      else{
+      } else {
+        /** Add the AddPoint Event */
         this.addPoint(e);
       }
-
-      
-
     });
 
     document.addEventListener('mousemove', e => {
       this.handleMouseMove(e)
     });
-
-    document.addEventListener('click', e => {
-      console.log('click');
-      this.addPoint(e);
-    });
-
   }
 
   // EVENTS CALLED BY LISTENERS
@@ -92,9 +82,13 @@ export default class Editor {
   }
 
 
+  /** Deep Copies this.state */
+  bestCopyEver = (src) => {
+    return Object.assign({}, src);
+  }
+
   /** 
    * setState for this Editor
-   *
    * @param {object} obj
    * @returns void
    */
@@ -131,7 +125,7 @@ export default class Editor {
       d += `${ p.x } ${ p.y } `;
     });
 
-    // if (closePath) d += 'Z';
+    if (closePath) d += 'Z';
 
     return d;
   }
@@ -154,10 +148,6 @@ export default class Editor {
     }
   }
 
-  /** Deep Copies this.state */
-  bestCopyEver = (src) => {
-    return Object.assign({}, src);
-  }
 
   /**@param {number} index */
   setDraggedPoint = (index) => {
@@ -233,6 +223,7 @@ export default class Editor {
     this.setState({ points });
   }
 
+
   /**@param {MouseEvent} e */
   getMouseCoords = (e) => {
     // const rect = ReactDOM.findDOMNode(this.refs.svg).getBoundingClientRect()
@@ -303,18 +294,12 @@ export default class Editor {
   };
 
   Render = () => {
-    // console.log(`renderSVG()`);
-    //console.log(this.bestCopyEver(this.state));
 
     Editor.SVGRender({
       state: this.bestCopyEver(this.state), // Cloned
       id: this.id,
       path: this.generatePath(),
       addPoint: this.addPoint,
-      setDraggedPoint: this.setDraggedPoint,
-      setDraggedQuadratic: this.setDraggedQuadratic,
-      setDraggedCubic: this.setDraggedCubic,
-      handleMouseMove: this.handleMouseMove
     });
   }
 }
@@ -325,14 +310,10 @@ export default class Editor {
  * @param {HTMLElement} props.id
  * @param {string} props.path
  * @param {function} props.addPoint
- * @param {function} props.setDraggedPoint
- * @param {function} props.setDraggedCubic
- * @param {function} props.setDraggedQuadratic
  * @param {object} props.state
- * @param {function} props.handleMouseMove
  */
 Editor.SVGRender = (props) => {
-  const { id, path, addPoint, handleMouseMove } = props;
+  const { id, path, addPoint } = props;
 
   const { w, h, points, activePoint } = props.state;
 
