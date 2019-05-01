@@ -1,4 +1,9 @@
-/* @use postcss-cssnext; */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: black;
+    color: white;
+  }
+}
 
 :root {
     --ad-Color-prim: #111;

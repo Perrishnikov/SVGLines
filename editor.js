@@ -15,7 +15,7 @@ window.onload = function() {
         // controlId: document.querySelector('.ad-Container-controls')  
       });
 
-      e.Render();
+      e.render();
       // console.log(store.dispatch(changeName('ee')));
     });
 };
