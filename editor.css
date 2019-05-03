@@ -57,14 +57,14 @@ body {
     flex-direction: column;
     height: 100%;
     width: 20rem;
-    background: var(--ad-Color-prim);
+    /* background: var(--ad-Color-prim); */
 }
 .ad-Container-controls ::-webkit-scrollbar {
     width: 6px;
 }
 .ad-Container-controls ::-webkit-scrollbar-thumb {
     border-radius: 30px;
-    background: rgba(255, 255, 255, .3);
+    /* background: rgba(255, 255, 255, .3); */
 }
 
 .ad-Foot {
@@ -159,7 +159,7 @@ body {
     overflow: auto;
     flex: 1;
     padding: 2rem;
-    color: #fff; /*TODO:*/
+    /* color: #fff; TODO: */
 }
 .ad-Controls :first-child {
     margin-top: 0;
@@ -186,13 +186,13 @@ body {
     text-transform: uppercase;
     font-size: .6rem;
     font-weight: bold;
-    color: color(var(--ad-Color-prim) l(+75%));
+    /* color: color(var(--ad-Color-prim) l(+75%)); */
 }
 
 .ad-Result {
     height: 5rem;
     padding: 1.4rem 1.6rem;
-    background: var(--ad-Color-prim);
+    /* background: var(--ad-Color-prim); */
     box-shadow: 0 -5px 10px rgba(0, 0, 0, .4);
 }
 .ad-Result-textarea {
@@ -206,7 +206,7 @@ body {
     font-size: .7rem;
     font-weight: bold;
     line-height: 1.8;
-    color: #fff;
+    /* color: #fff; */
 }
 .ad-Result-textarea:focus {
     outline: 0;
@@ -215,7 +215,7 @@ body {
 /* control elements */
 .ad-Button {
     padding: .8rem 1.4rem;
-    background: var(--ad-Color-sec);
+    /* background: var(--ad-Color-sec); */
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -230,7 +230,7 @@ body {
 .ad-Button:focus,
 .ad-Button:hover {
     outline: 0;
-    background: color(var(--ad-Color-sec) l(+5%));
+    /* background: color(var(--ad-Color-sec) l(+5%)); */
 }
 .ad-Button--delete {
     background: var(--ad-Color-del);
@@ -240,23 +240,23 @@ body {
     background: color(var(--ad-Color-del) l(+5%));
 }
 .ad-Button--reset {
-    background: color(var(--ad-Color-prim) l(+10%));
+    /* background: color(var(--ad-Color-prim) l(+10%)); */
 }
 .ad-Button--reset:focus,
 .ad-Button--reset:hover {
-    background: color(var(--ad-Color-prim) l(+15%));
+    /* background: color(var(--ad-Color-prim) l(+15%)); */
 }
 
 .ad-Text {
     height: 18px;
     width: 2rem;
-    background: color(var(--ad-Color-prim) l(+10%));
+    /* background: color(var(--ad-Color-prim) l(+10%)); */
     border: none;
     border-radius: 4px;
-    text-align: center;
+    /* text-align: center; */
     font-family: "Open Sans", sans-serif;
     font-size: .6rem;
-    color: #fff;
+    /* color: #fff; */
 }
 .ad-Text:focus {
     outline: 0;

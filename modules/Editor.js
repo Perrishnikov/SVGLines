@@ -1,6 +1,6 @@
 //@ts-check
 // import store from './store/index.js'; //use store INSTANCE to get State
-import { Controls } from './Editor.Controls.js';
+import Controls from './Editor.Controls.js';
 import { Point, Quadratic, Cubic, Grid } from './Editor.Components.js';
 /**
  * @typedef {object} Editor.state
@@ -21,22 +21,18 @@ export default class Editor {
     /**@type {HTMLDivElement} */
     this.id = id;
 
-    /** controls */
-    // this.reset = this.reset.bind(this);
-    // this.removeActivePoint = this.removeActivePoint.bind(this);
-    // this.setPointPosition = this.setPointPosition.bind(this);
-    // this.setQuadraticPosition = this.setQuadraticPosition.bind(this);
-    // this.setCubicPosition = this.setCubicPosition.bind(this);
-    // this.setArcParam = this.setArcParam.bind(this);
-    // this.setPointType = this.setPointType.bind(this);
-    // this.setWidth = this.setWidth.bind(this);
-    // this.setHeight = this.setHeight.bind(this);
+    /**Controls - auto adds listeners */
+    this.controls = new Controls(this);
 
-    document.addEventListener('keydown', this.handleKeyDown, false);
-    document.addEventListener('keyup', this.handleKeyUp, false);
-    document.addEventListener('mouseup', this.cancelDragging, false);
+    const main = document.querySelector('.ad-Container-main');
 
-    document.addEventListener('mousedown', (e) => {
+    main.addEventListener('keydown', this.handleKeyDown, false);
+    main.addEventListener('keyup', this.handleKeyUp, false);
+    main.addEventListener('mouseup', this.cancelDragging, false);
+
+    main.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       /**@type {String[]} */
       const classList = [...e.target.classList];
       const index = e.target.dataset.index;
@@ -61,27 +57,32 @@ export default class Editor {
       }
     });
 
-    document.addEventListener('mousemove', e => {
+    main.addEventListener('mousemove', e => {
       this.handleMouseMove(e);
     });
+
   }
 
   // EVENTS CALLED BY LISTENERS
   /**
-   *
    * @memberof Editor
-   * @param {KeyboardEventInit} e
+   * @param {e} e
    */
   handleKeyDown = (e) => {
-    if (e.key === 'Alt') {this.setState({ ctrl: true });}
-    // console.log(state);
+    if (e.key === 'Alt') {
+      this.setState({ ctrl: true });
+    }
   }
 
+
   handleKeyUp = () => {
-    this.setState({ ctrl: false });
+    if (this.state.ctrl == 'true') {
+      this.setState({ ctrl: false });
+    }
   }
 
   cancelDragging = () => {
+
     this.setState({
       draggedPoint: false,
       draggedQuadratic: false,
@@ -106,6 +107,7 @@ export default class Editor {
     this.state = Object.assign({}, this.state, obj);
     // console.log(this.state);
     this.render();
+    this.controls.render();
   }
 
 
@@ -151,8 +153,6 @@ export default class Editor {
    * 
    */
   addPoint = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
     console.log('addPoint');
 
     if (this.state.ctrl) {
@@ -296,6 +296,8 @@ export default class Editor {
    * @param {e} e 
    */
   handleMouseMove = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     // console.log(`mousemove`);
     if (!this.state.ctrl) {
       if (this.state.draggedPoint) {
@@ -389,6 +391,7 @@ export default class Editor {
       state: this.bestCopyEver(this.state), // Cloned
       id: this.id,
       path: this.generatePath(),
+      controls: this.controls
     });
   }
 }
@@ -399,9 +402,10 @@ export default class Editor {
  * @param {HTMLElement} props.id
  * @param {string} props.path
  * @param {object} props.state
+ * @param {Controls} props.controls
  */
 Editor.SVGRender = (props) => {
-  const { id, path } = props;
+  const { id, path, controls } = props;
   const { w, h, points, activePoint } = props.state;
 
   // console.log(`ap: ${activePoint}, index:`);
@@ -457,7 +461,7 @@ Editor.SVGRender = (props) => {
 
   const grid = Grid(props.state);
 
-  const controls = Controls(props.state);
+  // const controls = (props.state);
 
   id.innerHTML =
     `<div class="ad-Container">
@@ -476,7 +480,7 @@ Editor.SVGRender = (props) => {
       </div>
       <div class="ad-Container-controls">
         <div id="controls" class=""></div>
-        ${controls}
+        ${controls.render()}
       </div>
     </div>`;
 

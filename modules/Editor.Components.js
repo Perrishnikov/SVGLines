@@ -105,7 +105,7 @@ function Grid(props) {
     // );
   }
   return `
-    <g class="ad-Grid ${!show ? ' is-hidden"' : '"'}>
+    <g class="ad-Grid ${!show ? ' is-hidden"' : ''}">
       ${grid}
     </g>
   `;
@@ -119,4 +119,138 @@ function Grid(props) {
   // );
 }
 
-export { Point, Quadratic, Cubic, Grid };
+
+// Controls stuf
+function Control(props) {
+  const { name, type, ...rest } = props;
+
+  let control = '';
+  let label = '';
+
+  switch (type) {
+    // case 'range': control = <Range { ..._props } />;
+    case 'range':
+      control = Range(rest);
+      break;
+    case 'text':
+      control = Text( rest);
+      break;
+    case 'checkbox':
+      control = Checkbox(rest);
+      break;
+    case 'button':
+      control = Button(rest);
+      break;
+    case 'choices':
+      control = Choices(rest);
+      break;
+  }
+
+  if (name) {
+    label = `<label "class="ad-Control-label">${ name }</label>`;
+  }
+
+  return `
+    <div class="ad-Control">
+      ${ label }
+      ${ control } 
+    </div>`;
+}
+
+function Crap(name, props) {
+  let input = document.createElement('input');
+  input.setAttribute('type', 'text');
+  input.setAttribute('class', 'ad-Text');
+  input.setAttribute('value', props.value)
+return input;
+  // return `<div class="ad-Text">${props.value}</div>`;
+
+}
+
+function Text( props) {
+  // console.log(`"${props.value}"`);
+  // let t = document.createElement('input');
+  // return t.innerHTML = `
+  return `
+    <div
+      class="ad-Text"
+      contenteditable="true">
+      ${props.value}</div>`;
+}
+
+function Choices(props) {
+  let choices = props.choices.map((c, i) => {
+    return `
+        <label class="ad-Choice">
+          <input
+            class="ad-Choice-input"
+            type="radio"
+            value=${ c.value }
+            checked=${ c.checked }
+            name=${ props.id }
+            />
+          <div className="ad-Choice-fake">
+            ${ c.name }
+          </div>
+        </label>
+      `;
+  }).join('');
+
+  return `
+    <div class="ad-Choices">
+      ${ choices }
+    </div>
+  `;
+}
+
+function Button(props) {
+  //TODO: onCLick needs to change
+  return `
+    <button
+      class="ad-Button${(props.action ? ' ad-Button--' + props.action : '')}"
+      type="button"
+      >
+      ${ props.value }
+    </button>
+  `;
+}
+
+function Checkbox(props) {
+  // onChange=" props.onChange "
+  // ${props.checked ? 'checked': ''} />
+  return `
+  <label class="ad-Checkbox"></label>
+  <input
+    class="ad-Checkbox-input"
+    type="checkbox"
+    ${props.checked ? 'checked': ''} 
+    />
+    
+    <div class="ad-Checkbox-fake"></div>
+  
+`;
+}
+
+function Range(props) {
+  // onChange={ props.onChange } />
+  return `
+  <div class="ad-Range">
+    <input
+      class="ad-Range-input"
+      type="range"
+      min=${ props.min }
+      max=${ props.max }
+      step=${ props.step }
+      value=${ props.value }
+      />
+    <input
+      class="ad-Range-text ad-Text"
+      type="text"
+      value=${ props.value }
+      />
+  </div>
+  `;
+}
+
+
+export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices };
