@@ -13,7 +13,14 @@ export default class Main {
     this.bestCopyEver = editor.bestCopyEver;
     this.getMouseCoords = editor.getMouseCoords;
 
-    target.addEventListener('mouseup', this.cancelDragging, false);
+    target.addEventListener('mouseup', (e) => {
+      let state = this.getState();
+
+      if (state.draggedPoint || state.draggedQuadratic || state.draggedCubic) {
+        this.cancelDragging()
+      }
+    }, false);
+
     target.addEventListener('mousemove', this.handleMouseMove, false);
 
     target.addEventListener('mousedown', (e) => {
@@ -126,24 +133,24 @@ export default class Main {
     // console.log('addPoint ' + this.getState().ctrl);
 
     // if (this.state().ctrl === true) {
-      const coords = this.getMouseCoords(e);
-      const { points } = this.getState();
-      // console.log(points);
-      points.push(coords);
+    const coords = this.getMouseCoords(e);
+    const { points } = this.getState();
+    // console.log(points);
+    points.push(coords);
 
-      this.setState({
-        points,
-        activePoint: points.length - 1
-      });
+    this.setState({
+      points,
+      activePoint: points.length - 1
+    });
     // }
   }
 
   render = (props) => {
     console.log(`from Main render()`);
-    console.log(props);
+    // console.log(props);
     const { path } = props;
     const { w, h, points, activePoint } = props.state;
-    
+
     // console.log(`ap: ${activePoint}, index:`);
     const circles = points.map((p, i, a) => {
       let anchors = [];

@@ -83,7 +83,7 @@ function Grid(props) {
           x1="${i * size }"
           y1="0"
           x2="${i * size }"
-          y2="${ h }"/>
+          y2="${h}"/>
         `;
   }
 
@@ -93,7 +93,7 @@ function Grid(props) {
         class="ad-Anchor-line"
         x1="0"
         y1="${i * size}"
-        x2="${w }"
+        x2="${w}"
         y2="${i * size}"/>
       `;
     // grid.push(
@@ -133,7 +133,7 @@ function Control(props) {
       control = Range(rest);
       break;
     case 'text':
-      control = Text( rest);
+      control = Text(rest);
       break;
     case 'checkbox':
       control = Checkbox(rest);
@@ -162,12 +162,12 @@ function Crap(name, props) {
   input.setAttribute('type', 'text');
   input.setAttribute('class', 'ad-Text');
   input.setAttribute('value', props.value)
-return input;
+  return input;
   // return `<div class="ad-Text">${props.value}</div>`;
 
 }
 
-function Text( props) {
+function Text(props) {
   // console.log(`"${props.value}"`);
   // let t = document.createElement('input');
   // return t.innerHTML = `
