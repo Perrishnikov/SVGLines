@@ -1,19 +1,21 @@
 //@ts-check
 import { Control } from './Editor.Components.js';
 export default class Controls {
-  constructor(editor) {
-    // this.editor = editor;
-    this.bestCopyEver = editor.bestCopyEver;
-    this.positiveNumber = editor.positiveNumber;
+  constructor(editor, target) {
+    this.id = target;
     this.setState = editor.setState;
     this.state = editor.state;
+
+    this.bestCopyEver = editor.bestCopyEver;
+    this.positiveNumber = editor.positiveNumber;
     this.setPointCoords = editor.setPointCoords;
     this.setQuadraticCoords = editor.setQuadraticCoords;
     this.setCubicCoords = editor.setCubicCoords;
+
+    this.addListeners(this.id);
   }
 
-  addControlListeners = () => {
-
+  addListeners = (target) => {
     // Editor.ControlsRender({
     //   state: this.bestCopyEver(this.state), // Cloned
     //   removeActivePoint: this.removeActivePoint,
@@ -190,11 +192,10 @@ export default class Controls {
     document.querySelector('#Width').value = this.state.w;
   }
 
-  render = () => {
-    const props = this.state;
-    const active = props.points[props.activePoint];
-    const step = props.grid.snap ? props.grid.size : 1;
-    // console.log(props);
+  render = (props) => {
+    const { w, h, points, activePoint, grid } = props.state;
+    const active = points[activePoint];
+    const step = grid.snap ? grid.size : 1;
 
     let params = [];
 
@@ -262,6 +263,7 @@ export default class Controls {
     }
     
     return `
+    <div id="controls" class="ad-Container-controls">
         <div class="ad-Controls">
             <h3 class="ad-Controls-title">Parameters</h3>
             
@@ -269,13 +271,13 @@ export default class Controls {
               ${Control({
                 name:'Width',
                 type:'text',
-                value: props.w,
+                value: w,
                 // onChange={ (e) => props.setWidth(e) } />
               })}
               ${Control({
                 name:'Height',
                 type:'text',
-                value: props.h,
+                value: h,
                 // onChange={ (e) => props.setHeight(e) } />
               })}
             </div>
@@ -283,19 +285,19 @@ export default class Controls {
               ${Control({
                 name:'Grid size',
                 type:'text',
-                value: props.grid.size
+                value: grid.size
                 // onChange={ (e) => props.setGridSize(e) }
               })}
               ${Control({
                 name:'Snap grid',
                 type:'checkbox',
-                checked: props.grid.snap,
+                checked: grid.snap,
                 // onChange={ (e) => props.setGridSnap(e) } />
               })}
               ${Control({
                 name:'Show grid',
                 type:'checkbox',
-                checked: props.grid.show
+                checked: grid.show
                 // onChange={ (e) => props.setGridShow(e) } />
               })}
             </div>
@@ -336,6 +338,7 @@ export default class Controls {
               })}
             </div>
         </div>
+      </div>
     `;
   }
 
@@ -345,6 +348,6 @@ export default class Controls {
 // export { Controls, addControlListeners };
 
 
-Controls.ControlsRender = (props) => {
+Controls.Render = (props) => {
 
 };

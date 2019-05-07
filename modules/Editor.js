@@ -1,7 +1,9 @@
 //@ts-check
 // import store from './store/index.js'; //use store INSTANCE to get State
 import Controls from './Editor.Controls.js';
+import Main from './Editor.Main.js';
 import { Point, Quadratic, Cubic, Grid } from './Editor.Components.js';
+
 /**
  * @typedef {object} Editor.state
  * @typedef {HTMLBaseElement} id
@@ -16,78 +18,39 @@ export default class Editor {
    */
   constructor(props) {
     let { state, id } = props;
-
     this.state = state;
-    /**@type {HTMLDivElement} */
     this.id = id;
 
-    /**Controls - auto adds listeners */
-    this.controls = new Controls(this);
+    //must be added to document, not Main
+    document.addEventListener('keydown', this.handleKeyDown, false);
+    document.addEventListener('keyup', this.handleKeyUp, false);
 
-    const main = document.querySelector('.ad-Container-main');
+    /**@type {HTMLDivElement} */
+    const mainId = document.querySelector('#main');
+    this.main = new Main(this, mainId);
 
-    main.addEventListener('keydown', this.handleKeyDown, false);
-    main.addEventListener('keyup', this.handleKeyUp, false);
-    main.addEventListener('mouseup', this.cancelDragging, false);
+    /**@type {HTMLDivElement} */
+    const controlId = document.querySelector('#controls');
+    this.controls = new Controls(this, controlId);
 
-    main.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      /**@type {String[]} */
-      const classList = [...e.target.classList];
-      const index = e.target.dataset.index;
-
-      if (classList.includes('ad-Anchor-point')) {
-        //if the target has an anchor, it is Cubic
-        const anchor = e.target.dataset.anchor ? e.target.dataset.anchor : null;
-
-        if (anchor) {
-          /** for Cubic - props = index, anchor */
-          this.setDraggedCubic(index, anchor);
-        } else {
-          /** for Quadratic - props = index */
-          this.setDraggedQuadratic(index);
-        }
-      } /** This is a regular Point */
-      else if (classList.includes('ad-Point')) {
-        this.setDraggedPoint(index);
-      } else {
-        /** Add the AddPoint Event */
-        this.addPoint(e);
-      }
-    });
-
-    main.addEventListener('mousemove', e => {
-      this.handleMouseMove(e);
-    });
-
+    //trigger the everything render()
+    this.setState(state);
   }
 
-  // EVENTS CALLED BY LISTENERS
-  /**
-   * @memberof Editor
-   * @param {e} e
-   */
+
   handleKeyDown = (e) => {
-    if (e.key === 'Alt') {
+    console.log(`handleKeyDown: ${e.key}`);
+    if (e.key === 'Alt' || e.key === 'Meta') {
       this.setState({ ctrl: true });
     }
   }
 
 
-  handleKeyUp = () => {
-    if (this.state.ctrl == 'true') {
+  handleKeyUp = (e) => {
+    // console.log(`handleKeyUp`);
+    if (this.state.ctrl === true) {
       this.setState({ ctrl: false });
     }
-  }
-
-  cancelDragging = () => {
-
-    this.setState({
-      draggedPoint: false,
-      draggedQuadratic: false,
-      draggedCubic: false
-    });
   }
 
 
@@ -96,18 +59,33 @@ export default class Editor {
     return Object.assign({}, src);
   }
 
+
+  getState = () => {
+    return this.bestCopyEver(this.state);
+  }
+
+
   /** 
    * setState for this Editor
    * @param {object} obj
    * @returns void
    */
   setState = (obj) => {
-    // console.log(`this.setState`);
+    let myFirstPromise = new Promise((resolve, reject) => {
+      resolve(this.state = Object.assign({}, this.state, obj));
 
-    this.state = Object.assign({}, this.state, obj);
-    // console.log(this.state);
-    this.render();
-    this.controls.render();
+    }).then((state) => {
+      const props = {
+        state: this.bestCopyEver(this.state), // Cloned
+        // id: this.id,
+        path: this.generatePath(),
+        // controls: this.controls,
+        // main: this.main,
+      };
+
+      this.render(props);
+    });
+
   }
 
 
@@ -144,77 +122,6 @@ export default class Editor {
 
     return d;
   }
-
-  /**
-   * Callled from mousedown event
-   * @memberof Editor
-   * calls setState
-   * @param {e} e
-   * 
-   */
-  addPoint = (e) => {
-    console.log('addPoint');
-
-    if (this.state.ctrl) {
-      const coords = this.getMouseCoords(e);
-      const { points } = this.bestCopyEver(this.state);
-      // console.log(points);
-      points.push(coords);
-
-      this.setState({
-        points,
-        activePoint: points.length - 1
-      });
-    }
-  }
-
-
-  /**
-   * Called from mousedown event
-   * @param {number} index 
-   */
-  setDraggedPoint = (index) => {
-    // console.log(`draggedPoint`);
-    if (!this.state.ctrl) {
-      this.setState({
-        activePoint: index,
-        draggedPoint: true
-      });
-    }
-  }
-
-  /**
-   * Called from mousedown event
-   * Sets the active point to this
-   * @param {number} index 
-   */
-  setDraggedQuadratic = (index) => {
-    // console.log(`setDraggedQuadratic`);
-    if (!this.state.ctrl) {
-      this.setState({
-        activePoint: index,
-        draggedQuadratic: true
-      });
-    }
-  }
-
-  /**
-   * Called from mousedown event
-   * Sets the active point to this, and draggedCubic to the anchor
-   * calls setState
-   * @param {anchor} anchor
-   * @param {number} index
-   */
-  setDraggedCubic = (index, anchor) => {
-    // console.log(`setDraggedCubic`);
-    if (!this.state.ctrl) {
-      this.setState({
-        activePoint: index,
-        draggedCubic: anchor
-      });
-    }
-  }
-
 
   /**
    * Called from handleMouseMove
@@ -293,7 +200,9 @@ export default class Editor {
   }
 
   /**
+   * passed to Editor.Main
    * @param {e} e 
+   * 
    */
   handleMouseMove = (e) => {
     e.preventDefault();
@@ -385,14 +294,20 @@ export default class Editor {
    * Calls Class SVGRender - sorta interface
    * @memberof Editor
    */
-  render = () => {
+  render = (props) => {
+    const mainId = document.querySelector('#main');
+    mainId.innerHTML = this.main.render(props);
 
-    Editor.SVGRender({
-      state: this.bestCopyEver(this.state), // Cloned
-      id: this.id,
-      path: this.generatePath(),
-      controls: this.controls
-    });
+    /**Controls - auto adds listeners */
+    const controlId = document.querySelector('#controls');
+    controlId.innerHTML = this.controls.render(props);
+    // Editor.SVGRender({
+    //   state: this.bestCopyEver(this.state), // Cloned
+    //   id: this.id,
+    //   path: this.generatePath(),
+    //   controls: this.controls,
+    //   main: this.main,
+    // });
   }
 }
 
@@ -403,94 +318,23 @@ export default class Editor {
  * @param {string} props.path
  * @param {object} props.state
  * @param {Controls} props.controls
+ * @param {Main} props.main
  */
 Editor.SVGRender = (props) => {
-  const { id, path, controls } = props;
-  const { w, h, points, activePoint } = props.state;
+  const { id, controls, main } = props;
+  // const { w, h, points, activePoint } = props.state;
 
-  // console.log(`ap: ${activePoint}, index:`);
-  const circles = points.map((p, i, a) => {
-    let anchors = [];
+  // const m = document.createElement('div');
+  // m.innerHTML = main.render(props);
+  // id.appendChild(m);
 
-    if (p.q) {
-      anchors.push(
-        Quadratic({
-          index: i,
-          p1x: a[i - 1].x,
-          p1y: a[i - 1].y,
-          p2x: p.x,
-          p2y: p.y,
-          x: p.q.x,
-          y: p.q.y,
-          //setDraggedQuadratic: setDraggedQuadratic //needs to be caslled higher up
-        })
-      );
-    } else if (p.c) {
-      anchors.push(
-        Cubic({
-          index: i,
-          p1x: a[i - 1].x,
-          p1y: a[i - 1].y,
-          p2x: p.x,
-          p2y: p.y,
-          x1: p.c[0].x,
-          y1: p.c[0].y,
-          x2: p.c[1].x,
-          y2: p.c[1].y,
-          // setDraggedCubic: setDraggedCubic //needs to be caslled higher up
-        })
-      );
-    }
+  // const c = document.createElement('div');
+  // c.innerHTML = controls.render(props);
+  // id.appendChild(c);
 
-    const isFirst = i === 0 ? ' ad-PointGroup--first' : '';
-    const ap = activePoint.toString() === i.toString() ? ' is-active' : '';
-
-    return (
-      `<g class="ad-PointGroup${isFirst}${ap}">
-          ${Point({
-            index:i,
-            x:p.x,
-            y:p.y,
-            rad: 16,
-            // setDraggedPoint:setDraggedPoint //needs to be caslled higher up
-          })}
-          ${anchors}
-      </g>`
-    );
-  }).join('');
-
-  const grid = Grid(props.state);
-
-  // const controls = (props.state);
-
-  id.innerHTML =
-    `<div class="ad-Container">
-      <div class="ad-Container-main">
-        <div class="ad-Container-svg">
-          <svg class="ad-SVG" width="${w}" height="${h}">
-            <path class="ad-Path" d="${path}"></path>
-            <path d="M 100 100 L 200 200"
-            fill="#59fa81" stroke="#d85b49" stroke-width="3" />
-            <g class="ad-Points">
-            ${circles}
-            </g>
-            ${grid}
-          </svg>
-        </div>
-      </div>
-      <div class="ad-Container-controls">
-        <div id="controls" class=""></div>
-        ${controls.render()}
-      </div>
-    </div>`;
-
-};
-
-
-
-Editor.InitGetState = () => {
-
-};
-Editor.PostState = () => {
-
+  // id.innerHTML = `
+  //     <div id="main" class="ad-Container-main">
+  //       ${main.render(props)}
+  //     </div>
+  //     ${controls.render(props)}`;
 };

@@ -9,13 +9,10 @@ window.onload = function() {
     .then(state => {
 
       const e = new Editor({
-        state: state,
+        state,
         id: document.querySelector('#app'),
-        // mainId: document.querySelector('.ad-Container-main'),
-        // controlId: document.querySelector('.ad-Container-controls')  
       });
 
-      e.render();
-      // console.log(store.dispatch(changeName('ee')));
+      // e.render();
     });
 };
