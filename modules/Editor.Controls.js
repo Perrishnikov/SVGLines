@@ -40,51 +40,48 @@ export default class Controls {
   }
 
   setPointType = (e) => {
-    const cstate = this.getState();
-
-    const points = cstate.points;
-    const active = cstate.activePoint;
+    const {lines, activePoint, activeLine} = this.getState();
 
     // not the first point
-    if (active !== 0) {
+    if (activePoint !== 0) {
       let v = e.target.value;
 
       switch (v) {
         case 'l':
-          points[active] = {
-            x: points[active].x,
-            y: points[active].y
+          points[activePoint] = {
+            x: points[activePoint].x,
+            y: points[activePoint].y
           };
           break;
         case 'q':
-          points[active] = {
-            x: points[active].x,
-            y: points[active].y,
+          points[activePoint] = {
+            x: points[activePoint].x,
+            y: points[activePoint].y,
             q: {
-              x: (points[active].x + points[active - 1].x) / 2,
-              y: (points[active].y + points[active - 1].y) / 2
+              x: (points[activePoint].x + points[activePoint - 1].x) / 2,
+              y: (points[activePoint].y + points[activePoint - 1].y) / 2
             }
           };
           break;
         case 'c':
-          points[active] = {
-            x: points[active].x,
-            y: points[active].y,
+          points[activePoint] = {
+            x: points[activePoint].x,
+            y: points[activePoint].y,
             c: [{
-                x: (points[active].x + points[active - 1].x - 50) / 2,
-                y: (points[active].y + points[active - 1].y) / 2
+                x: (points[activePoint].x + points[activePoint - 1].x - 50) / 2,
+                y: (points[activePoint].y + points[activePoint - 1].y) / 2
               },
               {
-                x: (points[active].x + points[active - 1].x + 50) / 2,
-                y: (points[active].y + points[active - 1].y) / 2
+                x: (points[activePoint].x + points[activePoint - 1].x + 50) / 2,
+                y: (points[activePoint].y + points[activePoint - 1].y) / 2
               }
             ]
           };
           break;
         case 'a':
-          points[active] = {
-            x: points[active].x,
-            y: points[active].y,
+          points[activePoint] = {
+            x: points[activePoint].x,
+            y: points[activePoint].y,
             a: {
               rx: 50,
               ry: 50,
@@ -96,7 +93,8 @@ export default class Controls {
           break;
       }
 
-      this.setState({ points });
+      // this.setState({ points });
+      this.setState({ lines });
     }
   }
 
@@ -163,19 +161,19 @@ export default class Controls {
   }
 
   removeActivePoint = (e) => {
-    const cstate = this.getState();
-    const points = cstate.points;
-    const active = cstate.activePoint;
+    const {activePoint, lines, activeLine} = this.getState();
+    // const points = cstate.points;
+    // const active = cstate.activePoint;
 
-    if (points.length > 1 && active !== 0) {
-      points.splice(active, 1);
+    if (lines[activeLine].points.length > 1 && activePoint !== 0) {
+      lines[activeLine].points.splice(activePoint, 1);
 
       this.setState({
-        points,
-        activePoint: points.length - 1
+        lines,
+        activePoint: lines[activeLine].points.length - 1
       });
     }
-    console.log(`Hello World!`);
+    console.log(`Point removed`);
   }
 
   reset = (e) => {
@@ -190,23 +188,28 @@ export default class Controls {
   }
 
   setTextInputs = () => {
-    console.log(this.state.w);
+    console.log(`setText: ${this.state.w}`);
     document.querySelector('#Width').value = this.state.w;
   }
 
   render = (props) => {
-    const { w, h, points, activePoint, grid } = props.state;
-    const active = points[activePoint];
+    const { w, h, lines, activeLine, activePoint, grid } = props.state;
+    const active = lines[activeLine].points[activePoint];
     const step = grid.snap ? grid.size : 1;
 
     let params = [];
 
+    let pointType = 'l';
+
     if (active.q) {
-      // console.log(`Hello World!`);
+      console.log(`Hello Active Q`);
+      pointType = 'q';
     } else if (active.c) {
-      // console.log(`Hello World!`);
+      console.log(`Hello Active C!`);
+      pointType = 'c';
     } else if (active.a) {
-      // console.log(`Hello World!`);
+      console.log(`Hello Active A!`);
+      pointType = 'a';
 
       // params.push(
       //     <div className="ad-Controls-container">
@@ -321,10 +324,10 @@ export default class Controls {
                 type:'choices',
                 id:'pointType',
                 choices:[
-                    { name: 'L', value: 'l', checked: (!active.q && !active.c && !active.a)},
-                    { name: 'Q', value: 'q', checked: !active.q },
-                    { name: 'C', value: 'c', checked: !active.c },
-                    { name: 'A', value: 'a', checked: !active.a }
+                    { name: 'L', value: 'l', checked: (pointType == 'l')},
+                    { name: 'Q', value: 'q', checked: pointType == 'q' },
+                    { name: 'C', value: 'c', checked: pointType == 'c' },
+                    { name: 'A', value: 'a', checked: pointType == 'a' }
                 ]
                 // onChange:{ (e) => props.setPointType(e) } 
               })}

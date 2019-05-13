@@ -181,16 +181,17 @@ function Text(props) {
 
 function Choices(props) {
   let choices = props.choices.map((c, i) => {
+    console.log(c);
     return `
         <label class="ad-Choice">
           <input
             class="ad-Choice-input"
             type="radio"
             value=${ c.value }
-            checked=${ c.checked }
+            ${ c.checked ? 'checked' : ''}
             name=${ props.id }
             />
-          <div className="ad-Choice-fake">
+          <div class="ad-Choice-fake">
             ${ c.name }
           </div>
         </label>

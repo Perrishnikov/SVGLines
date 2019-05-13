@@ -31,7 +31,7 @@ export default class Main {
       /**@type {string[]} */
       const classList = [...e.target.classList];
       /**@type {string} */
-      const index = e.target.dataset.index; //TODO:
+      const index = e.target.dataset.index; //point index value
 
       // console.log(classList);
 
@@ -150,7 +150,7 @@ export default class Main {
 
     // if (this.state().ctrl === true) {
     const coords = this.getMouseCoords(e);
-    const { points, lines, activeLine } = this.getState();
+    const { lines, activeLine } = this.getState();
     // const { points } = this.getState();
     // console.log(points);
     // points.push(coords);
@@ -159,7 +159,7 @@ export default class Main {
     this.setState({
       lines,
       //points
-      activePoint: points.length - 1
+      activePoint: lines[activeLine].points.length - 1
     });
     // }
   }
@@ -207,7 +207,6 @@ export default class Main {
    * @memberof Main
    */
   generateCircles = (points, ap, al) => {
-    console.log(ap, al);
 
     return points.map((p, i, a) => {
       let anchors = [];
