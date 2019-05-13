@@ -239,9 +239,14 @@ body {
 .ad-Button--delete:hover {
     background: color(var(--ad-Color-del) l(+5%));
 }
-.ad-Button--reset {
-    /* background: color(var(--ad-Color-prim) l(+10%)); */
+.ad-Button--newLine {
+  background: var(--ad-Color-del);
 }
+.ad-Button--newLine:focus,
+.ad-Button--newLine:hover {
+  background: color(var(--ad-Color-del) l(+5%));
+}
+
 .ad-Button--reset:focus,
 .ad-Button--reset:hover {
     /* background: color(var(--ad-Color-prim) l(+15%)); */

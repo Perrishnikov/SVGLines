@@ -10,14 +10,14 @@ export default class Main {
     this.setState = editor.setState;
     this.getState = editor.getState;
     this.handleMouseMove = editor.handleMouseMove;
-    this.bestCopyEver = editor.bestCopyEver;
+    // this.bestCopyEver = editor.bestCopyEver;
     this.getMouseCoords = editor.getMouseCoords;
 
     target.addEventListener('mouseup', (e) => {
       let state = this.getState();
 
       if (state.draggedPoint || state.draggedQuadratic || state.draggedCubic) {
-        this.cancelDragging()
+        this.cancelDragging();
       }
     }, false);
 

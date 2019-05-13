@@ -168,11 +168,12 @@ function Crap(name, props) {
 }
 
 function Text(props) {
-  // console.log(`"${props.value}"`);
+  // console.log(props);
   // let t = document.createElement('input');
   // return t.innerHTML = `
   return `
     <div
+      onblur="${props.onchange}"
       class="ad-Text"
       contenteditable="true">
       ${props.value}</div>`;
@@ -204,12 +205,13 @@ function Choices(props) {
 }
 
 function Button(props) {
+  // const h = props.onclick ? props.onclick : console.log(`jj`);
   //TODO: onCLick needs to change
+  // console.log(props);
   return `
     <button
-      class="ad-Button${(props.action ? ' ad-Button--' + props.action : '')}"
-      type="button"
-      >
+      class="ad-Button${(props.action ? ` ad-Button--${props.action}` : '')}"
+      type="button">
       ${ props.value }
     </button>
   `;

@@ -6,21 +6,22 @@ export default class Controls {
     this.setState = editor.setState;
     this.state = editor.state;
 
-    this.bestCopyEver = editor.bestCopyEver;
+    // this.bestCopyEver = editor.bestCopyEver;
     this.positiveNumber = editor.positiveNumber;
     this.setPointCoords = editor.setPointCoords;
     this.setQuadraticCoords = editor.setQuadraticCoords;
     this.setCubicCoords = editor.setCubicCoords;
+    this.getState = editor.getState;
 
-    this.addListeners(this.id);
+    this.id.addEventListener('click', (e) => {
+      let click = [...e.target.classList];
+
+      if (click.includes('ad-Button--delete'))
+        this.removeActivePoint();
+    });
+
   }
 
-  addListeners = (target) => {
-    // Editor.ControlsRender({
-    //   state: this.bestCopyEver(this.state), // Cloned
-    //   removeActivePoint: this.removeActivePoint,
-    // });
-  }
 
   setHeight = (e) => {
     let v = this.positiveNumber(e.target.value),
@@ -39,7 +40,7 @@ export default class Controls {
   }
 
   setPointType = (e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     const points = cstate.points;
     const active = cstate.activePoint;
@@ -100,7 +101,7 @@ export default class Controls {
   }
 
   setArcParam = (param, e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     const points = cstate.points;
     const active = cstate.activePoint;
@@ -118,7 +119,7 @@ export default class Controls {
   }
 
   setPointPosition = (coord, e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     const coords = cstate.points[cstate.activePoint];
     let v = this.positiveNumber(e.target.value);
@@ -133,7 +134,7 @@ export default class Controls {
 
 
   setQuadraticPosition = (coord, e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     const coords = cstate.points[cstate.activePoint].q;
     let v = this.positiveNumber(e.target.value);
@@ -148,7 +149,7 @@ export default class Controls {
 
 
   setCubicPosition = (coord, anchor, e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     const coords = cstate.points[cstate.activePoint].c[anchor];
     let v = this.positiveNumber(e.target.value);
@@ -162,7 +163,7 @@ export default class Controls {
   }
 
   removeActivePoint = (e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
     const points = cstate.points;
     const active = cstate.activePoint;
 
@@ -174,10 +175,11 @@ export default class Controls {
         activePoint: points.length - 1
       });
     }
+    console.log(`Hello World!`);
   }
 
   reset = (e) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
     const w = cstate.w;
     const h = cstate.h;
 
@@ -261,9 +263,9 @@ export default class Controls {
       //     </div>
       // )
     }
-    
+
     return `
-    <div id="controls" class="ad-Container-controls">
+    
         <div class="ad-Controls">
             <h3 class="ad-Controls-title">Parameters</h3>
             
@@ -272,7 +274,7 @@ export default class Controls {
                 name:'Width',
                 type:'text',
                 value: w,
-                // onChange={ (e) => props.setWidth(e) } />
+                // onchange:log()
               })}
               ${Control({
                 name:'Height',
@@ -305,7 +307,8 @@ export default class Controls {
               ${Control({
                 type: 'button',
                 action: 'reset',
-                value: 'Reset path'
+                value: 'Reset path',
+                // onclick: log
                 // onClick={ (e) => props.reset(e) } />
               })}
             </div>
@@ -329,16 +332,28 @@ export default class Controls {
             
             ${ params }
             
-            <div className="ad-Controls-container">
+            <div class="ad-Controls-container">
               ${Control({
                 type:'button',
                 action:'delete',
                 value:'Remove this point',
+                // onclick: this.removeActivePoint
                 // onClick={ (e) => props.removeActivePoint(e) } />
               })}
             </div>
+
+          <div class="ad-Controls-container">
+            ${Control({
+              type:'button',
+              action:'newLine',
+              value:'Add New Line',
+              // onclick: log()
+            })}
+          </div>
+
+
+
         </div>
-      </div>
     `;
   }
 

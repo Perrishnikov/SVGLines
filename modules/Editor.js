@@ -21,13 +21,15 @@ export default class Editor {
     this.state = state;
     this.id = id;
 
-    //must be added to document, not Main
-    document.addEventListener('keydown', this.handleKeyDown, false);
+    //must be added to document, not Main. Needed in Main, but cant place it in div??
+    document.addEventListener('keydown', this.handleKeyDown, true);
     document.addEventListener('keyup', this.handleKeyUp, false);
 
     /**@type {HTMLDivElement} */
     const mainId = document.querySelector('#main');
     this.main = new Main(this, mainId);
+
+    
 
     /**@type {HTMLDivElement} */
     const controlId = document.querySelector('#controls');
@@ -47,7 +49,7 @@ export default class Editor {
 
 
   handleKeyUp = (e) => {
-    // console.log(`handleKeyUp`);
+    console.log(`handleKeyUp`);
     if (this.state.ctrl === true) {
       this.setState({ ctrl: false });
     }
@@ -55,13 +57,14 @@ export default class Editor {
 
 
   /** Deep Copies this.state */
-  bestCopyEver = (src) => {
-    return Object.assign({}, src);
-  }
+  // bestCopyEver = (src) => {
+  //   return Object.assign({}, src);
+  // }
 
 
   getState = () => {
-    return this.bestCopyEver(this.state);
+    return Object.assign({}, this.state);
+    // return this.bestCopyEver(this.state);
   }
 
 
@@ -71,12 +74,12 @@ export default class Editor {
    * @returns void
    */
   setState = (obj) => {
-    let myFirstPromise = new Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
       resolve(this.state = Object.assign({}, this.state, obj));
 
     }).then((state) => {
       const props = {
-        state: this.bestCopyEver(this.state), // Cloned
+        state: this.getState(), // Cloned
         // id: this.id,
         path: this.generatePath(),
         // controls: this.controls,
@@ -95,7 +98,7 @@ export default class Editor {
    * @memberof Editor
    */
   generatePath = () => {
-    let { points, closePath } = this.bestCopyEver(this.state);
+    let { points, closePath } = this.getState();
     let d = '';
 
     points.forEach((p, i) => {
@@ -130,7 +133,7 @@ export default class Editor {
    * @param {coords} coords
    */
   setPointCoords = (coords) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     const points = cstate.points;
     const active = cstate.activePoint;
@@ -149,7 +152,7 @@ export default class Editor {
    * @param {anchor} anchor
    */
   setCubicCoords = (coords, anchor) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     let points = cstate.points;
     let active = cstate.activePoint;
@@ -167,7 +170,7 @@ export default class Editor {
    * @param {coords} coords
    */
   setQuadraticCoords = (coords) => {
-    const cstate = this.bestCopyEver(this.state);
+    const cstate = this.getState();
 
     let points = cstate.points;
     let active = cstate.activePoint;

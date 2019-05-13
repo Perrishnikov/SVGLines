@@ -1,6 +1,7 @@
 {
   "ctrl": false,
   "activePoint": 2,
+  "activeLine":0,
   "draggedPoint": false,
   "draggedQuadratic": false,
   "draggedCubic": false,
