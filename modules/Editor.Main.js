@@ -12,6 +12,7 @@ export default class Main {
     this.handleMouseMove = editor.handleMouseMove;
     // this.bestCopyEver = editor.bestCopyEver;
     this.getMouseCoords = editor.getMouseCoords;
+    // this.generatePath = editor.generatePath;
 
     target.addEventListener('mouseup', (e) => {
       let state = this.getState();
@@ -30,24 +31,34 @@ export default class Main {
       /**@type {string[]} */
       const classList = [...e.target.classList];
       /**@type {string} */
-      const index = e.target.dataset.index;
-      console.log(classList);
+      const index = e.target.dataset.index; //TODO:
+
+      // console.log(classList);
 
       if (classList.includes('ad-Anchor-point')) {
         //if the target has an anchor, it is Cubic
         const anchor = e.target.dataset.anchor ? e.target.dataset.anchor : null;
 
+        console.log(`index: ${index}, anchor: ${anchor}`);
+
         if (anchor) {
           /** for Cubic - props = index, anchor */
-          this.setDraggedCubic(index, anchor);
+          const lineindex = e.target.parentElement.parentElement.parentElement.dataset.lineindex;
+
+          this.setDraggedCubic(index, anchor, lineindex);
         } else {
           /** for Quadratic - props = index */
-          this.setDraggedQuadratic(index);
+          const lineindex = e.target.parentElement.parentElement.parentElement.dataset.lineindex;
+
+          this.setDraggedQuadratic(index, lineindex);
         }
       } /** This is a regular Point */
       else if (classList.includes('ad-Point')) {
         // console.log('ad-Point classList');
-        this.setDraggedPoint(index);
+        const lineindex = e.target.parentElement.parentElement.dataset.lineindex;
+        // console.log(`lineindex: ${lineindex}`);
+
+        this.setDraggedPoint(index, lineindex);
       } else if (classList.includes('ad-SVG')) {
         //This is the canvas area
         /** Add the AddPoint Event */
@@ -68,7 +79,7 @@ export default class Main {
 
 
   cancelDragging = () => {
-    console.log(`cancelDragging`);
+    // console.log(`cancelDragging`);
     this.setState({
       draggedPoint: false,
       draggedQuadratic: false,
@@ -80,11 +91,13 @@ export default class Main {
   /**
    * Called from mousedown event
    * @param {string} index 
+   * @param {string} lineindex
    */
-  setDraggedPoint = (index) => {
+  setDraggedPoint = (index, lineindex) => {
     console.log(`draggedPoint`);
     if (!this.getState().ctrl) {
       this.setState({
+        activeLine: parseInt(lineindex),
         activePoint: parseInt(index),
         draggedPoint: true
       });
@@ -95,11 +108,13 @@ export default class Main {
    * Called from mousedown event
    * Sets the active point to this
    * @param {string} index 
+   * @param {string} lineindex
    */
-  setDraggedQuadratic = (index) => {
+  setDraggedQuadratic = (index, lineindex) => {
     console.log(`setDraggedQuadratic`);
     if (!this.getState().ctrl) {
       this.setState({
+        activeLine: parseInt(lineindex),
         activePoint: parseInt(index),
         draggedQuadratic: true
       });
@@ -113,10 +128,11 @@ export default class Main {
    * @param {anchor} anchor
    * @param {string} index
    */
-  setDraggedCubic = (index, anchor) => {
+  setDraggedCubic = (index, anchor, lineindex) => {
     console.log(`setDraggedCubic`);
     if (!this.getState().ctrl) {
       this.setState({
+        activeLine: parseInt(lineindex),
         activePoint: parseInt(index),
         draggedCubic: anchor
       });
@@ -134,25 +150,66 @@ export default class Main {
 
     // if (this.state().ctrl === true) {
     const coords = this.getMouseCoords(e);
-    const { points } = this.getState();
+    const { points, lines, activeLine } = this.getState();
+    // const { points } = this.getState();
     // console.log(points);
-    points.push(coords);
+    // points.push(coords);
+    lines[activeLine].points.push(coords);
 
     this.setState({
-      points,
+      lines,
+      //points
       activePoint: points.length - 1
     });
     // }
   }
 
-  render = (props) => {
-    console.log(`from Main render()`);
-    // console.log(props);
-    const { path } = props;
-    const { w, h, points, activePoint } = props.state;
 
-    // console.log(`ap: ${activePoint}, index:`);
-    const circles = points.map((p, i, a) => {
+  /**
+   * Pass in a line's points. Returns the path
+   * @param {object} points
+   * @returns {string} - a single path
+   */
+  generatePath = (points) => {
+    // let { points, closePath } = props;
+    let d = '';
+
+    points.forEach((p, i) => {
+      if (i === 0) {
+        // first point
+        d += 'M ';
+      } else if (p.q) {
+        // quadratic
+        d += `Q ${ p.q.x } ${ p.q.y } `;
+      } else if (p.c) {
+        // cubic
+        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
+      } else if (p.a) {
+        // arc
+        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
+      } else {
+        d += 'L ';
+      }
+
+      d += `${ p.x } ${ p.y } `;
+    });
+
+    // if (closePath) { d += 'Z'; }
+
+    return d;
+  }
+
+  /**
+   * Pass in a line's points. Returns the path
+   * @param {object} points
+   * @param {string} ap
+   * @returns {string} - a single path
+   * @memberof Main
+   */
+  generateCircles = (points, ap, al) => {
+    console.log(ap, al);
+
+    return points.map((p, i, a) => {
       let anchors = [];
 
       if (p.q) {
@@ -186,10 +243,10 @@ export default class Main {
       }
 
       const isFirst = i === 0 ? ' ad-PointGroup--first' : '';
-      const ap = activePoint == i ? ' is-active' : '';
+      const ap2 = ap == i && al == true? ' is-active' : '';
 
       return (
-        `<g class="ad-PointGroup${isFirst}${ap}">
+        `<g class="ad-PointGroup${isFirst}${ap2}">
           ${Point({
             index:i,
             x:p.x,
@@ -202,15 +259,28 @@ export default class Main {
       );
     }).join('');
 
+  }
+
+  render = (props) => {
+    console.log(`from Main render()`);
+    const { w, h, activePoint, activeLine } = props.state;
     const grid = Grid(props.state);
-    // console.log(`Main Ctrl: ${props.state.ctrl}`);
-    // console.log(this);
+    const lines = props.state.lines;
+
     return `
-      
       <div class="ad-Container-svg">
         <svg class="ad-SVG" width="${w}" height="${h}">
-          <path class="ad-Path" d="${path}"></path>
-          <g class="ad-Points">${circles}</g>
+          ${lines.map((line, index) => {
+            let al = activeLine == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
+            const path = this.generatePath(line.points);
+            const circles = this.generateCircles(line.points, activePoint, al );
+            
+            return (`
+              <path class="ad-Path" d="${path}"></path>
+              <g data-lineindex="${index}" class="ad-Points">${circles}</g>
+            `);
+          }).join('')}
+
           ${grid}
         </svg>
       </div>`;

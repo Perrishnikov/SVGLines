@@ -29,6 +29,7 @@ export default class Editor {
     const mainId = document.querySelector('#main');
     this.main = new Main(this, mainId);
 
+    
 
     /**@type {HTMLDivElement} */
     const controlId = document.querySelector('#controls');
@@ -74,20 +75,56 @@ export default class Editor {
    */
   setState = (obj) => {
     new Promise((resolve, reject) => {
-
       resolve(this.state = Object.assign({}, this.state, obj));
+
     }).then((state) => {
       const props = {
         state: this.getState(), // Cloned
-        // path: this.generatePath(),
+        // id: this.id,
+        path: this.generatePath(),
+        // controls: this.controls,
+        // main: this.main,
       };
+
       this.render(props);
     });
 
   }
 
 
+  /**
+   * Called from Class SVGRedner
+   *
+   * @memberof Editor
+   */
+  generatePath = () => {
+    let { points, closePath } = this.getState();
+    let d = '';
 
+    points.forEach((p, i) => {
+      if (i === 0) {
+        // first point
+        d += 'M ';
+      } else if (p.q) {
+        // quadratic
+        d += `Q ${ p.q.x } ${ p.q.y } `;
+      } else if (p.c) {
+        // cubic
+        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
+      } else if (p.a) {
+        // arc
+        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
+      } else {
+        d += 'L ';
+      }
+
+      d += `${ p.x } ${ p.y } `;
+    });
+
+    if (closePath) { d += 'Z'; }
+
+    return d;
+  }
 
   /**
    * Called from handleMouseMove
@@ -96,18 +133,15 @@ export default class Editor {
    * @param {coords} coords
    */
   setPointCoords = (coords) => {
-    // const cstate = this.getState();
-    const { activePoint, lines, activeLine } = this.getState();
+    const cstate = this.getState();
 
-    // console.log(lines[activeLine].points[0]);
-    // const points = cstate.points;
-    // const active = cstate.activePoint;
-    // points[active].x = coords.x;
-    // points[active].y = coords.y;
-    lines[activeLine].points[activePoint].x = coords.x;
-    lines[activeLine].points[activePoint].y = coords.y;
+    const points = cstate.points;
+    const active = cstate.activePoint;
 
-    this.setState({ lines });
+    points[active].x = coords.x;
+    points[active].y = coords.y;
+
+    this.setState({ points });
   }
 
   /**
@@ -118,22 +152,15 @@ export default class Editor {
    * @param {anchor} anchor
    */
   setCubicCoords = (coords, anchor) => {
-    // const cstate = this.getState();
-    const { points, activePoint, lines, activeLine } = this.getState();
+    const cstate = this.getState();
 
-    console.log(this.getState().lines[activeLine]);
-    // console.log(lines[activeLine]);
-    // console.log(`line n stuff: ${lines[activeLine].points[activePoint]}, anchor: ${anchor}`);
+    let points = cstate.points;
+    let active = cstate.activePoint;
 
-    // let points = cstate.points;
-    // let active = cstate.activePoint;
+    points[active].c[anchor].x = coords.x;
+    points[active].c[anchor].y = coords.y;
 
-    // points[active].c[anchor].x = coords.x;
-    // points[active].c[anchor].y = coords.y;
-    lines[activeLine].points[activePoint].c[anchor].x = coords.x;
-    lines[activeLine].points[activePoint].c[anchor].y = coords.y;
-
-    this.setState({ lines });
+    this.setState({ points });
   }
 
   /**
@@ -143,18 +170,15 @@ export default class Editor {
    * @param {coords} coords
    */
   setQuadraticCoords = (coords) => {
-    // const cstate = this.getState();
-    const { points, activePoint, lines, activeLine } = this.getState();
+    const cstate = this.getState();
 
-    // let points = cstate.points;
-    // let active = cstate.activePoint;
+    let points = cstate.points;
+    let active = cstate.activePoint;
 
-    // points[active].q.x = coords.x;
-    // points[active].q.y = coords.y;
-    lines[activeLine].points[activePoint].q.x = coords.x;
-    lines[activeLine].points[activePoint].q.y = coords.y;
+    points[active].q.x = coords.x;
+    points[active].q.y = coords.y;
 
-    this.setState({ lines });
+    this.setState({ points });
   }
 
 
@@ -187,16 +211,15 @@ export default class Editor {
     e.preventDefault();
     e.stopPropagation();
     // console.log(`mousemove`);
-
     if (!this.state.ctrl) {
       if (this.state.draggedPoint) {
-        console.log(`setPoint`);
+
         this.setPointCoords(this.getMouseCoords(e));
       } else if (this.state.draggedQuadratic) {
-        console.log(`setQuad`);
+
         this.setQuadraticCoords(this.getMouseCoords(e));
       } else if (this.state.draggedCubic !== false) {
-        console.log(`setCubic`);
+
         this.setCubicCoords(
           this.getMouseCoords(e),
           this.state.draggedCubic
@@ -273,7 +296,6 @@ export default class Editor {
   /**
    * Calls Class SVGRender - sorta interface
    * @memberof Editor
-   * @param {{state:object}} props
    */
   render = (props) => {
     const mainId = document.querySelector('#main');
@@ -303,5 +325,19 @@ export default class Editor {
  */
 Editor.SVGRender = (props) => {
   const { id, controls, main } = props;
+  // const { w, h, points, activePoint } = props.state;
 
+  // const m = document.createElement('div');
+  // m.innerHTML = main.render(props);
+  // id.appendChild(m);
+
+  // const c = document.createElement('div');
+  // c.innerHTML = controls.render(props);
+  // id.appendChild(c);
+
+  // id.innerHTML = `
+  //     <div id="main" class="ad-Container-main">
+  //       ${main.render(props)}
+  //     </div>
+  //     ${controls.render(props)}`;
 };
