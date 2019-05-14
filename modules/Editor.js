@@ -3,6 +3,7 @@ import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
 
 /**
+ * Misc
  * @typedef {HTMLDivElement} Element
  * @typedef {{x:number,y:number}} coords
  * @typedef {0 | 1} anchor
@@ -10,11 +11,13 @@ import Main from './Editor.Main.js';
  */
 
 /**
+ * Line
  * @typedef {Object} Line
  * @property {[{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}]} points
  */
 
 /**
+ * State
  * @typedef {Object} State
  * @property {boolean} draggedCubic
  * @property {boolean} draggedQuadratic
@@ -30,6 +33,7 @@ import Main from './Editor.Main.js';
  */
 
 /**
+ * Editor
  * @typedef {Editor} this
  * @property {Id} id
  * @property {State} state

@@ -71,47 +71,46 @@ export default class Controls {
             y: ap.points[activePoint].y
           };
           break;
-        // case 'q':
-        //   points[activePoint] = {
-        //     x: points[activePoint].x,
-        //     y: points[activePoint].y,
-        //     q: {
-        //       x: (points[activePoint].x + points[activePoint - 1].x) / 2,
-        //       y: (points[activePoint].y + points[activePoint - 1].y) / 2
-        //     }
-        //   };
-        //   break;
-        // case 'c':
-        //   points[activePoint] = {
-        //     x: points[activePoint].x,
-        //     y: points[activePoint].y,
-        //     c: [{
-        //         x: (points[activePoint].x + points[activePoint - 1].x - 50) / 2,
-        //         y: (points[activePoint].y + points[activePoint - 1].y) / 2
-        //       },
-        //       {
-        //         x: (points[activePoint].x + points[activePoint - 1].x + 50) / 2,
-        //         y: (points[activePoint].y + points[activePoint - 1].y) / 2
-        //       }
-        //     ]
-        //   };
-        //   break;
-        // case 'a':
-        //   points[activePoint] = {
-        //     x: points[activePoint].x,
-        //     y: points[activePoint].y,
-        //     a: {
-        //       rx: 50,
-        //       ry: 50,
-        //       rot: 0,
-        //       laf: 1,
-        //       sf: 1
-        //     }
-        //   };
-          // break;
+        case 'q':
+          ap.points[activePoint] = {
+            x: ap.points[activePoint].x,
+            y: ap.points[activePoint].y,
+            q: {
+              x: (ap.points[activePoint].x + ap.points[activePoint - 1].x) / 2,
+              y: (ap.points[activePoint].y + ap.points[activePoint - 1].y) / 2
+            }
+          };
+          break;
+        case 'c':
+          ap.points[activePoint] = {
+            x: ap.points[activePoint].x,
+            y: ap.points[activePoint].y,
+            c: [{
+                x: (ap.points[activePoint].x + ap.points[activePoint - 1].x - 50) / 2,
+                y: (ap.points[activePoint].y + ap.points[activePoint - 1].y) / 2
+              },
+              {
+                x: (ap.points[activePoint].x + ap.points[activePoint - 1].x + 50) / 2,
+                y: (ap.points[activePoint].y + ap.points[activePoint - 1].y) / 2
+              }
+            ]
+          };
+          break;
+        case 'a':
+          ap.points[activePoint] = {
+            x: ap.points[activePoint].x,
+            y: ap.points[activePoint].y,
+            a: {
+              rx: 50,
+              ry: 50,
+              rot: 0,
+              laf: 1,
+              sf: 1
+            }
+          };
+          break;
       }
 
-      // this.setState({ points });
       this.setState({ lines });
     }
   }
