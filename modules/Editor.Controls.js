@@ -1,23 +1,40 @@
 //@ts-check
 import { Control } from './Editor.Components.js';
+
+/**
+ * @typedef {import('./Editor').anchor} anchor
+ * @typedef {import('./Editor').State} State
+ * @typedef {import('./Editor').Element} Element
+ * @typedef {import('./Editor').default} Editor
+ * @typedef {{x:number,y:number}} coords
+ * @typedef {MouseEvent} e 
+ */
 export default class Controls {
+  /**
+   * @param {Editor} editor 
+   * @param {Element} target 
+   */
   constructor(editor, target) {
     this.id = target;
     this.setState = editor.setState;
-    this.state = editor.state;
-
-    // this.bestCopyEver = editor.bestCopyEver;
     this.positiveNumber = editor.positiveNumber;
     this.setPointCoords = editor.setPointCoords;
     this.setQuadraticCoords = editor.setQuadraticCoords;
     this.setCubicCoords = editor.setCubicCoords;
     this.getState = editor.getState;
 
+
     this.id.addEventListener('click', (e) => {
       let click = [...e.target.classList];
 
-      if (click.includes('ad-Button--delete'))
+      //REMOVE POINT
+      if (click.includes('ad-Button--delete')) {
         this.removeActivePoint();
+      } else if (click.includes('ad-Choice-input')) {
+        console.log(`Hello World!`);
+        this.setPointType(e);
+      }
+
     });
 
   }
@@ -40,7 +57,8 @@ export default class Controls {
   }
 
   setPointType = (e) => {
-    const {lines, activePoint, activeLine} = this.getState();
+    const { lines, activePoint, activeLine } = this.getState();
+    const ap = lines[activeLine];
 
     // not the first point
     if (activePoint !== 0) {
@@ -48,49 +66,49 @@ export default class Controls {
 
       switch (v) {
         case 'l':
-          points[activePoint] = {
-            x: points[activePoint].x,
-            y: points[activePoint].y
+          ap.points[activePoint] = {
+            x: ap.points[activePoint].x,
+            y: ap.points[activePoint].y
           };
           break;
-        case 'q':
-          points[activePoint] = {
-            x: points[activePoint].x,
-            y: points[activePoint].y,
-            q: {
-              x: (points[activePoint].x + points[activePoint - 1].x) / 2,
-              y: (points[activePoint].y + points[activePoint - 1].y) / 2
-            }
-          };
-          break;
-        case 'c':
-          points[activePoint] = {
-            x: points[activePoint].x,
-            y: points[activePoint].y,
-            c: [{
-                x: (points[activePoint].x + points[activePoint - 1].x - 50) / 2,
-                y: (points[activePoint].y + points[activePoint - 1].y) / 2
-              },
-              {
-                x: (points[activePoint].x + points[activePoint - 1].x + 50) / 2,
-                y: (points[activePoint].y + points[activePoint - 1].y) / 2
-              }
-            ]
-          };
-          break;
-        case 'a':
-          points[activePoint] = {
-            x: points[activePoint].x,
-            y: points[activePoint].y,
-            a: {
-              rx: 50,
-              ry: 50,
-              rot: 0,
-              laf: 1,
-              sf: 1
-            }
-          };
-          break;
+        // case 'q':
+        //   points[activePoint] = {
+        //     x: points[activePoint].x,
+        //     y: points[activePoint].y,
+        //     q: {
+        //       x: (points[activePoint].x + points[activePoint - 1].x) / 2,
+        //       y: (points[activePoint].y + points[activePoint - 1].y) / 2
+        //     }
+        //   };
+        //   break;
+        // case 'c':
+        //   points[activePoint] = {
+        //     x: points[activePoint].x,
+        //     y: points[activePoint].y,
+        //     c: [{
+        //         x: (points[activePoint].x + points[activePoint - 1].x - 50) / 2,
+        //         y: (points[activePoint].y + points[activePoint - 1].y) / 2
+        //       },
+        //       {
+        //         x: (points[activePoint].x + points[activePoint - 1].x + 50) / 2,
+        //         y: (points[activePoint].y + points[activePoint - 1].y) / 2
+        //       }
+        //     ]
+        //   };
+        //   break;
+        // case 'a':
+        //   points[activePoint] = {
+        //     x: points[activePoint].x,
+        //     y: points[activePoint].y,
+        //     a: {
+        //       rx: 50,
+        //       ry: 50,
+        //       rot: 0,
+        //       laf: 1,
+        //       sf: 1
+        //     }
+        //   };
+          // break;
       }
 
       // this.setState({ points });
@@ -161,7 +179,7 @@ export default class Controls {
   }
 
   removeActivePoint = (e) => {
-    const {activePoint, lines, activeLine} = this.getState();
+    const { activePoint, lines, activeLine } = this.getState();
     // const points = cstate.points;
     // const active = cstate.activePoint;
 
@@ -188,7 +206,7 @@ export default class Controls {
   }
 
   setTextInputs = () => {
-    console.log(`setText: ${this.state.w}`);
+    console.log(`setText: ${this.getState().w}`);
     document.querySelector('#Width').value = this.state.w;
   }
 
@@ -202,13 +220,13 @@ export default class Controls {
     let pointType = 'l';
 
     if (active.q) {
-      console.log(`Hello Active Q`);
+      // console.log(`Hello Active Q`);
       pointType = 'q';
     } else if (active.c) {
-      console.log(`Hello Active C!`);
+      // console.log(`Hello Active C!`);
       pointType = 'c';
     } else if (active.a) {
-      console.log(`Hello Active A!`);
+      // console.log(`Hello Active A!`);
       pointType = 'a';
 
       // params.push(

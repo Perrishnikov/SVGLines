@@ -1,41 +1,63 @@
 //@ts-check
-// import store from './store/index.js'; //use store INSTANCE to get State
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
-import { Point, Quadratic, Cubic, Grid } from './Editor.Components.js';
 
 /**
- * @typedef {object} Editor.state
- * @typedef {HTMLBaseElement} id
- * @typedef {function} Editor.setState
+ * @typedef {HTMLDivElement} Element
  * @typedef {{x:number,y:number}} coords
  * @typedef {0 | 1} anchor
- * @typedef {MouseEvent} e
+ * @typedef {MouseEvent} e 
+ */
+
+/**
+ * @typedef {Object} Line
+ * @property {[{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}]} points
+ */
+
+/**
+ * @typedef {Object} State
+ * @property {boolean} draggedCubic
+ * @property {boolean} draggedQuadratic
+ * @property {boolean} draggedPoint
+ * @property {boolean} ctrl
+ * @property {number} activeLine 
+ * @property {number} activePoint  
+ * @property {Line[]} lines
+ * @property {string} name
+ * @property {number} w
+ * @property {number} h
+ * @property {{snap: boolean, size: number,show: boolean}} grid
+ */
+
+/**
+ * @typedef {Editor} this
+ * @property {Id} id
+ * @property {State} state
+ * @property {Main} main
+ * @property {Controls} controls
  */
 export default class Editor {
   /**
    * @constructor
+   * @param {{state:State,id:Element}} props
    */
   constructor(props) {
-    let { state, id } = props;
-    this.state = state;
-    this.id = id;
+    this.id = props.id;
 
     //must be added to document, not Main. Needed in Main, but cant place it in div??
     document.addEventListener('keydown', this.handleKeyDown, true);
     document.addEventListener('keyup', this.handleKeyUp, false);
 
-    /**@type {HTMLDivElement} */
+    /**@type {Element} */
     const mainId = document.querySelector('#main');
     this.main = new Main(this, mainId);
 
-
-    /**@type {HTMLDivElement} */
+    /**@type {Element} */
     const controlId = document.querySelector('#controls');
     this.controls = new Controls(this, controlId);
 
     //trigger the everything render()
-    this.setState(state);
+    this.setState(props.state);
   }
 
 
@@ -55,20 +77,17 @@ export default class Editor {
   }
 
 
-  /** Deep Copies this.state */
-  // bestCopyEver = (src) => {
-  //   return Object.assign({}, src);
-  // }
-
-
+  /**
+   * Returns Editor's State
+   * @returns {State}
+   */
   getState = () => {
     return Object.assign({}, this.state);
-    // return this.bestCopyEver(this.state);
   }
 
 
   /** 
-   * setState for this Editor
+   * Sets Editor's State
    * @param {object} obj
    * @returns void
    */
@@ -79,7 +98,6 @@ export default class Editor {
     }).then((state) => {
       const props = {
         state: this.getState(), // Cloned
-        // path: this.generatePath(),
       };
       this.render(props);
     });
@@ -87,23 +105,14 @@ export default class Editor {
   }
 
 
-
-
   /**
    * Called from handleMouseMove
-   * calls setState
-   * @memberof Editor
+   * calls setState()
    * @param {coords} coords
    */
   setPointCoords = (coords) => {
-    // const cstate = this.getState();
     const { activePoint, lines, activeLine } = this.getState();
 
-    // console.log(lines[activeLine].points[0]);
-    // const points = cstate.points;
-    // const active = cstate.activePoint;
-    // points[active].x = coords.x;
-    // points[active].y = coords.y;
     lines[activeLine].points[activePoint].x = coords.x;
     lines[activeLine].points[activePoint].y = coords.y;
 
@@ -112,24 +121,13 @@ export default class Editor {
 
   /**
    * Called from handleMouseMove
-   * calls setState
-   * @memberof Editor
+   * calls setState()
    * @param {coords} coords
    * @param {anchor} anchor
    */
   setCubicCoords = (coords, anchor) => {
-    // const cstate = this.getState();
-    const { points, activePoint, lines, activeLine } = this.getState();
+    const { activePoint, lines, activeLine } = this.getState();
 
-    console.log(this.getState().lines[activeLine]);
-    // console.log(lines[activeLine]);
-    // console.log(`line n stuff: ${lines[activeLine].points[activePoint]}, anchor: ${anchor}`);
-
-    // let points = cstate.points;
-    // let active = cstate.activePoint;
-
-    // points[active].c[anchor].x = coords.x;
-    // points[active].c[anchor].y = coords.y;
     lines[activeLine].points[activePoint].c[anchor].x = coords.x;
     lines[activeLine].points[activePoint].c[anchor].y = coords.y;
 
@@ -138,19 +136,12 @@ export default class Editor {
 
   /**
    * Called from handleMouseMove
-   * calls setState
-   * @memberof Editor
+   * calls setState()
    * @param {coords} coords
    */
   setQuadraticCoords = (coords) => {
-    // const cstate = this.getState();
-    const { points, activePoint, lines, activeLine } = this.getState();
+    const { activePoint, lines, activeLine } = this.getState();
 
-    // let points = cstate.points;
-    // let active = cstate.activePoint;
-
-    // points[active].q.x = coords.x;
-    // points[active].q.y = coords.y;
     lines[activeLine].points[activePoint].q.x = coords.x;
     lines[activeLine].points[activePoint].q.y = coords.y;
 
@@ -178,15 +169,14 @@ export default class Editor {
     return { x, y };
   }
 
+
   /**
    * passed to Editor.Main
    * @param {e} e 
-   * 
    */
   handleMouseMove = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // console.log(`mousemove`);
 
     if (!this.state.ctrl) {
       if (this.state.draggedPoint) {
@@ -223,8 +213,7 @@ export default class Editor {
 
   /**
    * Grid
-   * calls setState
-   * @memberof Editor
+   * calls setState()
    * @param {e} e
    */
   setGridSize = (e) => {
@@ -244,8 +233,7 @@ export default class Editor {
 
   /**
    * Grid
-   * calls setState
-   * @memberof Editor
+   * calls setState()
    * @param {e} e
    */
   setGridSnap = (e) => {
@@ -258,8 +246,7 @@ export default class Editor {
 
   /**
    * Grid
-   * calls setState
-   * @memberof Editor
+   * calls setState()
    * @param {e} e
    */
   setGridShow = (e) => {
@@ -271,9 +258,8 @@ export default class Editor {
 
 
   /**
-   * Calls Class SVGRender - sorta interface
-   * @memberof Editor
-   * @param {{state:object}} props
+   * @param {{state:State}} props
+   * @returns void
    */
   render = (props) => {
     const mainId = document.querySelector('#main');
@@ -282,26 +268,12 @@ export default class Editor {
     /**Controls - auto adds listeners */
     const controlId = document.querySelector('#controls');
     controlId.innerHTML = this.controls.render(props);
-    // Editor.SVGRender({
-    //   state: this.bestCopyEver(this.state), // Cloned
-    //   id: this.id,
-    //   path: this.generatePath(),
-    //   controls: this.controls,
-    //   main: this.main,
-    // });
   }
 }
 
 
 /** 
- * @param {object} props
- * @param {HTMLElement} props.id
- * @param {string} props.path
- * @param {object} props.state
- * @param {Controls} props.controls
- * @param {Main} props.main
+ * Interface to render to a DOM
+ * @param {{state:State}} props
  */
-Editor.SVGRender = (props) => {
-  const { id, controls, main } = props;
-
-};
+Editor.DOMRender = (props) => {};

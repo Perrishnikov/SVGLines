@@ -181,7 +181,6 @@ function Text(props) {
 
 function Choices(props) {
   let choices = props.choices.map((c, i) => {
-    console.log(c);
     return `
         <label class="ad-Choice">
           <input
