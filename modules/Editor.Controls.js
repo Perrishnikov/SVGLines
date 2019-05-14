@@ -31,7 +31,7 @@ export default class Controls {
       if (click.includes('ad-Button--delete')) {
         this.removeActivePoint();
       } else if (click.includes('ad-Choice-input')) {
-        console.log(`Hello World!`);
+        // console.log(`setPointType`);
         this.setPointType(e);
       }
 
@@ -48,6 +48,7 @@ export default class Controls {
     this.setState({ h: v });
   }
 
+  
   setWidth = (e) => {
     let v = this.positiveNumber(e.target.value),
       min = 1;
@@ -55,6 +56,7 @@ export default class Controls {
 
     this.setState({ w: v });
   }
+
 
   setPointType = (e) => {
     const { lines, activePoint, activeLine } = this.getState();
@@ -115,11 +117,14 @@ export default class Controls {
     }
   }
 
-  setArcParam = (param, e) => {
-    const cstate = this.getState();
 
-    const points = cstate.points;
-    const active = cstate.activePoint;
+  setArcParam = (param, e) => {
+    const { lines, activePoint, activeLine } = this.getState();
+    const ap = lines[activeLine];
+    // const cstate = this.getState();
+
+    // const points = cstate.points;
+    // const active = cstate.activePoint;
     let v;
 
     if (['laf', 'sf'].indexOf(param) > -1) {
@@ -128,19 +133,23 @@ export default class Controls {
       v = this.positiveNumber(e.target.value);
     }
 
-    points[active].a[param] = v;
+    ap.points[activePoint].a[param] = v;
 
-    this.setState({ points });
+    this.setState({ lines });
   }
 
-  setPointPosition = (coord, e) => {
-    const cstate = this.getState();
 
-    const coords = cstate.points[cstate.activePoint];
+  setPointPosition = (coord, e) => {
+    const { lines, activePoint, activeLine, w, h } = this.getState();
+    const ap = lines[activeLine];
+
+    // const cstate = this.getState();
+
+    const coords = ap.points[activePoint];
     let v = this.positiveNumber(e.target.value);
 
-    if (coord === 'x' && v > cstate.w) v = cstate.w;
-    if (coord === 'y' && v > cstate.h) v = cstate.h;
+    if (coord === 'x' && v > w) v = w;
+    if (coord === 'y' && v > h) v = h;
 
     coords[coord] = v;
 
@@ -149,13 +158,15 @@ export default class Controls {
 
 
   setQuadraticPosition = (coord, e) => {
-    const cstate = this.getState();
+    const { lines, activePoint, activeLine, w, h } = this.getState();
+    const ap = lines[activeLine];
+    // const cstate = this.getState();
 
-    const coords = cstate.points[cstate.activePoint].q;
+    const coords = ap.points[activePoint].q;
     let v = this.positiveNumber(e.target.value);
 
-    if (coord === 'x' && v > cstate.w) v = cstate.w;
-    if (coord === 'y' && v > cstate.h) v = cstate.h;
+    if (coord === 'x' && v > w) v = w;
+    if (coord === 'y' && v > h) v = h;
 
     coords[coord] = v;
 
@@ -164,18 +175,21 @@ export default class Controls {
 
 
   setCubicPosition = (coord, anchor, e) => {
-    const cstate = this.getState();
+    const { lines, activePoint, activeLine, w, h } = this.getState();
+    const ap = lines[activeLine];
+    // const cstate = this.getState();
 
-    const coords = cstate.points[cstate.activePoint].c[anchor];
+    const coords = ap.points[activePoint].c[anchor];
     let v = this.positiveNumber(e.target.value);
 
-    if (coord === 'x' && v > cstate.w) v = cstate.w;
-    if (coord === 'y' && v > cstate.h) v = cstate.h;
+    if (coord === 'x' && v > w) v = w;
+    if (coord === 'y' && v > h) v = h;
 
     coords[coord] = v;
 
     this.setCubicCoords(coords, anchor);
   }
+
 
   removeActivePoint = (e) => {
     const { activePoint, lines, activeLine } = this.getState();
@@ -193,6 +207,7 @@ export default class Controls {
     console.log(`Point removed`);
   }
 
+
   reset = (e) => {
     const cstate = this.getState();
     const w = cstate.w;
@@ -204,10 +219,13 @@ export default class Controls {
     });
   }
 
+
   setTextInputs = () => {
+    //TODO:
     console.log(`setText: ${this.getState().w}`);
-    document.querySelector('#Width').value = this.state.w;
+    // document.querySelector('#Width').value = this.getState().w;
   }
+
 
   render = (props) => {
     const { w, h, lines, activeLine, activePoint, grid } = props.state;

@@ -6,7 +6,7 @@ import Main from './Editor.Main.js';
  * Misc
  * @typedef {HTMLDivElement} Element
  * @typedef {{x:number,y:number}} coords
- * @typedef {0 | 1} anchor
+ * @typedef {0 | 1 | boolean} anchor
  * @typedef {MouseEvent} e 
  */
 
@@ -36,9 +36,10 @@ import Main from './Editor.Main.js';
  * Editor
  * @typedef {Editor} this
  * @property {Id} id
- * @property {State} state
+ * property {State} state
  * @property {Main} main
  * @property {Controls} controls
+ * @property 
  */
 export default class Editor {
   /**
@@ -65,6 +66,7 @@ export default class Editor {
   }
 
 
+
   handleKeyDown = (e) => {
     console.log(`handleKeyDown: ${e.key}`);
     if (e.key === 'Alt' || e.key === 'Meta') {
@@ -75,7 +77,7 @@ export default class Editor {
 
   handleKeyUp = (e) => {
     console.log(`handleKeyUp`);
-    if (this.state.ctrl === true) {
+    if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
     }
   }
@@ -103,6 +105,7 @@ export default class Editor {
       const props = {
         state: this.getState(), // Cloned
       };
+
       this.render(props);
     });
 
@@ -130,12 +133,16 @@ export default class Editor {
    * @param {anchor} anchor
    */
   setCubicCoords = (coords, anchor) => {
+    // console.log('setCubicCoords');
+    // console.log(anchor);
     const { activePoint, lines, activeLine } = this.getState();
 
+    // if (anchor) {
     lines[activeLine].points[activePoint].c[anchor].x = coords.x;
     lines[activeLine].points[activePoint].c[anchor].y = coords.y;
 
     this.setState({ lines });
+    // }
   }
 
   /**
@@ -158,6 +165,7 @@ export default class Editor {
    * @returns {coords}
    */
   getMouseCoords = (e) => {
+    const { grid } = this.getState();
     // const rect = ReactDOM.findDOMNode(this.refs.svg).getBoundingClientRect()
     const rect = this.id.getBoundingClientRect();
     // console.log(rect);
@@ -165,9 +173,9 @@ export default class Editor {
     let x = Math.round(e.pageX - rect.left);
     let y = Math.round(e.pageY - rect.top);
 
-    if (this.state.grid.snap) {
-      x = this.state.grid.size * Math.round(x / this.state.grid.size);
-      y = this.state.grid.size * Math.round(y / this.state.grid.size);
+    if (grid.snap) {
+      x = grid.size * Math.round(x / grid.size);
+      y = grid.size * Math.round(y / grid.size);
     }
 
     return { x, y };
@@ -181,20 +189,18 @@ export default class Editor {
   handleMouseMove = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const { ctrl, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
 
-    if (!this.state.ctrl) {
-      if (this.state.draggedPoint) {
+    if (!ctrl) {
+      if (draggedPoint) {
         console.log(`setPoint`);
         this.setPointCoords(this.getMouseCoords(e));
-      } else if (this.state.draggedQuadratic) {
+      } else if (draggedQuadratic) {
         console.log(`setQuad`);
         this.setQuadraticCoords(this.getMouseCoords(e));
-      } else if (this.state.draggedCubic !== false) {
+      } else if (draggedCubic !== false) {
         console.log(`setCubic`);
-        this.setCubicCoords(
-          this.getMouseCoords(e),
-          this.state.draggedCubic
-        );
+        this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
       }
     }
   }
@@ -221,10 +227,10 @@ export default class Editor {
    * @param {e} e
    */
   setGridSize = (e) => {
-    let grid = this.state.grid;
+    let { grid, w, h } = this.getState();
     let v = this.positiveNumber(e.target.value);
     const min = 1;
-    const max = Math.min(this.state.w, this.state.h);
+    const max = Math.min(w, h);
 
     if (v < min) { v = min; }
     if (v >= max) { v = max / 2; }
@@ -241,7 +247,7 @@ export default class Editor {
    * @param {e} e
    */
   setGridSnap = (e) => {
-    let grid = this.state.grid;
+    let { grid } = this.getState();
     grid.snap = e.target.checked;
 
     this.setState({ grid });
@@ -254,7 +260,7 @@ export default class Editor {
    * @param {e} e
    */
   setGridShow = (e) => {
-    let grid = this.state.grid;
+    let { grid } = this.getState();
     grid.show = e.target.checked;
 
     this.setState({ grid });
