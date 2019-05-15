@@ -303,11 +303,11 @@ export default class Controls {
     }
 
     return `
-    
-        <div class="ad-Controls">
-            <h3 class="ad-Controls-title">Parameters</h3>
+            <div class="controls_div flex_row">
+                <h3 class="ad-Controls-title">Parameters</h3>
+            </div>
             
-            <div class="ad-Controls-container">
+            <div class="ad-Controls-container controls_div flex_row">
               ${Control({
                 name:'Width',
                 type:'text',
@@ -321,7 +321,7 @@ export default class Controls {
                 // onChange={ (e) => props.setHeight(e) } />
               })}
             </div>
-            <div class="ad-Controls-container">
+            <div class="ad-Controls-container controls_div flex_row">
               ${Control({
                 name:'Grid size',
                 type:'text',
@@ -341,7 +341,8 @@ export default class Controls {
                 // onChange={ (e) => props.setGridShow(e) } />
               })}
             </div>
-            <div class="ad-Controls-container">
+
+            <div class="ad-Controls-container controls_div flex_row">
               ${Control({
                 type: 'button',
                 action: 'reset',
@@ -350,10 +351,12 @@ export default class Controls {
                 // onClick={ (e) => props.reset(e) } />
               })}
             </div>
-                    
-            <h3 class="ad-Controls-title">Selected point</h3>
+
+            <div class="controls_div flex_row">
+                <h3 class="ad-Controls-title">Selected point</h3>
+            </div>
                         
-            <div class="ad-Controls-container">
+            <div class="ad-Controls-container controls_div flex_row">
               ${Control({
                 name:'Point type',
                 type:'choices',
@@ -370,7 +373,7 @@ export default class Controls {
             
             ${ params }
             
-            <div class="ad-Controls-container">
+            <div class="ad-Controls-container controls_div flex_row">
               ${Control({
                 type:'button',
                 action:'delete',
@@ -380,7 +383,7 @@ export default class Controls {
               })}
             </div>
 
-          <div class="ad-Controls-container">
+          <div class="ad-Controls-container controls_div flex_row">
             ${Control({
               type:'button',
               action:'newLine',
@@ -391,7 +394,6 @@ export default class Controls {
 
 
 
-        </div>
     `;
   }
 

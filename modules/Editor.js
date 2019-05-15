@@ -48,6 +48,7 @@ export default class Editor {
    */
   constructor(props) {
     this.id = props.id;
+    console.log(this.id);
 
     //must be added to document, not Main. Needed in Main, but cant place it in div??
     document.addEventListener('keydown', this.handleKeyDown, true);

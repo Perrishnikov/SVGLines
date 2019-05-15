@@ -275,7 +275,6 @@ export default class Main {
     const lines = props.state.lines;
 
     return `
-      <div class="ad-Container-svg">
         <svg class="ad-SVG" width="${w}" height="${h}">
           ${lines.map((line, index) => {
             let al = activeLine == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
@@ -289,8 +288,7 @@ export default class Main {
           }).join('')}
 
           ${grid}
-        </svg>
-      </div>`;
+        </svg>`;
   }
 
 }

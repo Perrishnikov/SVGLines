@@ -79,7 +79,7 @@ function Grid(props) {
   for (let i = 1; i < (w / size); i++) {
     grid +=
       `<line
-          class="ad-Anchor-line"
+          class="grid_line"
           x1="${i * size }"
           y1="0"
           x2="${i * size }"
@@ -90,7 +90,7 @@ function Grid(props) {
   for (let i = 1; i < (h / size); i++) {
     grid +=
       `<line
-        class="ad-Anchor-line"
+        class="grid_line"
         x1="0"
         y1="${i * size}"
         x2="${w}"
@@ -147,11 +147,11 @@ function Control(props) {
   }
 
   if (name) {
-    label = `<label "class="ad-Control-label">${ name }</label>`;
+    label = `<label class="ad-Control-label controls_label">${ name }</label>`;
   }
 
   return `
-    <div class="ad-Control">
+    <div class="ad-Control control">
       ${ label }
       ${ control } 
     </div>`;
@@ -174,7 +174,7 @@ function Text(props) {
   return `
     <div
       onblur="${props.onchange}"
-      class="ad-Text"
+      class="ad-Text controls_text"
       contenteditable="true">
       ${props.value}</div>`;
 }
@@ -198,7 +198,7 @@ function Choices(props) {
   }).join('');
 
   return `
-    <div class="ad-Choices">
+    <div class="ad-Choices flex_row">
       ${ choices }
     </div>
   `;
@@ -221,15 +221,12 @@ function Checkbox(props) {
   // onChange=" props.onChange "
   // ${props.checked ? 'checked': ''} />
   return `
-  <label class="ad-Checkbox"></label>
-  <input
-    class="ad-Checkbox-input"
-    type="checkbox"
-    ${props.checked ? 'checked': ''} 
-    />
-    
-    <div class="ad-Checkbox-fake"></div>
-  
+    <input
+      class="ad-Checkbox-input"
+      type="checkbox"
+      ${props.checked ? 'checked': ''} 
+      />
+    <div class="ad-Checkbox-fake c_label"></div>
 `;
 }
 

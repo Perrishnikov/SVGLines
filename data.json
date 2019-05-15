@@ -5,6 +5,7 @@
   "draggedCubic": false,
   "activePoint": 1,
   "activeLine": 0,
+  "tags":[],
   "lines": [{
       "points": [
         { "x": 100, "y": 300 },
