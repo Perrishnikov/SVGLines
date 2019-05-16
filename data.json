@@ -6,6 +6,7 @@
   "activePoint": 1,
   "activeLine": 0,
   "tags":[],
+  "style": {"default": "styles"},
   "lines": [{
       "points": [
         { "x": 100, "y": 300 },
@@ -35,7 +36,7 @@
     }
   ],
   "name": "node_demo",
-  "w": 800,
+  "w": 1000,
   "h": 600,
   "grid": {
     "snap": true,

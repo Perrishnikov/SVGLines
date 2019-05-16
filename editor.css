@@ -3,10 +3,18 @@ Accessed using the var() function (e.g., color: var(--main-color);)
 Custom properties do inherit.
 */
 :root {
-    --color_prim: #111;
-    --color_sec: #00E676;
-    --ad-Color-del: #E53935;
-    --color_main_bg: beige;
+    --color-1: #6e40aa;
+    --color-2: #4c6edb;
+    --color-3: #24aad8;
+    --color-4: #1ac7c2;
+    --color-5: #1ddea3;
+    --color-6: #333;
+    --color-7: #444;
+    --color-8: #555;
+    --color-9: #666;
+    --color-10: #777;
+    --color-11: #999;
+    --color-active: var(--color-5)
 }
 body {
     margin: 0 auto;
@@ -29,7 +37,7 @@ body {
     /* align-items: stretch; */
     /* display: block; */
     /* max-width: 496px; */
-    background-color: pink;
+    background-color: var(--color-2);
     z-index: 40;
     transition: all 0.2s ease-in-out;
     position: fixed;
@@ -75,7 +83,7 @@ body {
 
 }
 .control {
-    background-color: var(--color_sec);
+    background-color: var(--color-3);
     flex: 1;
     flex-direction: column;
     margin: .3rem;
@@ -83,7 +91,7 @@ body {
 }
 .ad-Grid {
     /* fill: none; */
-    stroke: black;
+    stroke: var(--color-6);
     stroke-width: 1px;
 }
 .ad-Grid.is-hidden {
@@ -91,23 +99,23 @@ body {
 }
 .ad-Path {
     fill: none;
-    stroke: #555;
+    stroke: var(--color-11);
     stroke-width: 4px;
     /* stroke-linecap: round; */
 }
 .ad-Point {
     cursor: pointer;
     fill: #fff;
-    stroke: #555;
+    stroke: var(--color-11);
     stroke-width: 5px;
     transition: fill .2s;
 }
 .ad-Point:hover,
 .ad-PointGroup.is-active .ad-Point {
-    fill: var(--color_sec);
+    fill: var(--color-active);
 }
 .ad-PointGroup--first .ad-Point {
-    stroke: var(--color_sec);
+    stroke: var(--color-4);
 }
 .ad-Anchor {
     opacity: .5;
@@ -122,12 +130,12 @@ body {
   stroke-width: 4px;
 }
 .ad-Anchor-line {
-  stroke: #888;
+  stroke:var(--color-11);
   stroke-width: 1px;
   stroke-dasharray: 5 5;
 }
 .grid_line{
-  stroke: #888;
+  stroke: var(--color-11);
   stroke-width: 1px;
 }
 .flex_column {
