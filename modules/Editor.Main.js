@@ -70,12 +70,17 @@ export default class Main {
       } else if (classList.includes('ad-SVG')) {
         //This is the canvas area
         /** Add the AddPoint Event */
-        // console.log(`this.state.ctrl:${this.state().ctrl}, true:${true}, equal:${this.state().ctrl == true}`);
+        // console.log(`this.state.ctrl:${this.getState().ctrl}, true:${true}, equal:${this.getState().ctrl == true}`);
+        // console.log(`this.state.shift:${this.getState().shift}, true:${true}, equal:${this.getState().shift == true}`);
 
-        if (this.getState().ctrl === true) {
+        if (this.getState().ctrl && !this.getState().shift) {
           console.log(`addPoint`);
           this.addPoint(e);
+        } else if (this.getState().ctrl && this.getState().shift) {
+          console.log(`addLine`);
+          this.addLine(e);
         }
+
       } else {
         console.log(`There might be an error here`);
       }
@@ -145,6 +150,26 @@ export default class Main {
         draggedCubic: anchor
       });
     }
+  }
+
+
+  /**
+   * Called from mousedown event
+   * calls setState
+   * param {e} e
+   */
+  addLine = (e) => {
+    const coords = this.getMouseCoords(e);
+    const { lines, activeLine } = this.getState();
+
+    const newPoints = { points: [coords] };
+    lines.push(newPoints);
+
+    this.setState({
+      lines,
+      activePoint: 0, //first point
+      activeLine: lines.length - 1 // on new line
+    });
   }
 
   /**
@@ -250,7 +275,7 @@ export default class Main {
       }
 
       const isFirst = i === 0 ? ' ad-PointGroup--first' : '';
-      const ap2 = ap == i && al == true? ' is-active' : '';
+      const ap2 = ap == i && al == true ? ' is-active' : '';
 
       return (
         `<g class="ad-PointGroup${isFirst}${ap2}">

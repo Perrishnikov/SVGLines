@@ -48,7 +48,7 @@ export default class Controls {
     this.setState({ h: v });
   }
 
-  
+
   setWidth = (e) => {
     let v = this.positiveNumber(e.target.value),
       min = 1;
@@ -304,7 +304,7 @@ export default class Controls {
 
     return `
             <div class="controls_div flex_row">
-                <h3 class="ad-Controls-title">Parameters</h3>
+                <h3 class="ad-Controls-title">Board</h3>
             </div>
             
             <div class="ad-Controls-container controls_div flex_row">
@@ -353,16 +353,18 @@ export default class Controls {
             </div>
 
             <div class="controls_div flex_row">
-                <h3 class="ad-Controls-title">Selected point</h3>
+                <h3 class="ad-Controls-title">Point</h3>
             </div>
-                        
+            <div class="controls_div flex_row">
+                <h3 class="ad-Controls-title">Line</h3>
+            </div>      
             <div class="ad-Controls-container controls_div flex_row">
               ${Control({
                 name:'Point type',
                 type:'choices',
                 id:'pointType',
                 choices:[
-                    { name: 'L', value: 'l', checked: (pointType == 'l')},
+                    { name: 'L', value: 'l', checked: pointType == 'l' },
                     { name: 'Q', value: 'q', checked: pointType == 'q' },
                     { name: 'C', value: 'c', checked: pointType == 'c' },
                     { name: 'A', value: 'a', checked: pointType == 'a' }
@@ -377,24 +379,29 @@ export default class Controls {
               ${Control({
                 type:'button',
                 action:'delete',
-                value:'Remove this point',
+                value:'Delete Point',
                 // onclick: this.removeActivePoint
                 // onClick={ (e) => props.removeActivePoint(e) } />
               })}
-            </div>
-
-          <div class="ad-Controls-container controls_div flex_row">
-            ${Control({
-              type:'button',
-              action:'newLine',
-              value:'Add New Line',
-              // onclick: log()
-            })}
-          </div>
-
-
-
-    `;
+              ${Control({
+                type:'button',
+                action:'newLine',
+                value:'New Line',
+                // onclick: log()
+              })}
+              ${Control({
+                type:'button',
+                action:'newPoint',
+                value:'New Point',
+                // onclick: log()
+              })}
+              ${Control({
+                type:'button',
+                action:'Undo',
+                value:'Undo',
+                // onclick: log()
+              })}
+            </div>`;
   }
 
 

@@ -13,7 +13,7 @@ import Main from './Editor.Main.js';
 /**
  * Line
  * @typedef {Object} Line
- * @property {[{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}]} points
+ * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
  */
 
 /**
@@ -23,6 +23,7 @@ import Main from './Editor.Main.js';
  * @property {boolean} draggedQuadratic
  * @property {boolean} draggedPoint
  * @property {boolean} ctrl
+ * @property {boolean} shift
  * @property {number} activeLine 
  * @property {number} activePoint  
  * @property {Line[]} lines
@@ -48,7 +49,6 @@ export default class Editor {
    */
   constructor(props) {
     this.id = props.id;
-    console.log(this.id);
 
     //must be added to document, not Main. Needed in Main, but cant place it in div??
     document.addEventListener('keydown', this.handleKeyDown, true);
@@ -67,11 +67,15 @@ export default class Editor {
   }
 
 
-
   handleKeyDown = (e) => {
     console.log(`handleKeyDown: ${e.key}`);
     if (e.key === 'Alt' || e.key === 'Meta') {
+      // console.log('meta');
       this.setState({ ctrl: true });
+    }
+    if (e.key === 'Shift') {
+      // console.log('shift');
+      this.setState({ shift: true });
     }
   }
 
@@ -80,6 +84,9 @@ export default class Editor {
     console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
+    }
+    if (this.getState().shift === true) {
+      this.setState({ shift: false });
     }
   }
 
@@ -190,9 +197,9 @@ export default class Editor {
   handleMouseMove = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { ctrl, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
+    const { ctrl, shift, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
 
-    if (!ctrl) {
+    if (!ctrl && !shift) {
       if (draggedPoint) {
         console.log(`setPoint`);
         this.setPointCoords(this.getMouseCoords(e));
