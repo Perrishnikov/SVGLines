@@ -237,15 +237,15 @@ function Range(props) {
     <input
       class="ad-Range-input"
       type="range"
-      min=${ props.min }
-      max=${ props.max }
-      step=${ props.step }
-      value=${ props.value }
+      min="${ props.min }"
+      max="${ props.max }"
+      step="${ props.step }"
+      value="${ props.value }"
       />
     <input
       class="ad-Range-text ad-Text"
       type="text"
-      value=${ props.value }
+      value="${ props.value }"
       />
   </div>
   `;
