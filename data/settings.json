@@ -1,0 +1,16 @@
+{
+  "ctrl": false,
+  "shift": false,
+  "draggedPoint": false,
+  "draggedQuadratic": false,
+  "draggedCubic": false,
+  "activePoint": 1,
+  "activeLine": 0,
+  "edit_w": 1000,
+  "edit_h": 600,
+  "grid": {
+    "snap": true,
+    "show": true,
+    "size": 50
+  }
+}

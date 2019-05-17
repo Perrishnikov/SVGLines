@@ -1,0 +1,29 @@
+/* :root can be useful for declaring global CSS variables. 
+Accessed using the var() function (e.g., color: var(--main-color);)
+Custom properties do inherit.
+*/
+:root {
+    --color-1: #6e40aa;
+    --color-2: #4c6edb;
+    --color-3: #24aad8;
+    --color-4: #1ac7c2;
+    --color-5: #1ddea3;
+    --color-6: #333;
+    --color-7: #444;
+    --color-8: #555;
+    --color-9: #666;
+    --color-10: #777;
+    --color-11: #999;
+    --color-active: var(--color-5)
+}
+body {
+    margin: 0 auto;
+    font-family: Courier, monospace;
+    font-size: 16px;
+}
+.app_wrap {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+}

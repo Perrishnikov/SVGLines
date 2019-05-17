@@ -295,6 +295,7 @@ export default class Main {
 
   render = (props) => {
     console.log(`from Main render()`);
+    console.log(props);
     const { w, h, activePoint, activeLine } = props.state;
     const grid = Grid(props.state);
     const lines = props.state.lines;

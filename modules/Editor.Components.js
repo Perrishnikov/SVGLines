@@ -251,5 +251,13 @@ function Range(props) {
   `;
 }
 
+function NavButton(props){
+  const {name, id} = props;
+  return `
+    <div class="">
+    </div>
+  `;
+}
+
 
 export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices };
