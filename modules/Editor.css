@@ -3,6 +3,8 @@ Accessed using the var() function (e.g., color: var(--main-color);)
 Custom properties do inherit.
 */
 :root {
+    --color-dark: black;
+    --color-light: white;
     --color-1: #6e40aa;
     --color-2: #4c6edb;
     --color-3: #24aad8;
@@ -15,7 +17,7 @@ Custom properties do inherit.
     --color-10: #777;
     --color-11: #999;
     --color-active: var(--color-5);
-    --pad-standard: .5rem;
+    
 }
 body {
     margin: 0 auto;

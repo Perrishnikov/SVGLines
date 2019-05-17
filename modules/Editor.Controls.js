@@ -1,5 +1,5 @@
 //@ts-check
-import { Control, NavLi } from './Editor.Components.js';
+import { Control, Nav } from './Editor.Components.js';
 
 /**
  * @typedef {import('./Editor').anchor} anchor
@@ -25,7 +25,11 @@ export default class Controls {
 
 
     this.id.addEventListener('click', (e) => {
+      e.stopPropagation();
+
       let click = [...e.target.classList];
+      let id = e.target.id;
+      // console.dir(id);
 
       //REMOVE POINT
       if (click.includes('ad-Button--delete')) {
@@ -35,10 +39,57 @@ export default class Controls {
         this.setPointType(e);
       }
 
+      //NAVIGATION ICONS
+      if (id === 'nav_settings') {
+        this.navActive(e.target);
+        this.navHideComponent(['lines']);
+        // console.log(`nav_settings`);
+      } else if (id === 'nav_lines') {
+        this.navActive(e.target);
+        // console.log(`nav_lines`);
+      } else if (id === 'nav_help') {
+        this.navActive(e.target);
+        // console.log(`nav_help`);
+      }
+
     });
 
   }
 
+  navHideComponent = (target) => {
+
+    // const p = [...target.parentElement.children];
+
+    target.forEach(element => {
+      console.log(`${element}`);
+      let t = document.querySelector(`#${element}`);
+
+      console.dir(t);
+      t.classList.add('hide_nav_component');
+      // console.log(element.classList);
+    });
+
+    // target.children[0].classList.add('active_nav');
+
+  }
+
+  /**
+   * Activate the Nav when clicked
+   *`Remove and add class active_nav'
+   * @memberof Controls
+   * @param {Element} target
+   */
+  navActive = (target) => {
+    const p = [...target.parentElement.children];
+
+    p.forEach(element => {
+      // console.dir(element);
+      element.children[0].classList.remove('active_nav');
+      // console.log(element.classList);
+    });
+
+    target.children[0].classList.add('active_nav');
+  }
 
   setHeight = (e) => {
     let v = this.positiveNumber(e.target.value),
@@ -227,6 +278,7 @@ export default class Controls {
   }
 
 
+
   render = (props) => {
     const { w, h, lines, activeLine, activePoint, grid } = props.state;
     const active = lines[activeLine].points[activePoint];
@@ -246,6 +298,9 @@ export default class Controls {
       // console.log(`Hello Active A!`);
       pointType = 'a';
 
+    }
+
+    {
       // params.push(
       //     <div className="ad-Controls-container">
       //         <Control
@@ -301,18 +356,18 @@ export default class Controls {
       //     </div>
       // )
     }
-
     return (
       `<nav>
-                ${NavLi({
+                ${Nav({
                   icon: 'settings',
-                  id:'nav_settings'
+                  id:'nav_settings',
+                  active: true
                 })}
-                ${NavLi({
+                ${Nav({
                   icon:'lines',
-                  id:'nav_line'
+                  id:'nav_lines'
                 })}
-                ${NavLi({
+                ${Nav({
                   icon: 'help',
                   id:'nav_help'
                 })}
@@ -320,103 +375,119 @@ export default class Controls {
             <div class="controls_div flex_row">
                 <h3 class="ad-Controls-title">Board</h3>
             </div>
-            
-            <div class="ad-Controls-container controls_div flex_row">
-              ${Control({
-                name:'Width',
-                type:'text',
-                value: w,
-                // onchange:log()
-              })}
-              ${Control({
-                name:'Height',
-                type:'text',
-                value: h,
-                // onChange={ (e) => props.setHeight(e) } />
-              })}
-            </div>
-            <div class="ad-Controls-container controls_div flex_row">
-              ${Control({
-                name:'Grid size',
-                type:'text',
-                value: grid.size
-                // onChange={ (e) => props.setGridSize(e) }
-              })}
-              ${Control({
-                name:'Snap grid',
-                type:'checkbox',
-                checked: grid.snap,
-                // onChange={ (e) => props.setGridSnap(e) } />
-              })}
-              ${Control({
-                name:'Show grid',
-                type:'checkbox',
-                checked: grid.show
-                // onChange={ (e) => props.setGridShow(e) } />
-              })}
-            </div>
-
-            <div class="ad-Controls-container controls_div flex_row">
-              ${Control({
-                type: 'button',
-                action: 'reset',
-                value: 'Reset path',
-                // onclick: log
-                // onClick={ (e) => props.reset(e) } />
-              })}
-            </div>
-
-            <div class="controls_div flex_row">
-                <h3 class="ad-Controls-title">Point</h3>
-            </div>
-            <div class="controls_div flex_row">
-                <h3 class="ad-Controls-title">Line</h3>
-            </div>      
-            <div class="ad-Controls-container controls_div flex_row">
-              ${Control({
-                name:'Point type',
-                type:'choices',
-                id:'pointType',
-                choices:[
-                    { name: 'L', value: 'l', checked: pointType == 'l' },
-                    { name: 'Q', value: 'q', checked: pointType == 'q' },
-                    { name: 'C', value: 'c', checked: pointType == 'c' },
-                    { name: 'A', value: 'a', checked: pointType == 'a' }
-                ]
-                // onChange:{ (e) => props.setPointType(e) } 
-              })}
-            </div>
-            
-            ${ params }
-            
-            <div class="ad-Controls-container controls_div flex_row">
-              ${Control({
-                type:'button',
-                action:'delete',
-                value:'Delete Point',
-                // onclick: this.removeActivePoint
-                // onClick={ (e) => props.removeActivePoint(e) } />
-              })}
-              ${Control({
-                type:'button',
-                action:'newLine',
-                value:'New Line',
-                // onclick: log()
-              })}
-              ${Control({
-                type:'button',
-                action:'newPoint',
-                value:'New Point',
-                // onclick: log()
-              })}
-              ${Control({
-                type:'button',
-                action:'Undo',
-                value:'Undo',
-                // onclick: log()
-              })}
-            </div>`
+              ${this.Settings({w, h, grid})}
+              ${this.Lines({params,pointType})}`
     );
+  }
+
+  Lines = (props) => {
+    const { pointType, params } = props;
+
+    return `
+    <div id="lines">
+        <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          type: 'button',
+          action: 'reset',
+          value: 'Reset path',
+          // onclick: log
+          // onClick={ (e) => props.reset(e) } />
+        })}
+      </div>
+
+      <div class="controls_div flex_row">
+          <h3 class="ad-Controls-title">Point</h3>
+      </div>
+      <div class="controls_div flex_row">
+          <h3 class="ad-Controls-title">Line</h3>
+      </div>      
+      <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          name:'Point type',
+          type:'choices',
+          id:'pointType',
+          choices:[
+              { name: 'L', value: 'l', checked: pointType == 'l' },
+              { name: 'Q', value: 'q', checked: pointType == 'q' },
+              { name: 'C', value: 'c', checked: pointType == 'c' },
+              { name: 'A', value: 'a', checked: pointType == 'a' }
+          ]
+          // onChange:{ (e) => props.setPointType(e) } 
+        })}
+      </div>
+      
+      ${ params }
+      
+      <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          type:'button',
+          action:'delete',
+          value:'Delete Point',
+          // onclick: this.removeActivePoint
+          // onClick={ (e) => props.removeActivePoint(e) } />
+        })}
+        ${Control({
+          type:'button',
+          action:'newLine',
+          value:'New Line',
+          // onclick: log()
+        })}
+        ${Control({
+          type:'button',
+          action:'newPoint',
+          value:'New Point',
+          // onclick: log()
+        })}
+        ${Control({
+          type:'button',
+          action:'Undo',
+          value:'Undo',
+          // onclick: log()
+        })}
+      </div>
+    </div>`;
+  }
+
+
+  Settings = (props) => {
+    const { w, h, grid } = props;
+    return `
+        <div id="settings">
+            <div class="ad-Controls-container controls_div flex_row">
+            ${Control({
+              name:'Width',
+              type:'text',
+              value: w,
+              // onchange:log()
+            })}
+            ${Control({
+              name:'Height',
+              type:'text',
+              value: h,
+              // onChange={ (e) => props.setHeight(e) } />
+            })}
+          </div>
+          <div class="ad-Controls-container controls_div flex_row">
+            ${Control({
+              name:'Grid size',
+              type:'text',
+              value: grid.size
+              // onChange={ (e) => props.setGridSize(e) }
+            })}
+            ${Control({
+              name:'Snap grid',
+              type:'checkbox',
+              checked: grid.snap,
+              // onChange={ (e) => props.setGridSnap(e) } />
+            })}
+            ${Control({
+              name:'Show grid',
+              type:'checkbox',
+              checked: grid.show
+              // onChange={ (e) => props.setGridShow(e) } />
+            })}
+          </div>
+        </div>`;
   }
 
 

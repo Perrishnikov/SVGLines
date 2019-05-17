@@ -1,14 +1,15 @@
-
+:root {
+    --color-control-hover: #999;
+    --color-control-active: white;
+    --pad-standard: .5rem;
+    --icon-dim: 60px;
+}
 .controls_wrap {
-    /* align-items: stretch; */
-    /* display: block; */
-    /* max-width: 496px; */
     background-color: var(--color-2);
     z-index: 40;
-    transition: all 0.2s ease-in-out;
     position: fixed;
     right: 0px;
-    /* overflow-y: scroll; */
+    overflow-y: scroll;
     top: 0;
     bottom: 0;
     /* padding: 1rem; */
@@ -71,23 +72,36 @@
     flex-shrink: 0;
     flex-basis: auto;
 }
-nav{
-  display: flex;
-  flex-wrap: nowrap;
-  flex: 0 0 auto;
-  justify-content:space-between;
-  /* background-color: var(--color-11); */
+nav {
+    display: flex;
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
+    justify-content: space-between;
+    /* background-color: var(--color-11); */
 }
-.nav_li{
-  display: flex;
-  align-self: baseline;
-  background-color: var(--color-1);
-  padding: var(--pad-standard);
-
+.nav_icon {
+    display: flex;
+    align-self: baseline;
+    /* background-color: var(--color-1); */
+    padding: var(--pad-standard);
+    cursor: pointer;
 }
-.svg_icon{
-  stroke: white;
-  stroke-width: 1px;
-  width: 60px;
-  height: 60px;
+.nav_icon:hover .svg_icon {
+    stroke: var(--color-control-hover)
+        /* background-color: var(--color-1); */
+        /* padding: var(--pad-standard); */
+}
+.active_nav {
+    stroke: var(--color-control-active) !important;
+}
+.hide_nav_component {
+    display: none;
+}
+.svg_icon {
+    z-index: -100;
+    /*used to avoid clicking this*/
+    stroke: var(--color-dark);
+    stroke-width: 1px;
+    width: var(--icon-dim);
+    height: var(--icon-dim);
 }
