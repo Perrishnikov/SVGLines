@@ -11,7 +11,7 @@
     /* overflow-y: scroll; */
     top: 0;
     bottom: 0;
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 .controls_div {
     /* background: var(--color_prim); */
@@ -70,4 +70,24 @@
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: auto;
+}
+nav{
+  display: flex;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  justify-content:space-between;
+  /* background-color: var(--color-11); */
+}
+.nav_li{
+  display: flex;
+  align-self: baseline;
+  background-color: var(--color-1);
+  padding: var(--pad-standard);
+
+}
+.svg_icon{
+  stroke: white;
+  stroke-width: 1px;
+  width: 60px;
+  height: 60px;
 }

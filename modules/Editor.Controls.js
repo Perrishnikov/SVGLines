@@ -1,5 +1,5 @@
 //@ts-check
-import { Control } from './Editor.Components.js';
+import { Control, NavLi } from './Editor.Components.js';
 
 /**
  * @typedef {import('./Editor').anchor} anchor
@@ -302,7 +302,21 @@ export default class Controls {
       // )
     }
 
-    return `
+    return (
+      `<nav>
+                ${NavLi({
+                  icon: 'settings',
+                  id:'nav_settings'
+                })}
+                ${NavLi({
+                  icon:'lines',
+                  id:'nav_line'
+                })}
+                ${NavLi({
+                  icon: 'help',
+                  id:'nav_help'
+                })}
+            </nav>
             <div class="controls_div flex_row">
                 <h3 class="ad-Controls-title">Board</h3>
             </div>
@@ -401,7 +415,8 @@ export default class Controls {
                 value:'Undo',
                 // onclick: log()
               })}
-            </div>`;
+            </div>`
+    );
   }
 
 

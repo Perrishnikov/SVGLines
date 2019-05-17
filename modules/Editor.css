@@ -14,7 +14,8 @@ Custom properties do inherit.
     --color-9: #666;
     --color-10: #777;
     --color-11: #999;
-    --color-active: var(--color-5)
+    --color-active: var(--color-5);
+    --pad-standard: .5rem;
 }
 body {
     margin: 0 auto;
