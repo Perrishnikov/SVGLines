@@ -24,10 +24,11 @@ export default class Controls {
     this.getState = editor.getState;
 
     this.const = {
-      LINE: 'lines',
+      LINE: 'line',
       SAVE: 'save',
       SETTINGS: 'settings',
-      HELP: 'help'
+      HELP: 'help',
+      ACTIVE: 'save',
     };
 
     /** CONTROLS Event Listeners */
@@ -57,9 +58,12 @@ export default class Controls {
     });
   }
 
+
+  /// UI metods
+
   /**
-   *Takes all Nav Components and turns them on or off
-   * @param {Element} target - id of Controls Section
+   * Takes all Nav Sections and turns them on or off
+   * @param {Element} target -  of Controls Section
    */
   showThisSection = (target) => {
     const sections = [...document.querySelectorAll('.controls-section')];
@@ -74,11 +78,7 @@ export default class Controls {
         section.classList.add('active_section');
       }
     });
-
-
   }
-
-  /// UI metods
 
   /**
    * Activate the Nav when clicked
@@ -86,7 +86,7 @@ export default class Controls {
    * @param {Element} target
    */
   activateThisIcon = (target) => {
-    //get all the nav icons
+    //get all the NAV icons
     const icons = [...document.querySelectorAll('.nav_icon')];
 
     icons.forEach(icon => {
@@ -97,6 +97,10 @@ export default class Controls {
 
     // make the target svg icon active
     target.children[0].classList.add('active_icon');
+
+    const sub = target.id.substring(5);
+    console.log(sub);
+    this.const.ACTIVE = sub;
   }
 
   /** LOGIC methods */
@@ -367,26 +371,30 @@ export default class Controls {
       // )
     }
 
-    let { LINE, SAVE, SETTINGS, HELP } = this.const;
+    let { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.const;
+    console.log(`ACTIVE: ${ACTIVE}`);
 
     return (
       `<nav>
           ${NavComponent({
             icon:'line',
             id:`icon_${LINE}`,
+            active: ACTIVE
           })}
           ${NavComponent({
             icon: 'save',
             id: `icon_${SAVE}`,
-            active: true
+            active: ACTIVE
           })}    
           ${NavComponent({
             icon: 'settings',
-            id:`icon_${SETTINGS}`
+            id:`icon_${SETTINGS}`,
+            active: ACTIVE
           })}
           ${NavComponent({
             icon: 'help',
-            id:`icon_${HELP}`
+            id:`icon_${HELP}`,
+            active: ACTIVE
           })}
       </nav>
 
@@ -394,6 +402,7 @@ export default class Controls {
           id:`section_${LINE}`,
           icon:`icon_${LINE}`,
           title: LINE,
+          active: ACTIVE,
           params,
           pointType
         })} 
@@ -402,14 +411,15 @@ export default class Controls {
           id:`section_${SAVE}`,
           icon:`icon_${SAVE}`,
           title: SAVE,
-          params,
-          active: true
+          active: ACTIVE,
+          params
         })}
         
         ${this.Settings({
           id:`section_${SETTINGS}`,
           icon:`icon_${SETTINGS}`,
           title: SETTINGS,
+          active: ACTIVE,
           w, h, grid
         })}
 
@@ -417,10 +427,16 @@ export default class Controls {
           id:`section_${HELP}`,
           icon:`icon_${HELP}`,
           title: HELP,
+          active: ACTIVE,
           params
         })}
-        `
-    );
+        
+    `);
+  }
+
+  Section = (props) => {
+    const { id, title, icon } = props;
+
   }
 
   Title = (props) => {
@@ -435,13 +451,11 @@ export default class Controls {
 
 
   Save = (props) => {
-    let { id, title, icon, active=false } = props;
-    
-    if (active == true) {
-      active = ' active_section';
-    } else {
-      active = '';
-    }
+    //id="section_save" title="save" icon="icon_save"
+    const { id, title, icon } = props;
+    let { ACTIVE } = this.const;
+    const active = ACTIVE == title ? ' active_section' : '';
+
     return `
       <div data-icon="${icon}" class="controls-section${active}" id="${id}">
       ${this.Title({title})}
@@ -451,13 +465,10 @@ export default class Controls {
 
 
   Line = (props) => {
-    let { pointType, params, title, id, icon, active=false } = props;
+    const { pointType, params, title, id, icon } = props;
+    let {ACTIVE} = this.const;
+    const active = ACTIVE == title ? ' active_section':'';
 
-    if (active == true) {
-      active = ' active_section';
-    } else {
-      active = '';
-    }
     return `
     <div data-icon="${icon}" class="controls-section${active}" id="${id}">
         ${this.Title({title})}
@@ -489,7 +500,6 @@ export default class Controls {
                 { name: 'C', value: 'c', checked: pointType == 'c' },
                 { name: 'A', value: 'a', checked: pointType == 'a' }
             ]
-            // onChange:{ (e) => props.setPointType(e) } 
           })}
         </div>
         
@@ -528,52 +538,58 @@ export default class Controls {
 
   Settings = (props) => {
     const { w, h, grid, title, id, icon } = props;
-    return `
-    <div data-icon="${icon}" class="controls-section" id="${id}">
-            ${this.Title({title})}
+    let { ACTIVE } = this.const;
+    const active = ACTIVE == title ? ' active_section' : '';
 
-            <div class="ad-Controls-container controls_div flex_row">
-            ${Control({
-              name:'Width',
-              type:'text',
-              value: w,
-              // onchange:log()
-            })}
-            ${Control({
-              name:'Height',
-              type:'text',
-              value: h,
-              // onChange={ (e) => props.setHeight(e) } />
-            })}
-          </div>
-          <div class="ad-Controls-container controls_div flex_row">
-            ${Control({
-              name:'Grid size',
-              type:'text',
-              value: grid.size
-              // onChange={ (e) => props.setGridSize(e) }
-            })}
-            ${Control({
-              name:'Snap grid',
-              type:'checkbox',
-              checked: grid.snap,
-              // onChange={ (e) => props.setGridSnap(e) } />
-            })}
-            ${Control({
-              name:'Show grid',
-              type:'checkbox',
-              checked: grid.show
-              // onChange={ (e) => props.setGridShow(e) } />
-            })}
-          </div>
-        </div>`;
+    return `
+      <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+        ${this.Title({title})}
+
+        <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          name:'Width',
+          type:'text',
+          value: w,
+          // onchange:log()
+        })}
+        ${Control({
+          name:'Height',
+          type:'text',
+          value: h,
+          // onChange={ (e) => props.setHeight(e) } />
+        })}
+      </div>
+      <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          name:'Grid size',
+          type:'text',
+          value: grid.size
+          // onChange={ (e) => props.setGridSize(e) }
+        })}
+        ${Control({
+          name:'Snap grid',
+          type:'checkbox',
+          checked: grid.snap,
+          // onChange={ (e) => props.setGridSnap(e) } />
+        })}
+        ${Control({
+          name:'Show grid',
+          type:'checkbox',
+          checked: grid.show
+          // onChange={ (e) => props.setGridShow(e) } />
+        })}
+      </div>
+    </div>`;
   }
 
 
   Help = (props) => {
     let { title, id, icon } = props;
+    let { ACTIVE } = this.const;
+    const active = ACTIVE == title ? ' active_section' : '';
+
     return `
-    <div data-icon="${icon}" class="controls-section" id="${id}">
+    <div data-icon="${icon}" class="controls-section${active}" id="${id}">
         ${this.Title({title})}
       </div>
     `

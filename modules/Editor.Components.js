@@ -252,10 +252,10 @@ function Range(props) {
 }
 
 function NavComponent(props) {
-  let { icon, id, active = false } = props;
+  let { icon, id, active} = props;
   let svg;
 
-  if (active == true) {
+  if (active == icon) {
     active = ' active_icon';
   } else {
     active = '';
