@@ -93,11 +93,19 @@ nav {
         /* background-color: var(--color-1); */
         /* padding: var(--pad-standard); */
 }
-.active_nav {
+.active_icon {
     stroke: var(--color-control-active) !important;
 }
+
 .hide_nav_component {
     display: none;
+}
+.controls-section {
+    display: none;
+    /* font-size: 50px !important; */
+}
+.controls-section.active_section {
+    display: block
 }
 .svg_icon {
     z-index: -100;

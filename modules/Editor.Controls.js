@@ -12,10 +12,10 @@ import { Control, NavComponent } from './Editor.Components.js';
 export default class Controls {
   /**
    * @param {Editor} editor 
-   * @param {Element} target 
+   * @param {Element} targetId
    */
-  constructor(editor, target) {
-    this.id = target;
+  constructor(editor, targetId) {
+    this.id = targetId;
     this.setState = editor.setState;
     this.positiveNumber = editor.positiveNumber;
     this.setPointCoords = editor.setPointCoords;
@@ -23,83 +23,83 @@ export default class Controls {
     this.setCubicCoords = editor.setCubicCoords;
     this.getState = editor.getState;
 
+    this.const = {
+      LINE: 'lines',
+      SAVE: 'save',
+      SETTINGS: 'settings',
+      HELP: 'help'
+    };
 
+    /** CONTROLS Event Listeners */
     this.id.addEventListener('click', (e) => {
       e.stopPropagation();
 
-      let click = [...e.target.classList];
-      let id = e.target.id;
-      // console.dir(id);
+      let classList = [...e.target.classList];
+      // let target = e.target;
+      // console.dir(classList);x
 
-      //REMOVE POINT
-      if (click.includes('ad-Button--delete')) {
+      //REMOVE ACTIVE POINT
+      if (classList.includes('ad-Button--delete')) {
         this.removeActivePoint();
-      } else if (click.includes('ad-Choice-input')) {
+      } else if (classList.includes('ad-Choice-input')) {
         // console.log(`setPointType`);
         this.setPointType(e);
       }
 
       //NAVIGATION ICONS
-      if (id === 'nav_settings') {
-        this.navActive(e.target);
-        this.hideNavComponentExcept('settings');
-        // console.log(`nav_settings`);
-      } else if (id === 'nav_lines') {
-        this.navActive(e.target);
-        this.hideNavComponentExcept('lines');
-        // console.log(`nav_lines`);
-      } else if (id === 'nav_help') {
-        this.navActive(e.target);
-        this.hideNavComponentExcept('help');
-        // console.log(`nav_help`);
+      if (classList.includes('nav_icon')) {
+        //target = <nav><div id="icon_lines" class="nav_icons">
+
+        this.activateThisIcon(e.target);
+        this.showThisSection(e.target);
       }
 
     });
-
   }
 
-  hideNavComponentExcept = (target) => {
-    const navs = [...document.querySelectorAll('[data-component="nav"]')];
-    // const p = [...target.parentElement.children];
-    // console.log(navs);
-    navs.forEach(element => {
-      console.dir(element);
-      if (element.id !== target) {
-        element.classList.add('hide_nav_component');
-      } else {
-        element.classList.remove('hide_nav_component');
+  /**
+   *Takes all Nav Components and turns them on or off
+   * @param {Element} target - id of Controls Section
+   */
+  showThisSection = (target) => {
+    const sections = [...document.querySelectorAll('.controls-section')];
+
+    sections.forEach(section => {
+      // <div data-component="controls-section" id="section_lines">
+
+      section.classList.remove('active_section');
+
+      // console.log(`icon: ${section.dataset.icon}, taget id: ${target.id}`);
+      if (section.dataset.icon === target.id) {
+        section.classList.add('active_section');
       }
-    })
-    // target.forEach(element => {
-    //   console.log(`${element}`);
-    //   let t = document.querySelector(`#${element}`);
+    });
 
-    //   console.dir(t);
-    //   t.classList.add('hide_nav_component');
-    //   // console.log(element.classList);
-    // });
-
-    // target.children[0].classList.add('active_nav');
 
   }
+
+  /// UI metods
 
   /**
    * Activate the Nav when clicked
    *`Remove and add class active_nav'
-   * @memberof Controls
    * @param {Element} target
    */
-  navActive = (target) => {
-    const p = [...target.parentElement.children];
+  activateThisIcon = (target) => {
+    //get all the nav icons
+    const icons = [...document.querySelectorAll('.nav_icon')];
 
-    p.forEach(element => {
-      // console.dir(element);
-      element.children[0].classList.remove('active_nav');
+    icons.forEach(icon => {
+      // remove 'active_icon' from all svg icons
+      icon.children[0].classList.remove('active_icon');
       // console.log(element.classList);
     });
 
-    target.children[0].classList.add('active_nav');
+    // make the target svg icon active
+    target.children[0].classList.add('active_icon');
   }
+
+  /** LOGIC methods */
 
   setHeight = (e) => {
     let v = this.positiveNumber(e.target.value),
@@ -366,35 +366,102 @@ export default class Controls {
       //     </div>
       // )
     }
+
+    let { LINE, SAVE, SETTINGS, HELP } = this.const;
+
     return (
       `<nav>
           ${NavComponent({
-            icon: 'settings',
-            id:'nav_settings',
-            active: true
+            icon:'line',
+            id:`icon_${LINE}`,
           })}
           ${NavComponent({
-            icon:'lines',
-            id:'nav_lines'
+            icon: 'save',
+            id: `icon_${SAVE}`,
+            active: true
+          })}    
+          ${NavComponent({
+            icon: 'settings',
+            id:`icon_${SETTINGS}`
           })}
           ${NavComponent({
             icon: 'help',
-            id:'nav_help'
+            id:`icon_${HELP}`
           })}
       </nav>
-        ${this.Settings({w, h, grid})}
-        ${this.Lines({params,pointType})}`
+
+        ${this.Line({
+          id:`section_${LINE}`,
+          icon:`icon_${LINE}`,
+          title: LINE,
+          params,
+          pointType
+        })} 
+
+        ${this.Save({
+          id:`section_${SAVE}`,
+          icon:`icon_${SAVE}`,
+          title: SAVE,
+          params,
+          active: true
+        })}
+        
+        ${this.Settings({
+          id:`section_${SETTINGS}`,
+          icon:`icon_${SETTINGS}`,
+          title: SETTINGS,
+          w, h, grid
+        })}
+
+        ${this.Help({
+          id:`section_${HELP}`,
+          icon:`icon_${HELP}`,
+          title: HELP,
+          params
+        })}
+        `
     );
   }
 
-  Lines = (props) => {
-    const { pointType, params } = props;
+  Title = (props) => {
+    let { title } = props;
 
     return `
-    <div data-component="nav" id="lines">
-    <div class="controls_div flex_row">
-    <h3 class="ad-Controls-title">Lines</h3>
-</div>
+      <div class="controls_div flex_row">
+          <h3 class="ad-Controls-title">${title}</h3>
+      </div>      
+      `;
+  }
+
+
+  Save = (props) => {
+    let { id, title, icon, active=false } = props;
+    
+    if (active == true) {
+      active = ' active_section';
+    } else {
+      active = '';
+    }
+    return `
+      <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+      ${this.Title({title})}
+      </div>
+    `;
+  }
+
+
+  Line = (props) => {
+    let { pointType, params, title, id, icon, active=false } = props;
+
+    if (active == true) {
+      active = ' active_section';
+    } else {
+      active = '';
+    }
+    return `
+    <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+        ${this.Title({title})}
+
         <div class="ad-Controls-container controls_div flex_row">
         ${Control({
           type: 'button',
@@ -403,70 +470,67 @@ export default class Controls {
           // onclick: log
           // onClick={ (e) => props.reset(e) } />
         })}
-      </div>
+        </div>
 
-      <div class="controls_div flex_row">
-          <h3 class="ad-Controls-title">Point</h3>
-      </div>
-      <div class="controls_div flex_row">
-          <h3 class="ad-Controls-title">Line</h3>
-      </div>      
-      <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          name:'Point type',
-          type:'choices',
-          id:'pointType',
-          choices:[
-              { name: 'L', value: 'l', checked: pointType == 'l' },
-              { name: 'Q', value: 'q', checked: pointType == 'q' },
-              { name: 'C', value: 'c', checked: pointType == 'c' },
-              { name: 'A', value: 'a', checked: pointType == 'a' }
-          ]
-          // onChange:{ (e) => props.setPointType(e) } 
-        })}
-      </div>
-      
-      ${ params }
-      
-      <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          type:'button',
-          action:'delete',
-          value:'Delete Point',
-          // onclick: this.removeActivePoint
-          // onClick={ (e) => props.removeActivePoint(e) } />
-        })}
-        ${Control({
-          type:'button',
-          action:'newLine',
-          value:'New Line',
-          // onclick: log()
-        })}
-        ${Control({
-          type:'button',
-          action:'newPoint',
-          value:'New Point',
-          // onclick: log()
-        })}
-        ${Control({
-          type:'button',
-          action:'Undo',
-          value:'Undo',
-          // onclick: log()
-        })}
-      </div>
+        <div class="controls_div flex_row">
+            <h3 class="ad-Controls-title">Point</h3>
+        </div>
+        <div class="controls_div flex_row">
+            <h3 class="ad-Controls-title">Line</h3>
+        </div>      
+        <div class="ad-Controls-container controls_div flex_row">
+          ${Control({
+            name:'Point type',
+            type:'choices',
+            id:'pointType',
+            choices:[
+                { name: 'L', value: 'l', checked: pointType == 'l' },
+                { name: 'Q', value: 'q', checked: pointType == 'q' },
+                { name: 'C', value: 'c', checked: pointType == 'c' },
+                { name: 'A', value: 'a', checked: pointType == 'a' }
+            ]
+            // onChange:{ (e) => props.setPointType(e) } 
+          })}
+        </div>
+        
+        ${ params }
+        
+        <div class="ad-Controls-container controls_div flex_row">
+          ${Control({
+            type:'button',
+            action:'delete',
+            value:'Delete Point',
+            // onclick: this.removeActivePoint
+            // onClick={ (e) => props.removeActivePoint(e) } />
+          })}
+          ${Control({
+            type:'button',
+            action:'newLine',
+            value:'New Line',
+            // onclick: log()
+          })}
+          ${Control({
+            type:'button',
+            action:'newPoint',
+            value:'New Point',
+            // onclick: log()
+          })}
+          ${Control({
+            type:'button',
+            action:'Undo',
+            value:'Undo',
+            // onclick: log()
+          })}
+        </div>
     </div>`;
   }
 
 
   Settings = (props) => {
-    const { w, h, grid } = props;
+    const { w, h, grid, title, id, icon } = props;
     return `
-        <div data-component="nav" id="settings">
-
-        <div class="controls_div flex_row">
-        <h3 class="ad-Controls-title">Settings</h3>
-    </div>
+    <div data-icon="${icon}" class="controls-section" id="${id}">
+            ${this.Title({title})}
 
             <div class="ad-Controls-container controls_div flex_row">
             ${Control({
@@ -506,7 +570,14 @@ export default class Controls {
   }
 
 
-
+  Help = (props) => {
+    let { title, id, icon } = props;
+    return `
+    <div data-icon="${icon}" class="controls-section" id="${id}">
+        ${this.Title({title})}
+      </div>
+    `
+  }
 }
 // export { Controls, addControlListeners };
 

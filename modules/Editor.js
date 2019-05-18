@@ -4,7 +4,7 @@ import Main from './Editor.Main.js';
 
 /**
  * Misc
- * @typedef {HTMLDivElement} Element
+ * @typedef {HTMLElement} Element
  * @typedef {{x:number,y:number}} coords
  * @typedef {0 | 1 | boolean} anchor
  * @typedef {MouseEvent} e 
