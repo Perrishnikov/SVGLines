@@ -1,5 +1,5 @@
 //@ts-check
-import { Control, Nav } from './Editor.Components.js';
+import { Control, NavComponent } from './Editor.Components.js';
 
 /**
  * @typedef {import('./Editor').anchor} anchor
@@ -42,13 +42,15 @@ export default class Controls {
       //NAVIGATION ICONS
       if (id === 'nav_settings') {
         this.navActive(e.target);
-        this.navHideComponent(['lines']);
+        this.hideNavComponentExcept('settings');
         // console.log(`nav_settings`);
       } else if (id === 'nav_lines') {
         this.navActive(e.target);
+        this.hideNavComponentExcept('lines');
         // console.log(`nav_lines`);
       } else if (id === 'nav_help') {
         this.navActive(e.target);
+        this.hideNavComponentExcept('help');
         // console.log(`nav_help`);
       }
 
@@ -56,18 +58,26 @@ export default class Controls {
 
   }
 
-  navHideComponent = (target) => {
-
+  hideNavComponentExcept = (target) => {
+    const navs = [...document.querySelectorAll('[data-component="nav"]')];
     // const p = [...target.parentElement.children];
+    // console.log(navs);
+    navs.forEach(element => {
+      console.dir(element);
+      if (element.id !== target) {
+        element.classList.add('hide_nav_component');
+      } else {
+        element.classList.remove('hide_nav_component');
+      }
+    })
+    // target.forEach(element => {
+    //   console.log(`${element}`);
+    //   let t = document.querySelector(`#${element}`);
 
-    target.forEach(element => {
-      console.log(`${element}`);
-      let t = document.querySelector(`#${element}`);
-
-      console.dir(t);
-      t.classList.add('hide_nav_component');
-      // console.log(element.classList);
-    });
+    //   console.dir(t);
+    //   t.classList.add('hide_nav_component');
+    //   // console.log(element.classList);
+    // });
 
     // target.children[0].classList.add('active_nav');
 
@@ -358,25 +368,22 @@ export default class Controls {
     }
     return (
       `<nav>
-                ${Nav({
-                  icon: 'settings',
-                  id:'nav_settings',
-                  active: true
-                })}
-                ${Nav({
-                  icon:'lines',
-                  id:'nav_lines'
-                })}
-                ${Nav({
-                  icon: 'help',
-                  id:'nav_help'
-                })}
-            </nav>
-            <div class="controls_div flex_row">
-                <h3 class="ad-Controls-title">Board</h3>
-            </div>
-              ${this.Settings({w, h, grid})}
-              ${this.Lines({params,pointType})}`
+          ${NavComponent({
+            icon: 'settings',
+            id:'nav_settings',
+            active: true
+          })}
+          ${NavComponent({
+            icon:'lines',
+            id:'nav_lines'
+          })}
+          ${NavComponent({
+            icon: 'help',
+            id:'nav_help'
+          })}
+      </nav>
+        ${this.Settings({w, h, grid})}
+        ${this.Lines({params,pointType})}`
     );
   }
 
@@ -384,7 +391,10 @@ export default class Controls {
     const { pointType, params } = props;
 
     return `
-    <div id="lines">
+    <div data-component="nav" id="lines">
+    <div class="controls_div flex_row">
+    <h3 class="ad-Controls-title">Lines</h3>
+</div>
         <div class="ad-Controls-container controls_div flex_row">
         ${Control({
           type: 'button',
@@ -452,7 +462,12 @@ export default class Controls {
   Settings = (props) => {
     const { w, h, grid } = props;
     return `
-        <div id="settings">
+        <div data-component="nav" id="settings">
+
+        <div class="controls_div flex_row">
+        <h3 class="ad-Controls-title">Settings</h3>
+    </div>
+
             <div class="ad-Controls-container controls_div flex_row">
             ${Control({
               name:'Width',

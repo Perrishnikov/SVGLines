@@ -251,7 +251,7 @@ function Range(props) {
   `;
 }
 
-function Nav(props) {
+function NavComponent(props) {
   let { icon, id, active=false } = props;
   let svg;
   if(active == true){
@@ -295,4 +295,4 @@ function Icon_Settings(active) {
   `;
 }
 
-export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices, Nav };
+export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices, NavComponent };
