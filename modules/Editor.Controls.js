@@ -36,8 +36,6 @@ export default class Controls {
       e.stopPropagation();
 
       let classList = [...e.target.classList];
-      // let target = e.target;
-      // console.dir(classList);x
 
       //REMOVE ACTIVE POINT
       if (classList.includes('ad-Button--delete')) {
@@ -63,7 +61,7 @@ export default class Controls {
 
   /**
    * Takes all Nav Sections and turns them on or off
-   * @param {Element} target -  of Controls Section
+   * param {Element} target -  of Controls Section
    */
   showThisSection = (target) => {
     const sections = [...document.querySelectorAll('.controls-section')];
@@ -83,7 +81,7 @@ export default class Controls {
   /**
    * Activate the Nav when clicked
    *`Remove and add class active_nav'
-   * @param {Element} target
+   * param {Element} target
    */
   activateThisIcon = (target) => {
     //get all the NAV icons
@@ -434,10 +432,6 @@ export default class Controls {
     `);
   }
 
-  Section = (props) => {
-    const { id, title, icon } = props;
-
-  }
 
   Title = (props) => {
     let { title } = props;
@@ -459,6 +453,62 @@ export default class Controls {
     return `
       <div data-icon="${icon}" class="controls-section${active}" id="${id}">
       ${this.Title({title})}
+
+        <div class="controls_div flex_row">
+          <h3 class="ad-Controls-title">Import/Export</h3>
+        </div>
+        <div class="ad-Controls-container controls_div flex_row">
+
+        ${Control({
+          type:'button',
+          action:'importFile',
+          value:'Import JSON',
+          // onclick: log()
+        })}
+        ${Control({
+          type:'button',
+          action:'exportFile',
+          value:'export JSON',
+          // onclick: this.removeActivePoint
+          // onClick={ (e) => props.removeActivePoint(e) } />
+        })}
+                  
+        </div>
+
+        <div class="controls_div flex_row">
+            <h3 class="ad-Controls-title">Tags</h3>
+        </div>
+
+        <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          name:'Create Tag (x to remove)',
+          type:'text',
+          value: ''
+          // onchange:log()
+        })}
+        </div>
+
+        <div class="controls_div flex_row">
+            <h3 class="ad-Controls-title">Display Lines</h3>
+        </div>
+
+        <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          type:'button',
+          action:'assignUID',
+          value:'Assign UIDs',
+          // onclick: this.removeActivePoint
+          // onClick={ (e) => props.removeActivePoint(e) } />
+        })}
+        ${Control({
+          name:'Line List (x to remove line)',
+          type:'text',
+          value: ''
+          // onchange:log()
+        })}
+        </div>
+      
+
       </div>
     `;
   }
@@ -470,25 +520,51 @@ export default class Controls {
     const active = ACTIVE == title ? ' active_section':'';
 
     return `
-    <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+      <div data-icon="${icon}" class="controls-section${active}" id="${id}">
         ${this.Title({title})}
 
         <div class="ad-Controls-container controls_div flex_row">
         ${Control({
           type: 'button',
-          action: 'reset',
-          value: 'Reset path',
+          action: 'reset aka resetLine',
+          value: 'Reset Line',
           // onclick: log
           // onClick={ (e) => props.reset(e) } />
         })}
+        ${Control({
+          type:'button',
+          action:'addLine',
+          value:'New Line',
+          // onclick: log()
+        })}
+        ${Control({
+          type:'button',
+          action:'removeLine',
+          value:'Remove Line',
+          // onclick: log()
+        })}
+        
+        ${Control({
+          type:'button',
+          action:'removeTag',
+          value:'RTag',
+          // onclick: log()
+        })}
+        
         </div>
 
+        <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          name:'Line Tags',
+          type:'text',
+          value: ''
+          // onchange:log()
+        })}
+        </div>
         <div class="controls_div flex_row">
             <h3 class="ad-Controls-title">Point</h3>
         </div>
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Line</h3>
-        </div>      
+
         <div class="ad-Controls-container controls_div flex_row">
           ${Control({
             name:'Point type',
@@ -506,31 +582,33 @@ export default class Controls {
         ${ params }
         
         <div class="ad-Controls-container controls_div flex_row">
+
           ${Control({
             type:'button',
-            action:'delete',
-            value:'Delete Point',
+            action:'addPoint',
+            value:'Add Point',
+            // onclick: log()
+          })}
+          ${Control({
+            type:'button',
+            action:'removePoint',
+            value:'Remove Point',
             // onclick: this.removeActivePoint
             // onClick={ (e) => props.removeActivePoint(e) } />
           })}
-          ${Control({
-            type:'button',
-            action:'newLine',
-            value:'New Line',
-            // onclick: log()
-          })}
-          ${Control({
-            type:'button',
-            action:'newPoint',
-            value:'New Point',
-            // onclick: log()
-          })}
-          ${Control({
-            type:'button',
-            action:'Undo',
-            value:'Undo',
-            // onclick: log()
-          })}
+                    
+        </div>
+        <div class="controls_div flex_row">
+            <h3 class="ad-Controls-title">JSON</h3>
+        </div>
+
+        <div class="ad-Controls-container controls_div flex_row">
+        ${Control({
+          name:'Line path',
+          type:'text',
+          value: ''
+          // onchange:log()
+        })}
         </div>
     </div>`;
   }
@@ -579,6 +657,20 @@ export default class Controls {
           // onChange={ (e) => props.setGridShow(e) } />
         })}
       </div>
+
+      <div class="controls_div flex_row">
+        <h3 class="ad-Controls-title">JSON</h3>
+      </div>
+
+      <div class="ad-Controls-container controls_div flex_row">
+      ${Control({
+        name:'Show Settings State',
+        type:'text',
+        value: ''
+        // onchange:log()
+      })}
+      </div>
+
     </div>`;
   }
 
