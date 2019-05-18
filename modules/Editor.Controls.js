@@ -23,7 +23,7 @@ export default class Controls {
     this.setCubicCoords = editor.setCubicCoords;
     this.getState = editor.getState;
 
-    this.const = {
+    this.localState = {
       LINE: 'line',
       SAVE: 'save',
       SETTINGS: 'settings',
@@ -100,7 +100,7 @@ export default class Controls {
 
     const sub = target.id.substring(5);
     console.log(sub);
-    this.const.ACTIVE = sub;
+    this.localState.ACTIVE = sub;
   }
 
   /** LOGIC methods */
@@ -371,7 +371,7 @@ export default class Controls {
       // )
     }
 
-    let { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.const;
+    let { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.localState;
     console.log(`ACTIVE: ${ACTIVE}`);
 
     return (
@@ -453,7 +453,7 @@ export default class Controls {
   Save = (props) => {
     //id="section_save" title="save" icon="icon_save"
     const { id, title, icon } = props;
-    let { ACTIVE } = this.const;
+    let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
 
     return `
@@ -466,7 +466,7 @@ export default class Controls {
 
   Line = (props) => {
     const { pointType, params, title, id, icon } = props;
-    let {ACTIVE} = this.const;
+    let {ACTIVE} = this.localState;
     const active = ACTIVE == title ? ' active_section':'';
 
     return `
@@ -538,7 +538,7 @@ export default class Controls {
 
   Settings = (props) => {
     const { w, h, grid, title, id, icon } = props;
-    let { ACTIVE } = this.const;
+    let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
 
     return `
@@ -585,7 +585,7 @@ export default class Controls {
 
   Help = (props) => {
     let { title, id, icon } = props;
-    let { ACTIVE } = this.const;
+    let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
 
     return `
