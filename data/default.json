@@ -3,7 +3,9 @@
   "timestamp": "",
   "w": 1000,
   "h": 600,
-  "tags": [],
+  "tags": [
+    "subway","taxi"
+  ],
   "style": { "default": "styles" },
   "lines": [{
       "points": [

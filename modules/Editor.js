@@ -27,6 +27,7 @@ import Main from './Editor.Main.js';
  * @property {number} activeLine 
  * @property {number} activePoint  
  * @property {Line[]} lines
+ * @property {Array<string>} tags
  * @property {string} name
  * @property {number} w
  * @property {number} h
@@ -69,6 +70,7 @@ export default class Editor {
 
   handleKeyDown = (e) => {
     console.log(`handleKeyDown: ${e.key}`);
+
     if (e.key === 'Alt' || e.key === 'Meta') {
       // console.log('meta');
       this.setState({ ctrl: true });
@@ -77,10 +79,18 @@ export default class Editor {
       // console.log('shift');
       this.setState({ shift: true });
     }
+
+    //If Enter is pressed in the Add Tag Div
+    if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
+      this.controls.handleAddTag(e.target);
+    }
+
   }
 
 
   handleKeyUp = (e) => {
+    //need to account for text entry
+    // if (!this.getState().focusText) {
     console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
@@ -88,6 +98,7 @@ export default class Editor {
     if (this.getState().shift === true) {
       this.setState({ shift: false });
     }
+    // }
   }
 
 

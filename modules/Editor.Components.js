@@ -252,7 +252,7 @@ function Range(props) {
 }
 
 function NavComponent(props) {
-  let { icon, id, active} = props;
+  let { icon, id, active } = props;
   let svg;
 
   if (active == icon) {
@@ -306,5 +306,52 @@ function Icon_Settings(active) {
   `;
 }
 
+//TAGS
 
-export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices, NavComponent };
+function Icon_AddTag(){
+  return`
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M3 3h18v18H3zM12 8v8m-4-4h8"/></svg>
+  `;
+}
+
+function Icon_Delete() {
+  return `
+  <svg class="svg_tag" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+  `;
+}
+
+
+function ReturnTags(props) {
+  const {name, tags} = props;
+  let label = '';
+
+  if (name) {
+    label = `<label class="ad-Control-label controls_label">${name}</label>`;
+  }
+
+  const mappedTags = tags.map((tag, i) => {
+    return `
+      <div class="line_tag">
+        <span data-tag="true" class="">${tag}</span>
+        ${Icon_Delete()}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="control">
+      ${label}
+      <div id="" class="tag_row">
+        <label class="controls_label">Add Tag:</label>
+        <div id="newTagText" class="text_input" contenteditable="true">
+        newTag</div>
+      </div>
+      <div class="tag_row">
+        ${mappedTags}
+      </div>
+    </div>
+    `;
+
+}
+
+export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices, NavComponent, ReturnTags };

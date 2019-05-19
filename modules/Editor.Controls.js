@@ -1,5 +1,5 @@
 //@ts-check
-import { Control, NavComponent } from './Editor.Components.js';
+import { Control, NavComponent, ReturnTags } from './Editor.Components.js';
 
 /**
  * @typedef {import('./Editor').anchor} anchor
@@ -34,8 +34,10 @@ export default class Controls {
     /** CONTROLS Event Listeners */
     this.id.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
 
-      let classList = [...e.target.classList];
+      const classList = [...e.target.classList];
+      const id = e.target.id;
 
       //REMOVE ACTIVE POINT
       if (classList.includes('ad-Button--delete')) {
@@ -53,9 +55,34 @@ export default class Controls {
         this.showThisSection(e.target);
       }
 
+      //TAGS -> CREATE TAG
+      if (e.target.id === 'newTagText') {
+        this.toggleAddTagFocus(e.target);
+      }
+
     });
   }
 
+  toggleAddTagFocus(target) {
+    if (target.innerText) {
+      target.innerText = '';
+    } else {
+      target.innerText = 'newTag';
+    }
+  }
+
+  handleAddTag(target) {
+    let { tags } = this.getState();
+    const newTag = target.innerText.trim();
+    //TODO: validation
+    
+    if (newTag && newTag.length < 15) {
+      tags.push(newTag);
+      target.blur();
+      this.toggleAddTagFocus(target);
+      this.setState({ tags});
+    }
+  }
 
   /// UI metods
 
@@ -289,14 +316,21 @@ export default class Controls {
     // document.querySelector('#Width').value = this.getState().w;
   }
 
+  /**
+   *Creates a Line Tag
+   *
+   * @memberof Controls
+   */
+  createTag = () => {
 
+  }
 
   render = (props) => {
-    const { w, h, lines, activeLine, activePoint, grid } = props.state;
+    const { w, h, lines, activeLine, activePoint, grid, tags } = props.state;
     const active = lines[activeLine].points[activePoint];
     const step = grid.snap ? grid.size : 1;
 
-    let params = [];
+    // let params = [];
 
     let pointType = 'l';
 
@@ -370,7 +404,7 @@ export default class Controls {
     }
 
     let { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.localState;
-    console.log(`ACTIVE: ${ACTIVE}`);
+    // console.log(`ACTIVE: ${ACTIVE}`);
 
     return (
       `<nav>
@@ -401,7 +435,7 @@ export default class Controls {
           icon:`icon_${LINE}`,
           title: LINE,
           active: ACTIVE,
-          params,
+          // params,
           pointType
         })} 
 
@@ -410,7 +444,8 @@ export default class Controls {
           icon:`icon_${SAVE}`,
           title: SAVE,
           active: ACTIVE,
-          params
+          tags
+          // params
         })}
         
         ${this.Settings({
@@ -426,7 +461,7 @@ export default class Controls {
           icon:`icon_${HELP}`,
           title: HELP,
           active: ACTIVE,
-          params
+          // params
         })}
         
     `);
@@ -446,7 +481,7 @@ export default class Controls {
 
   Save = (props) => {
     //id="section_save" title="save" icon="icon_save"
-    const { id, title, icon } = props;
+    const { id, title, icon, tags } = props;
     let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
 
@@ -480,13 +515,13 @@ export default class Controls {
         </div>
 
         <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          name:'Create Tag (x to remove)',
-          type:'text',
-          value: ''
-          // onchange:log()
-        })}
-        </div>
+        
+          ${ReturnTags({
+            name:'Create Tag (x to remove)',
+            tags
+          })}
+
+        </div
 
         <div class="controls_div flex_row">
             <h3 class="ad-Controls-title">Display Lines</h3>
@@ -516,8 +551,8 @@ export default class Controls {
 
   Line = (props) => {
     const { pointType, params, title, id, icon } = props;
-    let {ACTIVE} = this.localState;
-    const active = ACTIVE == title ? ' active_section':'';
+    let { ACTIVE } = this.localState;
+    const active = ACTIVE == title ? ' active_section' : '';
 
     return `
       <div data-icon="${icon}" class="controls-section${active}" id="${id}">

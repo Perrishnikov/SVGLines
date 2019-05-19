@@ -17,12 +17,12 @@ Custom properties do inherit.
     --color-10: #777;
     --color-11: #999;
     --color-active: var(--color-5);
-    
+    --font-size: 16px;
 }
 body {
     margin: 0 auto;
     font-family: Courier, monospace;
-    font-size: 16px;
+    font-size: var(--font-size);
     position: fixed;
 }
 .app_wrap {

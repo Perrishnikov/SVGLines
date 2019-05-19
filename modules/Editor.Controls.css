@@ -28,6 +28,10 @@
     text-align: center;
     /* color: #fff; */
 }
+.text_input{
+  background-color: var(--color-11);
+  min-width: 100px;
+}
 .c_label {
     position: relative;
     /* height: 14px; */
@@ -114,4 +118,31 @@ nav {
     stroke-width: 1px;
     width: var(--icon-dim);
     height: var(--icon-dim);
+}
+.tag_row {
+    background-color: var(--color-4);
+    display: flex;
+    
+}
+.svg_tag {
+    /* background-color: var(--color-10); */
+    width: var(--font-size);
+    height: var(--font-size);
+}
+.svg_tag:hover {
+    stroke: var(--color-control-hover);
+    cursor: pointer;
+        /* width: var(--font-size); */
+        /* height: var(--font-size); */
+}
+.line_tag {
+    display: inline;
+    background-color: var(--color-2);
+    margin: .1rem;
+    /* flex: 1 0 auto; */
+    display: flex;
+    align-items:center;
+    /* flex: 0 1 auto; */
+    flex-shrink: 1;
+    cursor: default;
 }
