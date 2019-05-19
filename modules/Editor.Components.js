@@ -350,7 +350,7 @@ function Icon_ThumbsDown(value) {
 
 function Icon_Check(tag){
   return`
-  <svg data-tag="${tag}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+  <svg data-tag="${tag}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
   `;
 }
 
@@ -398,7 +398,7 @@ function TagList(props) {
   if (name) {
     label = `<label class="ad-Control-label controls_label">${name}</label>`;
   }
-  console.log(props);
+  // console.log(props);
 
   const mappedTags = tags.map((tag, i) => {
     //make sure that Active Line has Tags, if Line Tag matches App Tag...
@@ -413,7 +413,7 @@ function TagList(props) {
   }).join('');
 
   return `
-    <div class="control">
+    <div id="lineTags" class="">
       ${label}
       <div class="tag_row">
         ${mappedTags}

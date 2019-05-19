@@ -162,7 +162,7 @@ export default class Main {
     const coords = this.getMouseCoords(e);
     const { lines, activeLineIndex } = this.getState();
 
-    const newPoints = { points: [coords] };
+    const newPoints = { points: [coords], tags: [] };
     lines.push(newPoints);
 
     this.setState({

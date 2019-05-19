@@ -14,6 +14,7 @@ import Main from './Editor.Main.js';
  * Line
  * @typedef {Object} Line
  * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
+ * @property {Array<string>} tags
  */
 
 /**

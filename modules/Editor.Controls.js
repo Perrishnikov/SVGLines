@@ -40,6 +40,8 @@ export default class Controls {
       const classList = [...e.target.classList];
       const id = e.target.id;
       const dataset = e.target.dataset ? e.target.dataset : 'NULL';
+      const parent = e.target.parentNode;
+      const parentClasses = [...parent.classList];
 
       //REMOVE ACTIVE POINT
       if (classList.includes('ad-Button--removePoint')) {
@@ -77,15 +79,58 @@ export default class Controls {
 
       //SAVE -> TAGS -Confirm Delete
       if (dataset.value === 'confirm-yes') {
-        this.handleRemoveTag(this.localState.TAG_TO_DELETE);
+        this.handleRemoveGlobalTag(this.localState.TAG_TO_DELETE);
         // console.log(dataset);
       } else if (dataset.value === 'confirm-no') {
         this.toggleTagConfirmDelete();
       }
 
-      //LINE -> TAGS
+      //LINE -> TAGS 
+      if (parentClasses.includes('line_tag')) {
+
+        //LINE -> TAGS - Add
+        if (parent.dataset.value === 'true') {
+          this.handleLineRemoveTag(parent.dataset.tag);
+        }
+        //LINE -> TAGS - Remove
+        else if (parent.dataset.value === 'false') {
+          this.handleLineAddTag(parent.dataset.tag);
+        }
+
+      }
 
     });
+  }
+
+  /**
+   * When User clicks a Tag in Line -> Line Tags, add this Tag to the Line's Tags
+   * @param {string} addTag 
+   */
+  handleLineAddTag(addTag) {
+    const { activeLineIndex, lines } = this.getState();
+    let activeLine = lines[activeLineIndex];
+
+    activeLine.tags ? activeLine.tags : [];
+
+    activeLine.tags.push(addTag);
+
+    this.setState({ lines });
+  }
+
+  /**
+   * When User clicks a Tag in Line -> Line Tags, remove this Tag from the Line's Tags
+   * @param {string} removeTag 
+   */
+  handleLineRemoveTag(removeTag) {
+    const { activeLineIndex, lines } = this.getState();
+    let activeLine = lines[activeLineIndex];
+
+    const filtered = activeLine.tags.filter(tag => tag !== removeTag);
+
+    //assign the Tags to the Line
+    activeLine.tags = filtered;
+
+    this.setState({ lines });
   }
 
 
@@ -114,6 +159,7 @@ export default class Controls {
 
   /**
    * When User hits Enter, add the new Tag to State
+   * Called from Editor keydown Event Listener
    * @param {Element} target 
    */
   handleAddTag(target) {
@@ -138,16 +184,19 @@ export default class Controls {
 
   /**
    * When User clicks Tag's X, pop Tag from State
-   * @param {string} target 
+   * Then remove the Tag from all Lines
+   * @param {string} target 'subway'
    */
-  handleRemoveTag(target) {
-    let { tags } = this.getState();
-    // const dataTag = target.dataset.tag;
-    const dataTag = target;
-    const filtered = tags.filter(tag => tag !== dataTag);
+  handleRemoveGlobalTag(target) {
+    const { tags: gtags, lines } = this.getState();
+    const cleanedTags = gtags.filter(tag => tag !== target);
+    const cleanedLines = lines.map(line => {
+      const cleanTags = line.tags.filter(tag => tag !== target);
+      line.tags = cleanTags;
+      return line;
+    });
 
-    this.setState({ tags: filtered });
-    // const sibling = target.
+    this.setState({ tags: cleanedTags, lines: cleanedLines });
   }
 
   /// UI metods
@@ -190,7 +239,6 @@ export default class Controls {
     target.children[0].classList.add('active_icon');
 
     const sub = target.id.substring(5);
-    console.log(sub);
     this.localState.ACTIVE = sub;
   }
 

@@ -12,7 +12,7 @@
     overflow-y: scroll;
     top: 0;
     bottom: 0;
-    width: 300px;
+    max-width: 300px;
     /* padding: 1rem; */
 }
 .controls_div {
@@ -57,7 +57,8 @@
 }
 .control {
     background-color: var(--color-3);
-    flex: 1;
+    display: flex;
+    flex: 1 0 auto;
     flex-direction: column;
     margin: .3rem;
     min-height: 3rem;
@@ -122,7 +123,8 @@ nav {
 .tag_row {
     background-color: var(--color-4);
     display: flex;
-    
+    /* flex: 0 1 auto; */
+    flex: 1 0 auto;
 }
 .svg_tag {
     /* background-color: var(--color-10); */
@@ -146,10 +148,17 @@ nav {
     flex-shrink: 1;
     cursor: default;
 }
-/* SAVE - Tags */
+/* SAVE -> Tags */
 #tagConfirmDelete{
   display: none;
 }
 #tagConfirmDelete.active{
   display: block;
+}
+#lineTags .tag_row .line_tag:hover {
+  background-color: var(--color-3);
+  /* stroke: var(--color-control-hover);  */
+}
+#lineTags .tag_row div{
+  cursor: pointer;
 }
