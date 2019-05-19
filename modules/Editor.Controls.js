@@ -42,7 +42,7 @@ export default class Controls {
       const dataset = e.target.dataset ? e.target.dataset : 'NULL';
 
       //REMOVE ACTIVE POINT
-      if (classList.includes('ad-Button--delete')) {
+      if (classList.includes('ad-Button--removePoint')) {
         this.removeActivePoint();
       } else if (classList.includes('ad-Choice-input')) {
         // console.log(`setPointType`);
@@ -213,49 +213,49 @@ export default class Controls {
 
 
   setPointType = (e) => {
-    const { lines, activePoint, activeLine } = this.getState();
-    const ap = lines[activeLine];
+    const { lines, activePointIndex, activeLineIndex } = this.getState();
+    const ap = lines[activeLineIndex];
 
     // not the first point
-    if (activePoint !== 0) {
+    if (activePointIndex !== 0) {
       let v = e.target.value;
 
       switch (v) {
         case 'l':
-          ap.points[activePoint] = {
-            x: ap.points[activePoint].x,
-            y: ap.points[activePoint].y
+          ap.points[activePointIndex] = {
+            x: ap.points[activePointIndex].x,
+            y: ap.points[activePointIndex].y
           };
           break;
         case 'q':
-          ap.points[activePoint] = {
-            x: ap.points[activePoint].x,
-            y: ap.points[activePoint].y,
+          ap.points[activePointIndex] = {
+            x: ap.points[activePointIndex].x,
+            y: ap.points[activePointIndex].y,
             q: {
-              x: (ap.points[activePoint].x + ap.points[activePoint - 1].x) / 2,
-              y: (ap.points[activePoint].y + ap.points[activePoint - 1].y) / 2
+              x: (ap.points[activePointIndex].x + ap.points[activePointIndex - 1].x) / 2,
+              y: (ap.points[activePointIndex].y + ap.points[activePointIndex - 1].y) / 2
             }
           };
           break;
         case 'c':
-          ap.points[activePoint] = {
-            x: ap.points[activePoint].x,
-            y: ap.points[activePoint].y,
+          ap.points[activePointIndex] = {
+            x: ap.points[activePointIndex].x,
+            y: ap.points[activePointIndex].y,
             c: [{
-                x: (ap.points[activePoint].x + ap.points[activePoint - 1].x - 50) / 2,
-                y: (ap.points[activePoint].y + ap.points[activePoint - 1].y) / 2
+                x: (ap.points[activePointIndex].x + ap.points[activePointIndex - 1].x - 50) / 2,
+                y: (ap.points[activePointIndex].y + ap.points[activePointIndex - 1].y) / 2
               },
               {
-                x: (ap.points[activePoint].x + ap.points[activePoint - 1].x + 50) / 2,
-                y: (ap.points[activePoint].y + ap.points[activePoint - 1].y) / 2
+                x: (ap.points[activePointIndex].x + ap.points[activePointIndex - 1].x + 50) / 2,
+                y: (ap.points[activePointIndex].y + ap.points[activePointIndex - 1].y) / 2
               }
             ]
           };
           break;
         case 'a':
-          ap.points[activePoint] = {
-            x: ap.points[activePoint].x,
-            y: ap.points[activePoint].y,
+          ap.points[activePointIndex] = {
+            x: ap.points[activePointIndex].x,
+            y: ap.points[activePointIndex].y,
             a: {
               rx: 50,
               ry: 50,
@@ -273,12 +273,12 @@ export default class Controls {
 
 
   setArcParam = (param, e) => {
-    const { lines, activePoint, activeLine } = this.getState();
-    const ap = lines[activeLine];
+    const { lines, activePointIndex, activeLineIndex } = this.getState();
+    const ap = lines[activeLineIndex];
     // const cstate = this.getState();
 
     // const points = cstate.points;
-    // const active = cstate.activePoint;
+    // const active = cstate.activePointIndex;
     let v;
 
     if (['laf', 'sf'].indexOf(param) > -1) {
@@ -287,19 +287,19 @@ export default class Controls {
       v = this.positiveNumber(e.target.value);
     }
 
-    ap.points[activePoint].a[param] = v;
+    ap.points[activePointIndex].a[param] = v;
 
     this.setState({ lines });
   }
 
 
   setPointPosition = (coord, e) => {
-    const { lines, activePoint, activeLine, w, h } = this.getState();
-    const ap = lines[activeLine];
+    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+    const ap = lines[activeLineIndex];
 
     // const cstate = this.getState();
 
-    const coords = ap.points[activePoint];
+    const coords = ap.points[activePointIndex];
     let v = this.positiveNumber(e.target.value);
 
     if (coord === 'x' && v > w) v = w;
@@ -312,11 +312,11 @@ export default class Controls {
 
 
   setQuadraticPosition = (coord, e) => {
-    const { lines, activePoint, activeLine, w, h } = this.getState();
-    const ap = lines[activeLine];
+    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+    const ap = lines[activeLineIndex];
     // const cstate = this.getState();
 
-    const coords = ap.points[activePoint].q;
+    const coords = ap.points[activePointIndex].q;
     let v = this.positiveNumber(e.target.value);
 
     if (coord === 'x' && v > w) v = w;
@@ -329,11 +329,11 @@ export default class Controls {
 
 
   setCubicPosition = (coord, anchor, e) => {
-    const { lines, activePoint, activeLine, w, h } = this.getState();
-    const ap = lines[activeLine];
+    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+    const ap = lines[activeLineIndex];
     // const cstate = this.getState();
 
-    const coords = ap.points[activePoint].c[anchor];
+    const coords = ap.points[activePointIndex].c[anchor];
     let v = this.positiveNumber(e.target.value);
 
     if (coord === 'x' && v > w) v = w;
@@ -346,16 +346,16 @@ export default class Controls {
 
 
   removeActivePoint = (e) => {
-    const { activePoint, lines, activeLine } = this.getState();
+    const { activePointIndex, lines, activeLineIndex } = this.getState();
     // const points = cstate.points;
-    // const active = cstate.activePoint;
+    // const active = cstate.activePointIndex;
 
-    if (lines[activeLine].points.length > 1 && activePoint !== 0) {
-      lines[activeLine].points.splice(activePoint, 1);
+    if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
+      lines[activeLineIndex].points.splice(activePointIndex, 1);
 
       this.setState({
         lines,
-        activePoint: lines[activeLine].points.length - 1
+        activePointIndex: lines[activeLineIndex].points.length - 1
       });
     }
     console.log(`Point removed`);
@@ -369,7 +369,7 @@ export default class Controls {
 
     this.setState({
       points: [{ x: w / 2, y: h / 2 }],
-      activePoint: 0
+      activePointIndex: 0
     });
   }
 
@@ -390,8 +390,8 @@ export default class Controls {
   }
 
   render = (props) => {
-    const { w, h, lines, activeLine, activePoint, grid, tags } = props.state;
-    const active = lines[activeLine].points[activePoint];
+    const { w, h, lines, activeLineIndex, activePointIndex, grid, tags } = props.state;
+    const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
     // let params = [];
@@ -499,7 +499,7 @@ export default class Controls {
         icon:`icon_${LINE}`,
         title: LINE,
         active: ACTIVE,
-        activeLine,
+        activeLineIndex,
         tags,
         lines,
         pointType
@@ -616,10 +616,10 @@ export default class Controls {
 
 
   Line = (props) => {
-    const { pointType, params, title, id, icon, lines, tags, activeLine } = props;
+    const { pointType, params, title, id, icon, lines, tags, activeLineIndex } = props;
     let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
-    const parsedLine = lines[activeLine];
+    const parsedLine = lines[activeLineIndex];
     console.log(JSON.stringify(parsedLine));
 
     return `
@@ -681,8 +681,6 @@ export default class Controls {
             ]
           })}
         </div>
-        
-        ${ params }
         
         <div class="ad-Controls-container controls_div flex_row">
 

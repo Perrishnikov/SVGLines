@@ -4,8 +4,8 @@
   "draggedPoint": false,
   "draggedQuadratic": false,
   "draggedCubic": false,
-  "activePoint": 1,
-  "activeLine": 0,
+  "activePointIndex": 1,
+  "activeLineIndex": 0,
   "edit_w": 1000,
   "edit_h": 600,
   "grid": {

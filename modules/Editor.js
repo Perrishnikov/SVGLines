@@ -24,8 +24,8 @@ import Main from './Editor.Main.js';
  * @property {boolean} draggedPoint
  * @property {boolean} ctrl
  * @property {boolean} shift
- * @property {number} activeLine 
- * @property {number} activePoint  
+ * @property {number} activeLineIndex 
+ * @property {number} activePointIndex  
  * @property {Line[]} lines
  * @property {Array<string>} tags
  * @property {string} name
@@ -138,10 +138,10 @@ export default class Editor {
    * @param {coords} coords
    */
   setPointCoords = (coords) => {
-    const { activePoint, lines, activeLine } = this.getState();
+    const { activePointIndex, lines, activeLineIndex } = this.getState();
 
-    lines[activeLine].points[activePoint].x = coords.x;
-    lines[activeLine].points[activePoint].y = coords.y;
+    lines[activeLineIndex].points[activePointIndex].x = coords.x;
+    lines[activeLineIndex].points[activePointIndex].y = coords.y;
 
     this.setState({ lines });
   }
@@ -155,11 +155,11 @@ export default class Editor {
   setCubicCoords = (coords, anchor) => {
     // console.log('setCubicCoords');
     // console.log(anchor);
-    const { activePoint, lines, activeLine } = this.getState();
+    const { activePointIndex, lines, activeLineIndex } = this.getState();
 
     // if (anchor) {
-    lines[activeLine].points[activePoint].c[anchor].x = coords.x;
-    lines[activeLine].points[activePoint].c[anchor].y = coords.y;
+    lines[activeLineIndex].points[activePointIndex].c[anchor].x = coords.x;
+    lines[activeLineIndex].points[activePointIndex].c[anchor].y = coords.y;
 
     this.setState({ lines });
     // }
@@ -171,10 +171,10 @@ export default class Editor {
    * @param {coords} coords
    */
   setQuadraticCoords = (coords) => {
-    const { activePoint, lines, activeLine } = this.getState();
+    const { activePointIndex, lines, activeLineIndex } = this.getState();
 
-    lines[activeLine].points[activePoint].q.x = coords.x;
-    lines[activeLine].points[activePoint].q.y = coords.y;
+    lines[activeLineIndex].points[activePointIndex].q.x = coords.x;
+    lines[activeLineIndex].points[activePointIndex].q.y = coords.y;
 
     this.setState({ lines });
   }

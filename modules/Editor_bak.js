@@ -136,7 +136,7 @@ export default class Editor {
     const cstate = this.getState();
 
     const points = cstate.points;
-    const active = cstate.activePoint;
+    const active = cstate.activePointIndex;
 
     points[active].x = coords.x;
     points[active].y = coords.y;
@@ -155,7 +155,7 @@ export default class Editor {
     const cstate = this.getState();
 
     let points = cstate.points;
-    let active = cstate.activePoint;
+    let active = cstate.activePointIndex;
 
     points[active].c[anchor].x = coords.x;
     points[active].c[anchor].y = coords.y;
@@ -173,7 +173,7 @@ export default class Editor {
     const cstate = this.getState();
 
     let points = cstate.points;
-    let active = cstate.activePoint;
+    let active = cstate.activePointIndex;
 
     points[active].q.x = coords.x;
     points[active].q.y = coords.y;
@@ -325,7 +325,7 @@ export default class Editor {
  */
 Editor.SVGRender = (props) => {
   const { id, controls, main } = props;
-  // const { w, h, points, activePoint } = props.state;
+  // const { w, h, points, activePointIndex } = props.state;
 
   // const m = document.createElement('div');
   // m.innerHTML = main.render(props);

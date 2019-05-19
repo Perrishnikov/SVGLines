@@ -110,8 +110,8 @@ export default class Main {
     console.log(`draggedPoint`);
     if (!this.getState().ctrl) {
       this.setState({
-        activeLine: parseInt(lineindex),
-        activePoint: parseInt(index),
+        activeLineIndex: parseInt(lineindex),
+        activePointIndex: parseInt(index),
         draggedPoint: true
       });
     }
@@ -127,8 +127,8 @@ export default class Main {
     console.log(`setDraggedQuadratic`);
     if (!this.getState().ctrl) {
       this.setState({
-        activeLine: parseInt(lineindex),
-        activePoint: parseInt(index),
+        activeLineIndex: parseInt(lineindex),
+        activePointIndex: parseInt(index),
         draggedQuadratic: true
       });
     }
@@ -145,8 +145,8 @@ export default class Main {
     console.log(`setDraggedCubic`);
     if (!this.getState().ctrl) {
       this.setState({
-        activeLine: parseInt(lineindex),
-        activePoint: parseInt(index),
+        activeLineIndex: parseInt(lineindex),
+        activePointIndex: parseInt(index),
         draggedCubic: anchor
       });
     }
@@ -160,15 +160,15 @@ export default class Main {
    */
   addLine = (e) => {
     const coords = this.getMouseCoords(e);
-    const { lines, activeLine } = this.getState();
+    const { lines, activeLineIndex } = this.getState();
 
     const newPoints = { points: [coords] };
     lines.push(newPoints);
 
     this.setState({
       lines,
-      activePoint: 0, //first point
-      activeLine: lines.length - 1 // on new line
+      activePointIndex: 0, //first point
+      activeLineIndex: lines.length - 1 // on new line
     });
   }
 
@@ -183,16 +183,16 @@ export default class Main {
 
     // if (this.state().ctrl === true) {
     const coords = this.getMouseCoords(e);
-    const { lines, activeLine } = this.getState();
+    const { lines, activeLineIndex } = this.getState();
     // const { points } = this.getState();
     // console.log(points);
     // points.push(coords);
-    lines[activeLine].points.push(coords);
+    lines[activeLineIndex].points.push(coords);
 
     this.setState({
       lines,
       //points
-      activePoint: lines[activeLine].points.length - 1
+      activePointIndex: lines[activeLineIndex].points.length - 1
     });
     // }
   }
@@ -295,16 +295,16 @@ export default class Main {
 
   render = (props) => {
     console.log(`from Main render()`);
-    const { w, h, activePoint, activeLine } = props.state;
+    const { w, h, activePointIndex, activeLineIndex } = props.state;
     const grid = Grid(props.state);
     const lines = props.state.lines;
 
     return `
         <svg class="ad-SVG" width="${w}" height="${h}">
           ${lines.map((line, index) => {
-            let al = activeLine == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
+            let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
             const path = this.generatePath(line.points);
-            const circles = this.generateCircles(line.points, activePoint, al );
+            const circles = this.generateCircles(line.points, activePointIndex, al );
             
             return (`
               <path class="ad-Path" d="${path}"></path>
