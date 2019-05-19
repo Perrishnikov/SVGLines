@@ -28,7 +28,7 @@ export default class Controls {
       SAVE: 'save',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'save',
+      ACTIVE: 'line',
       TAG_TO_DELETE: ''
     };
 
@@ -59,6 +59,7 @@ export default class Controls {
 
       //TAGS -> ADD TAG
       if (e.target.id === 'newTagText') {
+        // @ts-ignore
         this.toggleAddTagFocus(e.target);
       }
 
@@ -75,11 +76,10 @@ export default class Controls {
       }
 
       //TAGS -> Confirm Delete
-      if(dataset.value === 'confirm-yes'){
+      if (dataset.value === 'confirm-yes') {
         this.handleRemoveTag(this.localState.TAG_TO_DELETE);
         // console.log(dataset);
-      }
-      if(dataset.value === 'confirm-no'){
+      } else if (dataset.value === 'confirm-no') {
         this.toggleTagConfirmDelete();
       }
 
@@ -87,11 +87,14 @@ export default class Controls {
   }
 
 
-  toggleTagConfirmDelete(){
+  /**
+   * When user clicks (x) to delete Tag, open the Tag Confirm Dialogue
+   * Toggle the active class 
+   */
+  toggleTagConfirmDelete() {
     const d = document.querySelector('#tagConfirmDelete');
 
     d.classList.toggle('active');
-
   }
 
   /**
@@ -114,14 +117,17 @@ export default class Controls {
   handleAddTag(target) {
     let { tags } = this.getState();
 
-    tags = tags ? tags: [];
+    //if all the Tags have been deleted, create a new array
+    tags = tags ? tags : [];
 
+    //Clean use input on Tag name
     const newTag = target.innerText.trim();
     //TODO: validation
     target.blur();
 
+    //If the Tag is valid, proceed....
     if (newTag && newTag.length < 15) {
-      tags.push(newTag);  
+      tags.push(newTag);
       this.toggleAddTagFocus(target);
       this.setState({ tags });
     }
@@ -461,7 +467,7 @@ export default class Controls {
       // )
     }
 
-    let { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.localState;
+    const { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.localState;
     // console.log(`ACTIVE: ${ACTIVE}`);
 
     return (
@@ -493,7 +499,9 @@ export default class Controls {
         icon:`icon_${LINE}`,
         title: LINE,
         active: ACTIVE,
-        // params,
+        activeLine,
+        tags,
+        lines,
         pointType
       })} 
 
@@ -595,7 +603,7 @@ export default class Controls {
         })}
         ${Control({
           name:'Line List (x to remove line)',
-          type:'text',
+          type:'StaticText',
           value: ''
           // onchange:log()
         })}
@@ -608,9 +616,11 @@ export default class Controls {
 
 
   Line = (props) => {
-    const { pointType, params, title, id, icon } = props;
+    const { pointType, params, title, id, icon, lines, tags, activeLine } = props;
     let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
+    const parsedLine = lines[activeLine];
+    console.log(JSON.stringify(parsedLine));
 
     return `
       <div data-icon="${icon}" class="controls-section${active}" id="${id}">
@@ -698,7 +708,7 @@ export default class Controls {
         <div class="ad-Controls-container controls_div flex_row">
         ${Control({
           name:'Line path',
-          type:'text',
+          type:'StaticText',
           value: ''
           // onchange:log()
         })}
@@ -719,13 +729,13 @@ export default class Controls {
         <div class="ad-Controls-container controls_div flex_row">
         ${Control({
           name:'Width',
-          type:'text',
+          type:'EditableText',
           value: w,
           // onchange:log()
         })}
         ${Control({
           name:'Height',
-          type:'text',
+          type:'EditableText',
           value: h,
           // onChange={ (e) => props.setHeight(e) } />
         })}
@@ -733,7 +743,7 @@ export default class Controls {
       <div class="ad-Controls-container controls_div flex_row">
         ${Control({
           name:'Grid size',
-          type:'text',
+          type:'EditableText',
           value: grid.size
           // onChange={ (e) => props.setGridSize(e) }
         })}

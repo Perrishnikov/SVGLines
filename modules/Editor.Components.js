@@ -132,8 +132,11 @@ function Control(props) {
     case 'range':
       control = Range(rest);
       break;
-    case 'text':
-      control = Text(rest);
+    case 'EditableText':
+      control = EditableText(rest);
+      break;
+      case 'StaticText':
+        control = StaticText(rest);
       break;
     case 'checkbox':
       control = Checkbox(rest);
@@ -167,7 +170,7 @@ function Crap(name, props) {
 
 }
 
-function Text(props) {
+function EditableText(props) {
   // console.log(props);
   // let t = document.createElement('input');
   // return t.innerHTML = `
@@ -178,6 +181,16 @@ function Text(props) {
       contenteditable="true">
       ${props.value}</div>`;
 }
+
+
+function StaticText(props){
+  return `
+    <div class="">
+      ${props.value}
+    </div>
+  `;
+}
+
 
 function Choices(props) {
   let choices = props.choices.map((c, i) => {
@@ -308,8 +321,8 @@ function Icon_Settings(active) {
 
 //TAGS
 
-function Icon_AddTag(){
-  return`
+function Icon_AddTag() {
+  return `
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M3 3h18v18H3zM12 8v8m-4-4h8"/></svg>
   `;
 }
@@ -320,20 +333,20 @@ function Icon_Delete(tag) {
   `;
 }
 
-function Icon_ThumbsUp(value){
-  return`
+function Icon_ThumbsUp(value) {
+  return `
   <svg data-value="${value}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
   `;
 }
 
-function Icon_ThumbsDown(value){
-  return`
+function Icon_ThumbsDown(value) {
+  return `
   <svg data-value="${value}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>
   `;
 }
 
 function ReturnTags(props) {
-  const {name, tags} = props;
+  const { name, tags } = props;
   let label = '';
 
   if (name) {
@@ -369,4 +382,4 @@ function ReturnTags(props) {
 
 }
 
-export { Point, Quadratic, Cubic, Grid, Control, Text, Range, Checkbox, Button, Choices, NavComponent, ReturnTags };
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, NavComponent, ReturnTags };

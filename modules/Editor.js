@@ -82,6 +82,7 @@ export default class Editor {
 
     //If Enter is pressed in the Add Tag Div
     if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
+      // handle the Add Tag
       this.controls.handleAddTag(e.target);
     }
 

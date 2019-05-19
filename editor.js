@@ -8,7 +8,7 @@ window.onload = function() {
     .then(json => json)
     .then(settingState => {
 
-      fetch('./data/default.json')
+      fetch('./data/line.json')
         .then(response => response.json())
         .then(json => json)
         .then(defaultState => {
