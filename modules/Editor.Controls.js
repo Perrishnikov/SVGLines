@@ -55,14 +55,26 @@ export default class Controls {
         this.showThisSection(e.target);
       }
 
-      //TAGS -> CREATE TAG
+      //TAGS -> ADD TAG
       if (e.target.id === 'newTagText') {
         this.toggleAddTagFocus(e.target);
       }
 
+      //TAGS -> ADD TAG handled in EDITOR
+
+      //TAGS -> REMOVE TAG
+      if (classList.includes('svg_tag')) {
+        //target = <div><svg class="svg-tag">
+        this.handleRemoveTag(e.target);
+      }
     });
   }
 
+  
+  /**
+   * When User clicks on or off on NewTag, update the text
+   * @param {Element} target 
+   */
   toggleAddTagFocus(target) {
     if (target.innerText) {
       target.innerText = '';
@@ -71,17 +83,39 @@ export default class Controls {
     }
   }
 
+
+  /**
+   * When User hits Enter, add the new Tag to State
+   * @param {Element} target 
+   */
   handleAddTag(target) {
     let { tags } = this.getState();
+
+    tags = tags ? tags: [];
+
     const newTag = target.innerText.trim();
     //TODO: validation
-    
+    target.blur();
+
     if (newTag && newTag.length < 15) {
-      tags.push(newTag);
-      target.blur();
+      tags.push(newTag);  
       this.toggleAddTagFocus(target);
-      this.setState({ tags});
+      this.setState({ tags });
     }
+  }
+
+
+  /**
+   * When User clicks Tag's X, pop Tag from State
+   * @param {Element} target 
+   */
+  handleRemoveTag(target) {
+    let { tags } = this.getState();
+    const dataTag = target.dataset.tag;
+    const filtered = tags.filter(tag => tag !== dataTag);
+
+    this.setState({ tags: filtered });
+    // const sibling = target.
   }
 
   /// UI metods
