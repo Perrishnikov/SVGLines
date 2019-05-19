@@ -57,15 +57,15 @@ export default class Controls {
         this.showThisSection(e.target);
       }
 
-      //TAGS -> ADD TAG
+      //SAVE -> TAGS - ADD TAG
       if (e.target.id === 'newTagText') {
         // @ts-ignore
         this.toggleAddTagFocus(e.target);
       }
 
-      //TAGS -> In EDITOR, the ADD TAG is handled
+      //SAVE -> TAGS - In EDITOR, the ADD TAG is handled
 
-      //TAGS -> REMOVE TAG when (x) clicked
+      //SAVE -> TAGS - REMOVE TAG when (x) clicked
       if (classList.includes('svg_tag') && dataset.tag) {
         //target = <div><svg class="svg-tag">
         //set localState so we have a handle on the tag to delete
@@ -75,13 +75,15 @@ export default class Controls {
         this.toggleTagConfirmDelete();
       }
 
-      //TAGS -> Confirm Delete
+      //SAVE -> TAGS -Confirm Delete
       if (dataset.value === 'confirm-yes') {
         this.handleRemoveTag(this.localState.TAG_TO_DELETE);
         // console.log(dataset);
       } else if (dataset.value === 'confirm-no') {
         this.toggleTagConfirmDelete();
       }
+
+      //LINE -> TAGS
 
     });
   }
@@ -394,8 +396,6 @@ export default class Controls {
     const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
-    // let params = [];
-
     let pointType = 'l';
 
     if (active.q) {
@@ -511,7 +511,6 @@ export default class Controls {
         title: SAVE,
         active: ACTIVE,
         tags
-        // params
       })}
       
       ${this.Settings({
@@ -519,7 +518,9 @@ export default class Controls {
         icon:`icon_${SETTINGS}`,
         title: SETTINGS,
         active: ACTIVE,
-        w, h, grid
+        w, 
+        h, 
+        grid
       })}
 
       ${this.Help({
@@ -527,7 +528,6 @@ export default class Controls {
         icon:`icon_${HELP}`,
         title: HELP,
         active: ACTIVE,
-        // params
       })}
         
     `);
@@ -553,11 +553,13 @@ export default class Controls {
 
     return `
       <div data-icon="${icon}" class="controls-section${active}" id="${id}">
-      ${this.Title({title})}
+
+        ${this.Title({title})}
 
         <div class="controls_div flex_row">
           <h3 class="ad-Controls-title">Import/Export</h3>
         </div>
+
         <div class="ad-Controls-container controls_div flex_row">
 
         ${Control({
@@ -587,7 +589,7 @@ export default class Controls {
             tags
           })}
 
-        </div
+        </div>
 
         <div class="controls_div flex_row">
             <h3 class="ad-Controls-title">Display Lines</h3>
@@ -604,29 +606,28 @@ export default class Controls {
         ${Control({
           name:'Line List (x to remove line)',
           type:'StaticText',
-          value: ''
+          value: 'hello'
           // onchange:log()
         })}
         </div>
-      
 
-      </div>
-    `;
+    </div>`;
   }
 
 
   Line = (props) => {
-    const { pointType, params, title, id, icon, lines, tags, activeLineIndex } = props;
+    const { pointType, title, id, icon, lines, tags, activeLineIndex } = props;
     let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
-    const parsedLine = lines[activeLineIndex];
-    console.log(JSON.stringify(parsedLine));
+    const parsedLine = JSON.stringify(lines[activeLineIndex]);
+    const activeLine = lines[activeLineIndex];
 
     return `
       <div data-icon="${icon}" class="controls-section${active}" id="${id}">
         ${this.Title({title})}
 
         <div class="ad-Controls-container controls_div flex_row">
+
         ${Control({
           type: 'button',
           action: 'reset aka resetLine',
@@ -657,15 +658,18 @@ export default class Controls {
         </div>
 
         <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          name:'Line Tags',
-          type:'text',
-          value: ''
-          // onchange:log()
-        })}
+          
+          ${Control({
+            name:'Line Tags',
+            type:'taglist',
+            tags,
+            activeLine
+          })}
+
         </div>
+
         <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Point</h3>
+            <h3 class="ad-Controls-title">Points</h3>
         </div>
 
         <div class="ad-Controls-container controls_div flex_row">
@@ -699,6 +703,7 @@ export default class Controls {
           })}
                     
         </div>
+
         <div class="controls_div flex_row">
             <h3 class="ad-Controls-title">JSON</h3>
         </div>
@@ -707,10 +712,11 @@ export default class Controls {
         ${Control({
           name:'Line path',
           type:'StaticText',
-          value: ''
+          value: parsedLine
           // onchange:log()
         })}
         </div>
+      
     </div>`;
   }
 

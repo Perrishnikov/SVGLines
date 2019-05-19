@@ -135,8 +135,8 @@ function Control(props) {
     case 'EditableText':
       control = EditableText(rest);
       break;
-      case 'StaticText':
-        control = StaticText(rest);
+    case 'StaticText':
+      control = StaticText(rest);
       break;
     case 'checkbox':
       control = Checkbox(rest);
@@ -147,6 +147,11 @@ function Control(props) {
     case 'choices':
       control = Choices(rest);
       break;
+    case 'taglist':
+      control = TagList(rest);
+      break;
+    default:
+      control = '<div style="background-color:red">Incorrect code</div>';
   }
 
   if (name) {
@@ -183,11 +188,9 @@ function EditableText(props) {
 }
 
 
-function StaticText(props){
+function StaticText(props) {
   return `
-    <div class="">
       ${props.value}
-    </div>
   `;
 }
 
@@ -345,8 +348,14 @@ function Icon_ThumbsDown(value) {
   `;
 }
 
+function Icon_Check(tag){
+  return`
+  <svg data-tag="${tag}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+  `;
+}
+
 function ReturnTags(props) {
-  const { name, tags } = props;
+  const { name, tags = [] } = props;
   let label = '';
 
   if (name) {
@@ -379,7 +388,38 @@ function ReturnTags(props) {
       
     </div>
     `;
+}
 
+function TagList(props) {
+  // const allTags = props.tags ? props.tags : [];
+  const { name, activeLine, tags = [] } = props;
+  let label = '';
+
+  if (name) {
+    label = `<label class="ad-Control-label controls_label">${name}</label>`;
+  }
+  console.log(props);
+
+  const mappedTags = tags.map((tag, i) => {
+    //make sure that Active Line has Tags, if Line Tag matches App Tag...
+    const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
+
+    return `
+      <div data-tag="${tag}" data-value="${active}" class="line_tag">
+        <span class="">${tag}</span>
+        ${active ? Icon_Check(tag) : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="control">
+      ${label}
+      <div class="tag_row">
+        ${mappedTags}
+      </div>
+    </div>
+    `;
 }
 
 export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, NavComponent, ReturnTags };
