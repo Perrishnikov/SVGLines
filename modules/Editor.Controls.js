@@ -654,7 +654,7 @@ export default class Controls {
         ${Control({
           name:'Line List (x to remove line)',
           type:'StaticText',
-          value: 'hello'
+          value: ''
           // onchange:log()
         })}
         </div>
@@ -696,13 +696,6 @@ export default class Controls {
           // onclick: log()
         })}
         
-        ${Control({
-          type:'button',
-          action:'removeTag',
-          value:'RTag',
-          // onclick: log()
-        })}
-        
         </div>
 
         <div class="ad-Controls-container controls_div flex_row">
@@ -715,6 +708,16 @@ export default class Controls {
           })}
 
         </div>
+        <div class="ad-Controls-container controls_div flex_row">
+          
+        ${Control({
+          name:'Line ID',
+          type:'EditableText',
+          value: '000',
+          activeLine
+        })}
+
+      </div>
 
         <div class="controls_div flex_row">
             <h3 class="ad-Controls-title">Points</h3>

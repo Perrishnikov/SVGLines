@@ -165,16 +165,6 @@ function Control(props) {
     </div>`;
 }
 
-function Crap(name, props) {
-  let input = document.createElement('input');
-  input.setAttribute('type', 'text');
-  input.setAttribute('class', 'ad-Text');
-  input.setAttribute('value', props.value)
-  return input;
-  // return `<div class="ad-Text">${props.value}</div>`;
-
-}
-
 function EditableText(props) {
   // console.log(props);
   // let t = document.createElement('input');
