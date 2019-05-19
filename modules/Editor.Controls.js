@@ -29,15 +29,17 @@ export default class Controls {
       SETTINGS: 'settings',
       HELP: 'help',
       ACTIVE: 'save',
+      TAG_TO_DELETE: ''
     };
 
     /** CONTROLS Event Listeners */
     this.id.addEventListener('click', (e) => {
-      e.stopPropagation();
+      // e.stopPropagation();
       e.preventDefault();
 
       const classList = [...e.target.classList];
       const id = e.target.id;
+      const dataset = e.target.dataset ? e.target.dataset : 'NULL';
 
       //REMOVE ACTIVE POINT
       if (classList.includes('ad-Button--delete')) {
@@ -60,17 +62,38 @@ export default class Controls {
         this.toggleAddTagFocus(e.target);
       }
 
-      //TAGS -> ADD TAG handled in EDITOR
+      //TAGS -> In EDITOR, the ADD TAG is handled
 
-      //TAGS -> REMOVE TAG
-      if (classList.includes('svg_tag')) {
+      //TAGS -> REMOVE TAG when (x) clicked
+      if (classList.includes('svg_tag') && dataset.tag) {
         //target = <div><svg class="svg-tag">
-        this.handleRemoveTag(e.target);
+        //set localState so we have a handle on the tag to delete
+        this.localState.TAG_TO_DELETE = dataset.tag;
+
+        //Open Confirm Delete Dialogue
+        this.toggleTagConfirmDelete();
       }
+
+      //TAGS -> Confirm Delete
+      if(dataset.value === 'confirm-yes'){
+        this.handleRemoveTag(this.localState.TAG_TO_DELETE);
+        // console.log(dataset);
+      }
+      if(dataset.value === 'confirm-no'){
+        this.toggleTagConfirmDelete();
+      }
+
     });
   }
 
-  
+
+  toggleTagConfirmDelete(){
+    const d = document.querySelector('#tagConfirmDelete');
+
+    d.classList.toggle('active');
+
+  }
+
   /**
    * When User clicks on or off on NewTag, update the text
    * @param {Element} target 
@@ -107,11 +130,12 @@ export default class Controls {
 
   /**
    * When User clicks Tag's X, pop Tag from State
-   * @param {Element} target 
+   * @param {string} target 
    */
   handleRemoveTag(target) {
     let { tags } = this.getState();
-    const dataTag = target.dataset.tag;
+    // const dataTag = target.dataset.tag;
+    const dataTag = target;
     const filtered = tags.filter(tag => tag !== dataTag);
 
     this.setState({ tags: filtered });
@@ -442,61 +466,61 @@ export default class Controls {
 
     return (
       `<nav>
-          ${NavComponent({
-            icon:'line',
-            id:`icon_${LINE}`,
-            active: ACTIVE
-          })}
-          ${NavComponent({
-            icon: 'save',
-            id: `icon_${SAVE}`,
-            active: ACTIVE
-          })}    
-          ${NavComponent({
-            icon: 'settings',
-            id:`icon_${SETTINGS}`,
-            active: ACTIVE
-          })}
-          ${NavComponent({
-            icon: 'help',
-            id:`icon_${HELP}`,
-            active: ACTIVE
-          })}
+        ${NavComponent({
+          icon:'line',
+          id:`icon_${LINE}`,
+          active: ACTIVE
+        })}
+        ${NavComponent({
+          icon: 'save',
+          id: `icon_${SAVE}`,
+          active: ACTIVE
+        })}    
+        ${NavComponent({
+          icon: 'settings',
+          id:`icon_${SETTINGS}`,
+          active: ACTIVE
+        })}
+        ${NavComponent({
+          icon: 'help',
+          id:`icon_${HELP}`,
+          active: ACTIVE
+        })}
       </nav>
 
-        ${this.Line({
-          id:`section_${LINE}`,
-          icon:`icon_${LINE}`,
-          title: LINE,
-          active: ACTIVE,
-          // params,
-          pointType
-        })} 
+      ${this.Line({
+        id:`section_${LINE}`,
+        icon:`icon_${LINE}`,
+        title: LINE,
+        active: ACTIVE,
+        // params,
+        pointType
+      })} 
 
-        ${this.Save({
-          id:`section_${SAVE}`,
-          icon:`icon_${SAVE}`,
-          title: SAVE,
-          active: ACTIVE,
-          tags
-          // params
-        })}
-        
-        ${this.Settings({
-          id:`section_${SETTINGS}`,
-          icon:`icon_${SETTINGS}`,
-          title: SETTINGS,
-          active: ACTIVE,
-          w, h, grid
-        })}
+      ${this.Save({
+        id:`section_${SAVE}`,
+        icon:`icon_${SAVE}`,
+        title: SAVE,
+        active: ACTIVE,
+        tags
+        // params
+      })}
+      
+      ${this.Settings({
+        id:`section_${SETTINGS}`,
+        icon:`icon_${SETTINGS}`,
+        title: SETTINGS,
+        active: ACTIVE,
+        w, h, grid
+      })}
 
-        ${this.Help({
-          id:`section_${HELP}`,
-          icon:`icon_${HELP}`,
-          title: HELP,
-          active: ACTIVE,
-          // params
-        })}
+      ${this.Help({
+        id:`section_${HELP}`,
+        icon:`icon_${HELP}`,
+        title: HELP,
+        active: ACTIVE,
+        // params
+      })}
         
     `);
   }

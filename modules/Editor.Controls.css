@@ -146,3 +146,10 @@ nav {
     flex-shrink: 1;
     cursor: default;
 }
+/* SAVE - Tags */
+#tagConfirmDelete{
+  display: none;
+}
+#tagConfirmDelete.active{
+  display: block;
+}
