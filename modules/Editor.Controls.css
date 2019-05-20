@@ -5,15 +5,23 @@
     --icon-dim: 60px;
 }
 .controls_wrap {
+    display: flex;
+    flex-direction: column;
+    /* flex: 0 0 300px; */
+    /* height: 100%; */
+    /* width: 100%; */
     background-color: var(--color-2);
-    z-index: 40;
+    /* z-index: 40; */
     position: fixed;
     right: 0px;
+    overflow-x:hidden;
     overflow-y: scroll;
     top: 0;
     bottom: 0;
     max-width: 300px;
-    /* padding: 1rem; */
+    padding: 1rem;
+    margin: 0;
+    padding: 0;
 }
 .controls_div {
     flex-grow: 0;
@@ -28,9 +36,9 @@
     text-align: center;
     /* color: #fff; */
 }
-.text_input{
-  background-color: var(--color-11);
-  min-width: 100px;
+.text_input {
+    background-color: var(--color-11);
+    min-width: 100px;
 }
 .c_label {
     position: relative;
@@ -134,8 +142,8 @@ nav {
 .svg_tag:hover {
     stroke: var(--color-control-hover);
     cursor: pointer;
-        /* width: var(--font-size); */
-        /* height: var(--font-size); */
+    /* width: var(--font-size); */
+    /* height: var(--font-size); */
 }
 .line_tag {
     display: inline;
@@ -143,22 +151,27 @@ nav {
     margin: .1rem;
     /* flex: 1 0 auto; */
     display: flex;
-    align-items:center;
+    align-items: center;
     /* flex: 0 1 auto; */
     flex-shrink: 1;
     cursor: default;
 }
 /* SAVE -> Tags */
-#tagConfirmDelete{
-  display: none;
+#tagConfirmDelete {
+    display: none;
 }
-#tagConfirmDelete.active{
-  display: block;
+#tagConfirmDelete.active {
+    display: block;
 }
 #lineTags .tag_row .line_tag:hover {
-  background-color: var(--color-3);
-  /* stroke: var(--color-control-hover);  */
+    background-color: var(--color-3);
+    /* stroke: var(--color-control-hover);  */
 }
-#lineTags .tag_row div{
-  cursor: pointer;
+#lineTags .tag_row div {
+    cursor: pointer;
+}
+code {
+    margin: 0;
+    white-space: pre;
+    overflow-wrap: break-word;
 }

@@ -70,32 +70,49 @@ function Point(props) {
 
 function Grid(props) {
   // console.log(props);
-  const { show, snap, size } = props.grid;
+  const { show, snap, size, numbers } = props.grid;
   const { h, w } = props;
 
   // let grid = [];
   let grid = '';
+  let text = '';
 
-  for (let i = 1; i < (w / size); i++) {
-    grid +=
-      `<line
+  if (show) {
+    for (let i = 1; i < (w / size); i++) {
+      grid +=
+        `<line
+            class="grid_line"
+            x1="${i * size }"
+            y1="0"
+            x2="${i * size }"
+            y2="${h}"/>
+          `;
+
+      if (numbers) {
+        text +=
+          `<text x="${i*size}" y="10" class="small">${i*size}</text>`;
+      }
+
+    }
+
+    for (let i = 1; i < (h / size); i++) {
+      grid +=
+        `<line
           class="grid_line"
-          x1="${i * size }"
-          y1="0"
-          x2="${i * size }"
-          y2="${h}"/>
+          x1="0"
+          y1="${i * size}"
+          x2="${w}"
+          y2="${i * size}"/>
         `;
-  }
+        
+      if (numbers) {
+        text +=
+          `<text x="10" y="${i*size}" class="small">${i*size}</text>`;
+      }
 
-  for (let i = 1; i < (h / size); i++) {
-    grid +=
-      `<line
-        class="grid_line"
-        x1="0"
-        y1="${i * size}"
-        x2="${w}"
-        y2="${i * size}"/>
-      `;
+    }
+
+
     // grid.push(
     //     <line
     //         x1={ 0 }
@@ -105,8 +122,9 @@ function Grid(props) {
     // );
   }
   return `
-    <g class="ad-Grid ${!show ? ' is-hidden"' : ''}">
+    <g class="grid ${!show ? ' is-hidden"' : ''}">
       ${grid}
+      ${text}
     </g>
   `;
   // return (
@@ -179,9 +197,7 @@ function EditableText(props) {
 
 
 function StaticText(props) {
-  return `
-      ${props.value}
-  `;
+  return `<code>${props.value}</code>`;
 }
 
 
@@ -338,8 +354,8 @@ function Icon_ThumbsDown(value) {
   `;
 }
 
-function Icon_Check(tag){
-  return`
+function Icon_Check(tag) {
+  return `
   <svg data-tag="${tag}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
   `;
 }

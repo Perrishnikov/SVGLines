@@ -11,6 +11,7 @@
   "grid": {
     "snap": true,
     "show": true,
-    "size": 50
+    "size": 50,
+    "numbers": true
   }
 }

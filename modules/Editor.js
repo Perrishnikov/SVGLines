@@ -70,7 +70,7 @@ export default class Editor {
 
 
   handleKeyDown = (e) => {
-    console.log(`handleKeyDown: ${e.key}`);
+    // console.log(`handleKeyDown: ${e.key}`);
 
     if (e.key === 'Alt' || e.key === 'Meta') {
       // console.log('meta');
@@ -93,7 +93,7 @@ export default class Editor {
   handleKeyUp = (e) => {
     //need to account for text entry
     // if (!this.getState().focusText) {
-    console.log(`handleKeyUp`);
+    // console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
     }
@@ -187,18 +187,18 @@ export default class Editor {
    */
   getMouseCoords = (e) => {
     const { grid } = this.getState();
-    // const rect = ReactDOM.findDOMNode(this.refs.svg).getBoundingClientRect()
-    const rect = this.id.getBoundingClientRect();
-    // console.log(rect);
-    // console.log(`e.pageX ${e.pageX}, rect.left ${rect.left}`);
-    let x = Math.round(e.pageX - rect.left);
-    let y = Math.round(e.pageY - rect.top);
+    const rect = this.main.id;
+    const top = rect.getBoundingClientRect().top;
+
+    let x = e.clientX + rect.scrollLeft;
+    let y = e.clientY - top;
 
     if (grid.snap) {
       x = grid.size * Math.round(x / grid.size);
       y = grid.size * Math.round(y / grid.size);
     }
 
+    // console.log(`x:${x}, y:${y}`);
     return { x, y };
   }
 
@@ -211,6 +211,24 @@ export default class Editor {
     e.preventDefault();
     e.stopPropagation();
     const { ctrl, shift, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
+
+    //TESTING -> shows mouse coords
+    // const { grid } = this.getState();
+    // const rect = this.main.id;
+    // const top = rect.getBoundingClientRect().top;
+
+    // const x = e.clientX + rect.scrollLeft;
+    // const y = e.clientY - top;
+    // const rx = grid.size * Math.round(x / grid.size);
+    // const ry = grid.size * Math.round(y / grid.size);
+
+    // document.querySelector('#coords').innerText = `
+    // Screen X/Y: ${e.screenX}, ${e.screenY}
+    // Client X/Y: ${e.clientX}, ${e.clientY}
+    // Page X/Y: ${e.pageX}, ${e.pageY}
+    // X/Y: ${x}, ${y}
+    // rounded: ${rx}, ${ry}
+    // top:${top}! scrollLeft:${rect.scrollLeft}!`;
 
     if (!ctrl && !shift) {
       if (draggedPoint) {

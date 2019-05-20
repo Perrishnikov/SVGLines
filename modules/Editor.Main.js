@@ -74,7 +74,6 @@ export default class Main {
         // console.log(`this.state.shift:${this.getState().shift}, true:${true}, equal:${this.getState().shift == true}`);
 
         if (this.getState().ctrl && !this.getState().shift) {
-          console.log(`addPoint`);
           this.addPoint(e);
         } else if (this.getState().ctrl && this.getState().shift) {
           console.log(`addLine`);
@@ -179,10 +178,11 @@ export default class Main {
    * param {e} e
    */
   addPoint = (e) => {
-    // console.log('addPoint ' + this.getState().ctrl);
+    
 
     // if (this.state().ctrl === true) {
     const coords = this.getMouseCoords(e);
+    console.log(`addPoint at x:${coords.x}, y:${coords.y}`);
     const { lines, activeLineIndex } = this.getState();
     // const { points } = this.getState();
     // console.log(points);

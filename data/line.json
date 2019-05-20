@@ -1,8 +1,8 @@
 {
   "name": "node_demo",
   "timestamp": "",
-  "w": 1000,
-  "h": 600,
+  "w": 1600,
+  "h": 1600,
   "tags": [
     "subway","taxi"
   ],

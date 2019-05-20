@@ -1,11 +1,11 @@
 
 .main_wrap {
     overflow: scroll;
-    position: absolute;
-    min-width: 1600px;
-    min-height: 900px;
+    /* position: absolute; */
+    /* min-width: 1600px; */
+    /* min-height: 1200px; */
 }
-.ad-Grid {
+.grid {
     /* fill: none; */
     stroke: var(--color-6);
     stroke-width: 1px;

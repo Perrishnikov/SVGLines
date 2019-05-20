@@ -28,7 +28,7 @@ export default class Controls {
       SAVE: 'save',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'line',
+      ACTIVE: 'settings',
       TAG_TO_DELETE: ''
     };
 
@@ -667,7 +667,7 @@ export default class Controls {
     const { pointType, title, id, icon, lines, tags, activeLineIndex } = props;
     let { ACTIVE } = this.localState;
     const active = ACTIVE == title ? ' active_section' : '';
-    const parsedLine = JSON.stringify(lines[activeLineIndex]);
+    const parsedLine = JSON.stringify(lines[activeLineIndex], null, '  ');
     const activeLine = lines[activeLineIndex];
 
     return `
@@ -827,6 +827,9 @@ export default class Controls {
         value: ''
         // onchange:log()
       })}
+      </div>
+
+      <div id="coords">
       </div>
 
     </div>`;
