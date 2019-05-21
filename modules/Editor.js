@@ -190,7 +190,7 @@ export default class Editor {
     const rect = this.main.id;
     const top = rect.getBoundingClientRect().top;
 
-    let x = e.clientX + rect.scrollLeft;
+    let x = e.pageX;
     let y = e.clientY - top;
 
     if (grid.snap) {
@@ -216,8 +216,8 @@ export default class Editor {
     // const { grid } = this.getState();
     // const rect = this.main.id;
     // const top = rect.getBoundingClientRect().top;
-
-    // const x = e.clientX + rect.scrollLeft;
+    // // const x = e.clientX + rect.scrollLeft;
+    // const x = e.pageX;
     // const y = e.clientY - top;
     // const rx = grid.size * Math.round(x / grid.size);
     // const ry = grid.size * Math.round(y / grid.size);
@@ -232,13 +232,13 @@ export default class Editor {
 
     if (!ctrl && !shift) {
       if (draggedPoint) {
-        console.log(`setPoint`);
+        // console.log(`setPoint`);
         this.setPointCoords(this.getMouseCoords(e));
       } else if (draggedQuadratic) {
-        console.log(`setQuad`);
+        // console.log(`setQuad`);
         this.setQuadraticCoords(this.getMouseCoords(e));
       } else if (draggedCubic !== false) {
-        console.log(`setCubic`);
+        // console.log(`setCubic`);
         this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
       }
     }

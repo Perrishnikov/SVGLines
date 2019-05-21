@@ -18,11 +18,10 @@ export default class Main {
     this.setState = editor.setState;
     this.getState = editor.getState;
     this.handleMouseMove = editor.handleMouseMove;
-    // this.bestCopyEver = editor.bestCopyEver;
     this.getMouseCoords = editor.getMouseCoords;
-    // this.generatePath = editor.generatePath;
 
-    target.addEventListener('mouseup', (e) => {
+
+    this.id.addEventListener('mouseup', (e) => {
       let state = this.getState();
 
       if (state.draggedPoint || state.draggedQuadratic || state.draggedCubic) {
@@ -30,9 +29,9 @@ export default class Main {
       }
     }, false);
 
-    target.addEventListener('mousemove', this.handleMouseMove, false);
+    this.id.addEventListener('mousemove', this.handleMouseMove, false);
 
-    target.addEventListener('mousedown', (e) => {
+    this.id.addEventListener('mousedown', (e) => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -178,7 +177,7 @@ export default class Main {
    * param {e} e
    */
   addPoint = (e) => {
-    
+
 
     // if (this.state().ctrl === true) {
     const coords = this.getMouseCoords(e);
@@ -298,6 +297,10 @@ export default class Main {
     const { w, h, activePointIndex, activeLineIndex } = props.state;
     const grid = Grid(props.state);
     const lines = props.state.lines;
+    
+    /* SIDE EFFECT - set the width and height of Main based off of line.json*/
+    this.id.style.minHeight = `${props.state.h}px`;
+    this.id.style.minWidth = `${props.state.w +300}px`;
 
     return `
         <svg class="ad-SVG" width="${w}" height="${h}">

@@ -1,8 +1,9 @@
 
 .main_wrap {
     overflow: scroll;
-    /* position: absolute; */
-    /* min-width: 1600px; */
+    /* position: fixed; */
+    /* min-width: 1900px; */
+    /*Overwritten in */
     /* min-height: 1200px; */
 }
 .grid {
