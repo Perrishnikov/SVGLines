@@ -300,7 +300,7 @@ export default class Main {
     
     /* SIDE EFFECT - set the width and height of Main based off of line.json*/
     this.id.style.minHeight = `${props.state.h}px`;
-    this.id.style.minWidth = `${props.state.w +300}px`;
+    this.id.style.minWidth = `${props.state.w + 300}px`; //300px is width of Controls
 
     return `
         <svg class="ad-SVG" width="${w}" height="${h}">

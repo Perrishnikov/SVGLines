@@ -28,7 +28,7 @@ export default class Controls {
       SAVE: 'save',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'settings',
+      ACTIVE: 'line',
       TAG_TO_DELETE: ''
     };
 

@@ -18,20 +18,25 @@ Custom properties do inherit.
     --color-11: #999;
     --color-active: var(--color-5);
     --font-size: 16px;
+    --color-icon-hover: #999;
+    --color-icon-active: white;
+    --pad-standard: 6px;
+    --icon-dimension: 54px;
+    --controls-width: 300px;
 }
 body {
-  font-family: Courier, monospace;
-  font-size: var(--font-size);
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior: none;
+    font-family: Courier, monospace;
+    font-size: var(--font-size);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
 }
-.controls_wrap:hover + .main_wrap{
-  overflow: hidden !important;
-  background-color: aliceblue
+.controls_wrap:hover+.main_wrap {
+    overflow: hidden !important;
+    background-color: aliceblue
 }
 .app_wrap {
-position: relative;
+    position: relative;
 }
