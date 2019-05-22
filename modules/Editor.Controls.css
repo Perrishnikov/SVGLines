@@ -5,7 +5,7 @@
     background-color: var(--color-light);
     position: fixed;
     right: 0px;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     overflow-y: scroll;
     top: 0;
     bottom: 0;
@@ -20,12 +20,12 @@ nav {
     display: flex;
     flex-wrap: nowrap;
     /* justify-content: space-between; */
-    width: var(--controls-width);
+    /* width: var(--controls-width); */
     background-color: var(--color-3);
     z-index: -1001;
     padding-left: var(--pad-standard);
     padding-right: var(--pad-standard);
-    box-shadow: 0 -4px 4px rgba(0, 0, 0, .065)
+    box-shadow: 0 -4px 4px rgba(0, 0, 0, .065);
 }
 .nav_icon {
     display: flex;
@@ -65,21 +65,19 @@ nav {
 .control-group {
     display: flex;
     flex-direction: column;
-    /* flex-grow: 1; */
-    /* flex-shrink: 0; */
-    /* flex-basis: 1 0 auto; */
-    margin-bottom: 15px;
-    /* overflow: hidden; */
-    /* border-width: 1px; */
-    /* border-style: solid; */
-    /* border-color: var(--color-dkgray) */
-}
-.control-group-title {
-    background: var(--color-3);
-    color: var(--color-light);
-    padding: var(--pad-standard);
+    border: 1px solid var(--color-ltgray);
+    border-radius: var(--border-rad);
     margin-left: var(--pad-half);
     margin-right: var(--pad-half);
+    margin-bottom: calc(var(--pad-standard) * 3);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .165);
+}
+.control-group-title {
+    background: var(--color-ltgray);
+    color: var(--color-dark);
+    padding: var(--pad-standard);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .165);
 }
 .control-row {
     display: flex;
@@ -118,12 +116,15 @@ button.control-button{
   background-color: var(--color-ltgray);
   max-width: 80px;
   width:80px;
-  padding:8px;
+  padding: var(--pad-standard);
   border-radius: var(--border-rad);
   box-shadow: 0 2px 4px rgba(0, 0, 0, .165);
+  font-family: Courier, monospace;
+  font-size: var(--font-size);
 }
 button.control-button:hover{
-  background-color: var(--color-icon-hover);
+  background-color: var(--color-mdgray);
+  cursor: pointer;
 }
 button:focus {outline:0;}
 
@@ -172,11 +173,13 @@ button:focus {outline:0;}
 }
 
 
-.tag_row {
-    background-color: var(--color-4);
-    display: flex;
-    /* flex: 0 1 auto; */
-    flex: 1 0 auto;
+.tag-row {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0 auto;
+  padding: var(--pad-standard);
+  width:100%;
+  flex-wrap: wrap;
 }
 .svg_tag {
     /* background-color: var(--color-10); */
@@ -189,17 +192,24 @@ button:focus {outline:0;}
     /* width: var(--font-size); */
     /* height: var(--font-size); */
 }
-.line_tag {
-    display: inline;
-    background-color: var(--color-2);
-    margin: .1rem;
-    /* flex: 1 0 auto; */
+.line-tag {
     display: flex;
     align-items: center;
-    /* flex: 0 1 auto; */
-    flex-shrink: 1;
-    cursor: default;
+    
+    margin-right: var(--pad-standard);
+    margin-bottom: var(--pad-standard);
+    padding: var(--pad-standard);
+    padding-top:var(--pad-half);
+    padding-bottom:var(--pad-half);
+    background-color: var(--color-3);
+    color: var(--color-dark);
+    border-radius: calc(var(--border-rad) *3);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
 }
+.line-tag.active{
+  color: var(--color-light);
+} 
 /* SAVE -> Tags */
 #tagConfirmDelete {
     display: none;
@@ -207,6 +217,7 @@ button:focus {outline:0;}
 #tagConfirmDelete.active {
     display: block;
 }
+/* LINE -> Tags */
 #lineTags .tag_row .line_tag:hover {
     background-color: var(--color-3);
     /* stroke: var(--color-control-hover);  */
@@ -214,6 +225,7 @@ button:focus {outline:0;}
 #lineTags .tag_row div {
     cursor: pointer;
 }
+
 code {
     margin: 0;
     white-space: pre;

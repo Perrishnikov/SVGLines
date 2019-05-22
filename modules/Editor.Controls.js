@@ -1,5 +1,5 @@
 //@ts-check
-import { Control, NavComponent, ReturnTags } from './Editor.Components.js';
+import { Control, NavComponent, ReturnTags, TagList } from './Editor.Components.js';
 
 /**
  * @typedef {import('./Editor').anchor} anchor
@@ -675,52 +675,48 @@ export default class Controls {
         ${this.Title({title})}
 
         <div class="control-group">
-          <span class="control-group-title">Line Functions</span>
+          <span class="control-group-title">Line Functions (i)</span>
           <div class="control-row">
-          ${Control({
-            type: 'button',
-            action: 'resetLine',
-            value: 'Reset'
-          })}
-          ${Control({
-            type:'button',
-            action:'addLine',
-            value:'Add',
-          })}
-          ${Control({
-            type:'button',
-            action:'removeLine',
-            value:'Remove',
-          })}
+            ${Control({
+              type: 'button',
+              action: 'resetLine',
+              value: 'Reset'
+            })}
+            ${Control({
+              type:'button',
+              action:'addLine',
+              value:'Add',
+            })}
+            ${Control({
+              type:'button',
+              action:'removeLine',
+              value:'Remove',
+            })}
           </div>
         </div>
 
         <div class="control-group">
-        <span class="control-group-title">Line Yags</span>
-          ${Control({
+          <span class="control-group-title">Line Tags (i)</span>
+          ${TagList({
             name:'Line Tags',
-            type:'taglist',
             tags,
             activeLine
           })}
-
-        </div>
-        <div class="ad-Controls-container controls_div flex_row">
-          
-        ${Control({
-          name:'Line ID',
-          type:'EditableText',
-          value: '000',
-          activeLine
-        })}
-
-      </div>
-
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Points</h3>
         </div>
 
-        <div class="ad-Controls-container controls_div flex_row">
+        <div class="control-group">
+          <span class="control-group-title">Line ID (i)</span>
+          ${Control({
+            name:'Line ID',
+            type:'EditableText',
+            value: '000',
+            activeLine
+          })}
+        </div>
+
+      <div class="control-group">
+        <span class="control-group-title">Points (i)</span>
+        <div class="control-row">
           ${Control({
             name:'Point type',
             type:'choices',
@@ -734,8 +730,7 @@ export default class Controls {
           })}
         </div>
         
-        <div class="ad-Controls-container controls_div flex_row">
-
+        <div class="control-row">
           ${Control({
             type:'button',
             action:'addPoint',
@@ -748,24 +743,22 @@ export default class Controls {
             value:'Remove Point',
             // onclick: this.removeActivePoint
             // onClick={ (e) => props.removeActivePoint(e) } />
+          })} 
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-group-title">LINE DATA (toggle JSON and <path>. Mimic https://iconsvg.xyz/) (i)</span>
+
+          ${Control({
+            name:'Line path',
+            type:'StaticText',
+            value: parsedLine
+            // onchange:log()
           })}
-                    
-        </div>
 
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">JSON</h3>
         </div>
-
-        <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          name:'Line path',
-          type:'StaticText',
-          value: parsedLine
-          // onchange:log()
-        })}
-        </div>
-      
-    </section>`;
+      </section>`;
   }
 
 

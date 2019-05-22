@@ -3,25 +3,21 @@ Accessed using the var() function (e.g., color: var(--main-color);)
 Custom properties do inherit.
 */
 :root {
-    --color-dark: #1a343d;
-    --color-ltgray: #d3d9dd;
+    --color-light: white;  
+    --color-ltgray:#efeff4;
+    --color-mdgray: #d3d9dd;
     --color-dkgray: #666;
-    --color-light: white;
-    --color-1: #6e40aa;
-    --color-2: #4c6edb;
+    --color-dark: #1a343d;  
+    --color-1: #24d8ab;
+    --color-2: #2451d8;
     --color-3: #24aad8;
-    --color-4: #1ac7c2;
-    --color-5: #1ddea3;
-    --color-6: #333;
-    --color-7: #444;
-    --color-8: #555;
-    --color-9: #666;
-    --color-10: #777;
-    --color-11: #999;
-    --color-active: var(--color-5);
-    --font-size: 1em;
+    --color-3-mono: #46a1bf;
+    --color-3-comp: #d85124;
+    --color-active: var();
     --color-icon-hover: #999;
     --color-icon-active: white;
+
+    --font-size: 1em;
     --pad-standard: 8px;
     --pad-half: 4px;
     --icon-dimension: 48px;

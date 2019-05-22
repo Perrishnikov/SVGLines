@@ -399,33 +399,25 @@ function ReturnTags(props) {
 function TagList(props) {
   // const allTags = props.tags ? props.tags : [];
   const { name, activeLine, tags = [] } = props;
-  let label = '';
-
-  if (name) {
-    label = `<label class="ad-Control-label controls_label">${name}</label>`;
-  }
-  // console.log(props);
 
   const mappedTags = tags.map((tag, i) => {
     //make sure that Active Line has Tags, if Line Tag matches App Tag...
     const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
 
     return `
-      <div data-tag="${tag}" data-value="${active}" class="line_tag">
+      <div data-tag="${tag}" data-value="${active}" class="line-tag">
         <span class="">${tag}</span>
-        ${active ? Icon_Check(tag) : ''}
+        <span role="button">${active ? Icon_Check(tag) : ''}</span>
       </div>
     `;
   }).join('');
 
   return `
-    <div id="lineTags" class="">
-      ${label}
-      <div class="tag_row">
+    <div id="lineTags" class="tag-row">
+
         ${mappedTags}
-      </div>
     </div>
     `;
 }
 
-export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, NavComponent, ReturnTags };
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, NavComponent, ReturnTags, TagList };
