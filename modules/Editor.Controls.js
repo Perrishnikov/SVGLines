@@ -206,7 +206,7 @@ export default class Controls {
    * param {Element} target -  of Controls Section
    */
   showThisSection = (target) => {
-    const sections = [...document.querySelectorAll('.controls-section')];
+    const sections = [...document.querySelectorAll('.control-section')];
 
     sections.forEach(section => {
       // <div data-component="controls-section" id="section_lines">
@@ -586,8 +586,8 @@ export default class Controls {
     let { title } = props;
 
     return `
-      <div class="controls_div flex_row">
-          <h3 class="ad-Controls-title">${title}</h3>
+      <div class="">
+          <h3 class="section-title">${title}</h3>
       </div>      
       `;
   }
@@ -600,12 +600,12 @@ export default class Controls {
     const active = ACTIVE == title ? ' active_section' : '';
 
     return `
-      <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+      <div data-icon="${icon}" class="control-section${active}" id="${id}">
 
         ${this.Title({title})}
 
         <div class="controls_div flex_row">
-          <h3 class="ad-Controls-title">Import/Export</h3>
+          <h3 class="">Import/Export</h3>
         </div>
 
         <div class="ad-Controls-container controls_div flex_row">
@@ -671,35 +671,32 @@ export default class Controls {
     const activeLine = lines[activeLineIndex];
 
     return `
-      <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+      <section data-icon="${icon}" class="control-section${active}" id="${id}">
         ${this.Title({title})}
 
-        <div class="ad-Controls-container controls_div flex_row">
-
-        ${Control({
-          type: 'button',
-          action: 'reset aka resetLine',
-          value: 'Reset Line',
-          // onclick: log
-          // onClick={ (e) => props.reset(e) } />
-        })}
-        ${Control({
-          type:'button',
-          action:'addLine',
-          value:'New Line',
-          // onclick: log()
-        })}
-        ${Control({
-          type:'button',
-          action:'removeLine',
-          value:'Remove Line',
-          // onclick: log()
-        })}
-        
+        <div class="control-group">
+          <span class="control-group-title">Line Functions</span>
+          <div class="control-row">
+          ${Control({
+            type: 'button',
+            action: 'resetLine',
+            value: 'Reset'
+          })}
+          ${Control({
+            type:'button',
+            action:'addLine',
+            value:'Add',
+          })}
+          ${Control({
+            type:'button',
+            action:'removeLine',
+            value:'Remove',
+          })}
+          </div>
         </div>
 
-        <div class="ad-Controls-container controls_div flex_row">
-          
+        <div class="control-group">
+        <span class="control-group-title">Line Yags</span>
           ${Control({
             name:'Line Tags',
             type:'taglist',
@@ -768,7 +765,7 @@ export default class Controls {
         })}
         </div>
       
-    </div>`;
+    </section>`;
   }
 
 
@@ -778,7 +775,7 @@ export default class Controls {
     const active = ACTIVE == title ? ' active_section' : '';
 
     return `
-      <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+      <div data-icon="${icon}" class="control-section${active}" id="${id}">
         ${this.Title({title})}
 
         <div class="ad-Controls-container controls_div flex_row">
@@ -842,7 +839,7 @@ export default class Controls {
     const active = ACTIVE == title ? ' active_section' : '';
 
     return `
-    <div data-icon="${icon}" class="controls-section${active}" id="${id}">
+    <div data-icon="${icon}" class="control-section${active}" id="${id}">
         ${this.Title({title})}
       </div>
     `

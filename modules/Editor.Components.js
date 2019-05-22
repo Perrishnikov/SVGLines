@@ -104,7 +104,7 @@ function Grid(props) {
           x2="${w}"
           y2="${i * size}"/>
         `;
-        
+
       if (numbers) {
         text +=
           `<text x="10" y="${i*size}" class="small">${i*size}</text>`;
@@ -173,11 +173,11 @@ function Control(props) {
   }
 
   if (name) {
-    label = `<label class="ad-Control-label controls_label">${ name }</label>`;
+    label = `<label class="control-label">${ name }</label>`;
   }
 
   return `
-    <div class="ad-Control control">
+    <div class="control">
       ${ label }
       ${ control } 
     </div>`;
@@ -231,8 +231,8 @@ function Button(props) {
   //TODO: onCLick needs to change
   // console.log(props);
   return `
-    <button
-      class="ad-Button${(props.action ? ` ad-Button--${props.action}` : '')}"
+    <button data-action="${props.action}"
+      class="control-button"
       type="button">
       ${ props.value }
     </button>

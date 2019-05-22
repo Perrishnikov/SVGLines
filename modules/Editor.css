@@ -3,7 +3,9 @@ Accessed using the var() function (e.g., color: var(--main-color);)
 Custom properties do inherit.
 */
 :root {
-    --color-dark: black;
+    --color-dark: #1a343d;
+    --color-ltgray: #d3d9dd;
+    --color-dkgray: #666;
     --color-light: white;
     --color-1: #6e40aa;
     --color-2: #4c6edb;
@@ -17,12 +19,14 @@ Custom properties do inherit.
     --color-10: #777;
     --color-11: #999;
     --color-active: var(--color-5);
-    --font-size: 16px;
+    --font-size: 1em;
     --color-icon-hover: #999;
     --color-icon-active: white;
-    --pad-standard: 6px;
-    --icon-dimension: 54px;
+    --pad-standard: 8px;
+    --pad-half: 4px;
+    --icon-dimension: 48px;
     --controls-width: 300px;
+    --border-rad: 4px;
 }
 body {
     font-family: Courier, monospace;
