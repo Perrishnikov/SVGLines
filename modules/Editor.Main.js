@@ -21,7 +21,7 @@ export default class Main {
     this.getMouseCoords = editor.getMouseCoords;
 
 
-    this.id.addEventListener('mouseup', (e) => {
+    this.id.addEventListener('mouseup', () => {
       let state = this.getState();
 
       if (state.draggedPoint || state.draggedQuadratic || state.draggedCubic) {
@@ -293,7 +293,7 @@ export default class Main {
   }
 
   render = (props) => {
-    console.log(`from Main render()`);
+    // console.log(`from Main render()`);
     const { w, h, activePointIndex, activeLineIndex } = props.state;
     const grid = Grid(props.state);
     const lines = props.state.lines;

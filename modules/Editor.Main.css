@@ -8,31 +8,37 @@
 }
 .grid {
     /* fill: none; */
-    stroke: var(--color-6);
+    stroke: var(--color-mdgray);
     stroke-width: 1px;
 }
+.grid_line{
+  /* stroke: var(--color-11);
+  stroke-width: 1px; */
+  z-index: -999;
+}
+
 .ad-Grid.is-hidden {
     opacity: 0;
 }
 .ad-Path {
     fill: none;
-    stroke: var(--color-11);
+    stroke: var(--color-1);
     stroke-width: 4px;
     /* stroke-linecap: round; */
 }
 .ad-Point {
     cursor: pointer;
-    fill: #fff;
-    stroke: var(--color-11);
-    stroke-width: 5px;
+    fill: var(--color-dark);
+    stroke: var(--color-dark);
+    stroke-width: 4px;
     transition: fill .2s;
 }
 .ad-Point:hover,
 .ad-PointGroup.is-active .ad-Point {
-    fill: var(--color-active);
+    fill: var(--color-3);
 }
 .ad-PointGroup--first .ad-Point {
-    stroke: var(--color-4);
+    stroke: var(--color-3);
 }
 .ad-Anchor {
     opacity: .5;
@@ -47,11 +53,7 @@
   stroke-width: 4px;
 }
 .ad-Anchor-line {
-  stroke:var(--color-11);
+  stroke:var(--color-mdgray);
   stroke-width: 1px;
   stroke-dasharray: 5 5;
-}
-.grid_line{
-  stroke: var(--color-11);
-  stroke-width: 1px;
 }

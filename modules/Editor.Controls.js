@@ -44,12 +44,33 @@ export default class Controls {
       const parentClasses = [...parent.classList];
 
       //REMOVE ACTIVE POINT
-      if (classList.includes('ad-Button--removePoint')) {
-        this.removeActivePoint();
-      } else if (classList.includes('ad-Choice-input')) {
-        // console.log(`setPointType`);
-        this.setPointType(e);
+      // if (classList.includes('ad-Button--removePoint')) {
+      //   this.removeActivePoint();
+      // } else if (classList.includes('form-radio-points')) {
+      //   // console.log(`setPointType`);
+      //   this.setPointType(e);
+      // }
+
+      // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
+      let action = e.target.dataset.action;
+      console.log(action);
+      switch (action) {
+        case 'resetLine': '';
+        break;
+        case 'addLine': '';
+        break;
+        case 'removeLine': ''
+        break;
+        case 'setPointType': this.setPointType(e.target.value);
+        break;
+        case 'addPoint': '';
+        break;
+        case 'removePoint': this.removeActivePoint();
+        break;
+        default: console.log(`No action here.`);
       }
+
+      // if(e.target)
 
       //NAVIGATION ICONS
       if (classList.includes('nav_icon')) {
@@ -86,8 +107,7 @@ export default class Controls {
       }
 
       //LINE -> TAGS 
-      if (parentClasses.includes('line_tag')) {
-
+      if (parentClasses.includes('line-tag')) {
         //LINE -> TAGS - Add
         if (parent.dataset.value === 'true') {
           this.handleLineRemoveTag(parent.dataset.tag);
@@ -262,13 +282,14 @@ export default class Controls {
   }
 
 
-  setPointType = (e) => {
+  setPointType = (value) => {
     const { lines, activePointIndex, activeLineIndex } = this.getState();
     const ap = lines[activeLineIndex];
 
     // not the first point
     if (activePointIndex !== 0) {
-      let v = e.target.value;
+      // let v = e.target.value;
+      let v = value;
 
       switch (v) {
         case 'l':
@@ -395,7 +416,7 @@ export default class Controls {
   }
 
 
-  removeActivePoint = (e) => {
+  removeActivePoint = () => {
     const { activePointIndex, lines, activeLineIndex } = this.getState();
     // const points = cstate.points;
     // const active = cstate.activePointIndex;
@@ -608,7 +629,7 @@ export default class Controls {
           <h3 class="">Import/Export</h3>
         </div>
 
-        <div class="ad-Controls-container controls_div flex_row">
+        <div class="flex_row">
 
         ${Control({
           type:'button',
@@ -680,17 +701,17 @@ export default class Controls {
             ${Control({
               type: 'button',
               action: 'resetLine',
-              value: 'Reset'
+              value: 'Reset Line'
             })}
             ${Control({
               type:'button',
               action:'addLine',
-              value:'Add',
+              value:'Add Line',
             })}
             ${Control({
               type:'button',
               action:'removeLine',
-              value:'Remove',
+              value:'Remove Line',
             })}
           </div>
         </div>
@@ -716,7 +737,7 @@ export default class Controls {
 
       <div class="control-group">
         <span class="control-group-title">Points (i)</span>
-        <div class="control-row">
+
           ${Control({
             name:'Point type',
             type:'choices',
@@ -728,19 +749,19 @@ export default class Controls {
                 { name: 'A', value: 'a', checked: pointType == 'a' }
             ]
           })}
-        </div>
-        
+
+          
         <div class="control-row">
           ${Control({
             type:'button',
             action:'addPoint',
-            value:'Add Point',
+            value:'Add',
             // onclick: log()
           })}
           ${Control({
             type:'button',
             action:'removePoint',
-            value:'Remove Point',
+            value:'Remove',
             // onclick: this.removeActivePoint
             // onClick={ (e) => props.removeActivePoint(e) } />
           })} 

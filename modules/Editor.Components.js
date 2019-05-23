@@ -204,23 +204,25 @@ function StaticText(props) {
 function Choices(props) {
   let choices = props.choices.map((c, i) => {
     return `
-        <label class="ad-Choice">
-          <input
-            class="ad-Choice-input"
-            type="radio"
-            value=${ c.value }
-            ${ c.checked ? 'checked' : ''}
-            name=${ props.id }
-            />
-          <div class="ad-Choice-fake">
-            ${ c.name }
-          </div>
-        </label>
-      `;
+    <input data-action="setPointType" type="radio" name="${ props.id }" value="${ c.value }"
+    ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
+    <label class="choices-label" for="">${ c.name }</label>
+    `;
   }).join('');
-
+//   <label class="ad-Choice">
+//   <input
+//     class="ad-Choice-input"
+//     type="radio"
+//     value="${ c.value }
+//     ${ c.checked ? 'checked' : ''}"
+//     name="${ props.id }"
+//     />
+//   <div class="ad-Choice-fake">
+//     ${ c.name }
+//   </div>
+// </label>
   return `
-    <div class="ad-Choices flex_row">
+    <div class="flex_row">
       ${ choices }
     </div>
   `;
@@ -406,7 +408,7 @@ function TagList(props) {
 
     return `
       <div data-tag="${tag}" data-value="${active}" class="line-tag">
-        <span class="">${tag}</span>
+        <span class="" style="line-height:24px">${tag}</span>
         <span role="button">${active ? Icon_Check(tag) : ''}</span>
       </div>
     `;
