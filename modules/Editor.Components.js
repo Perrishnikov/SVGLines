@@ -172,7 +172,7 @@ function Control(props) {
       control = '<div style="background-color:red">Incorrect code</div>';
   }
 
-  if (name) {
+  if (name){
     label = `<label class="control-label">${ name }</label>`;
   }
 
@@ -197,7 +197,15 @@ function EditableText(props) {
 
 
 function StaticText(props) {
-  return `<code>${props.value}</code>`;
+  // console.log(props.value);
+  // console.trace();
+//   const c = document.createElement('code');
+//   const v = document.createTextNode(props.value);
+//   c.appendChild(v);
+//   console.log(c);
+// return c.textContent;
+
+  return String.raw`<code>${props.value}</code>`;
 }
 
 

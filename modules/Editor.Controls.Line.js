@@ -10,13 +10,13 @@ import { Section } from './Editor.Controls.Wrappers.js';
  * @param {import('./Editor.Controls').title} props.title
  * @param {import('./Editor.Controls').active} props.active
  * @param {number} props.activeLineIndex
- * @param {import('./Editor.Controls').State} props.tags
+ * @param {import('./Editor.Controls').tags} props.tags
  * @param {import('./Editor.Controls').State} props.lines
  * @param {import('./Editor').pointType} props.pointType
- * param {import('./Editor.Controls').html} props.html
+ * @param {string} props.path
  */
 export function Line(props) {
-  const { id, icon, title, active, activeLineIndex, tags, lines, pointType } = props;
+  const { id, icon, title, active, activeLineIndex, path, tags, lines, pointType } = props;
   // let { ACTIVE } = localState;
   // const activeSec = active == title ? ' active_section' : '';
   const parsedLine = JSON.stringify(lines[activeLineIndex], null, '  ');
@@ -97,12 +97,19 @@ export function Line(props) {
     </div>
 
     <div class="control-group">
-      <span class="control-group-title">LINE DATA (toggle JSON and <path>. Mimic https://iconsvg.xyz/) (i)</span>
+      <span class="control-group-title">LINE DATA (i)</span>
 
       ${Control({
-        name:'Line path',
+        name:'Line JSON',
         type:'StaticText',
         value: parsedLine
+        // onchange:log()
+      })}
+
+      ${Control({
+        name:'Line Path (Mimic svg https://iconsvg.xyz/)',
+        type:'StaticText',
+        value: path
         // onchange:log()
       })}
 

@@ -75,7 +75,7 @@ export function Lines(props) {
         })}
         ${Control({
           name:'Line List (x to remove line)',
-          type:'StaticText',
+          type:'',
           value: ''
           // onchange:log()
         })}

@@ -282,7 +282,7 @@ export default class Main {
             index:i,
             x:p.x,
             y:p.y,
-            rad: 16,
+            rad: 8,
             // setDraggedPoint:setDraggedPoint //needs to be caslled higher up
           })}
           ${anchors}

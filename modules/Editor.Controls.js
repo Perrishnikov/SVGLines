@@ -8,6 +8,7 @@ import { Help } from './Editor.Controls.Help.js';
 /**
  * @typedef {import('./Editor').anchor} anchor
  * @typedef {import('./Editor').State} State
+ * @typedef {tags} tags
  * @typedef {import('./Editor').Element} Element
  * @typedef {import('./Editor').default} Editor
  * @typedef {import('./Editor').pointType} PointType
@@ -58,7 +59,7 @@ export default class Controls {
 
       // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
       let action = e.target.dataset.action;
-      console.log(action);
+      console.log(`action: ${action}`);
       switch (action) {
         case 'resetLine':
           '';
@@ -79,7 +80,7 @@ export default class Controls {
           this.removeActivePoint();
           break;
         default:
-          console.log(`No action here.`);
+          console.log(`No action detected.`);
       }
 
       //NAVIGATION ICONS
@@ -471,8 +472,43 @@ export default class Controls {
   }
 
   /**
+   * Pass in a line's points. Returns the path
+   * @param {object} points
+   * @returns {string} - a single path
+   */
+  generatePath = (points) => {
+    // let { points, closePath } = props;
+    let d = '';
+
+    points.forEach((p, i) => {
+      if (i === 0) {
+        // first point
+        d += 'M ';
+      } else if (p.q) {
+        // quadratic
+        d += `Q ${ p.q.x } ${ p.q.y } `;
+      } else if (p.c) {
+        // cubic
+        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
+      } else if (p.a) {
+        // arc
+        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
+      } else {
+        d += 'L ';
+      }
+
+      d += `${ p.x } ${ p.y } `;
+    });
+
+    // if (closePath) { d += 'Z'; }
+
+    return d;
+  }
+
+  /**
    * Render this on every State change
    * @param {object} props
+   * @param {import('./Editor.Controls').tags} props.tags
    * @param {import('./Editor').State} props.state
    */
   render = (props) => {
@@ -480,6 +516,8 @@ export default class Controls {
 
     const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
+
+    let path = `d="${this.generatePath(lines[activeLineIndex].points)}"`;
 
     let pointType = 'l';
 
@@ -492,7 +530,6 @@ export default class Controls {
     } else if (active.a) {
       // console.log(`Hello Active A!`);
       pointType = 'a';
-
     }
 
     {
@@ -580,12 +617,13 @@ export default class Controls {
         })}
       </nav>
 
-      ${Line({
+      ${Line({ 
         id:`section_${LINE}`,
         icon:`icon_${LINE}`,
         title: LINE,
         active: ACTIVE,
         activeLineIndex,
+        path,
         tags,
         lines,
         pointType,

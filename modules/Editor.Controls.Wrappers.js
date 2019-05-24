@@ -27,7 +27,6 @@ export function Title(props) {
 
   return `
     <div class="">
-        <h3 class="section-title">${title}</h3>
-    </div>      
-    `;
+      <h3 class="section-title">${title}</h3>
+    </div>`;
 }
