@@ -8,12 +8,13 @@ import Main from './Editor.Main.js';
  * @typedef {{x:number,y:number}} coords
  * @typedef {0 | 1 | boolean} anchor
  * @typedef {MouseEvent} e 
+ * @typedef {'l'|'q'|'c'|'a'} pointType
  */
 
 /**
  * Line
  * @typedef {Object} Line
- * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
+ * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} Line.points
  * @property {Array<string>} tags
  */
 
@@ -42,7 +43,6 @@ import Main from './Editor.Main.js';
  * property {State} state
  * @property {Main} main
  * @property {Controls} controls
- * @property 
  */
 export default class Editor {
   /**

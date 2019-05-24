@@ -292,6 +292,11 @@ export default class Main {
 
   }
 
+  /**
+   * Render this on every State change
+   * @param {object} props
+   * @param {import('./Editor').State} props.state
+   */
   render = (props) => {
     // console.log(`from Main render()`);
     const { w, h, activePointIndex, activeLineIndex } = props.state;

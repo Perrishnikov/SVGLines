@@ -12,7 +12,7 @@
     stroke-width: 1px;
 }
 .grid_line{
-  /* stroke: var(--color-11);
+  /* stroke: var(--color-green1);
   stroke-width: 1px; */
   z-index: -999;
 }
@@ -22,7 +22,7 @@
 }
 .ad-Path {
     fill: none;
-    stroke: var(--color-1);
+    stroke: var(--color-green);
     stroke-width: 4px;
     /* stroke-linecap: round; */
 }

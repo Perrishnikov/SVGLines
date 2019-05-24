@@ -1,13 +1,26 @@
 //@ts-check
-import { Control, NavComponent, ReturnTags, TagList } from './Editor.Components.js';
+import { NavComponent } from './Editor.Components.js';
+import { Line } from './Editor.Controls.Line.js';
+import { Settings } from './Editor.Controls.Settings.js';
+import { Lines } from './Editor.Controls.Lines.js';
+import { Help } from './Editor.Controls.Help.js';
 
 /**
  * @typedef {import('./Editor').anchor} anchor
  * @typedef {import('./Editor').State} State
  * @typedef {import('./Editor').Element} Element
  * @typedef {import('./Editor').default} Editor
+ * @typedef {import('./Editor').pointType} PointType
+ * @typedef {import('./Editor').Line} Line
+ * 
  * @typedef {{x:number,y:number}} coords
  * @typedef {MouseEvent} e 
+ * @typedef {{LINE:string, LINES:string, SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} localState
+ * @typedef {string} title
+ * @typedef {string} id
+ * @typedef {string} icon
+ * @typedef {string} active
+ * @typedef {string} html
  */
 export default class Controls {
   /**
@@ -25,7 +38,7 @@ export default class Controls {
 
     this.localState = {
       LINE: 'line',
-      SAVE: 'save',
+      LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
       ACTIVE: 'line',
@@ -43,34 +56,31 @@ export default class Controls {
       const parent = e.target.parentNode;
       const parentClasses = [...parent.classList];
 
-      //REMOVE ACTIVE POINT
-      // if (classList.includes('ad-Button--removePoint')) {
-      //   this.removeActivePoint();
-      // } else if (classList.includes('form-radio-points')) {
-      //   // console.log(`setPointType`);
-      //   this.setPointType(e);
-      // }
-
       // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
       let action = e.target.dataset.action;
       console.log(action);
       switch (action) {
-        case 'resetLine': '';
-        break;
-        case 'addLine': '';
-        break;
-        case 'removeLine': ''
-        break;
-        case 'setPointType': this.setPointType(e.target.value);
-        break;
-        case 'addPoint': '';
-        break;
-        case 'removePoint': this.removeActivePoint();
-        break;
-        default: console.log(`No action here.`);
+        case 'resetLine':
+          '';
+          break;
+        case 'addLine':
+          '';
+          break;
+        case 'removeLine':
+          '';
+          break;
+        case 'setPointType':
+          this.setPointType(e.target.value);
+          break;
+        case 'addPoint':
+          '';
+          break;
+        case 'removePoint':
+          this.removeActivePoint();
+          break;
+        default:
+          console.log(`No action here.`);
       }
-
-      // if(e.target)
 
       //NAVIGATION ICONS
       if (classList.includes('nav_icon')) {
@@ -460,8 +470,14 @@ export default class Controls {
 
   }
 
+  /**
+   * Render this on every State change
+   * @param {object} props
+   * @param {import('./Editor').State} props.state
+   */
   render = (props) => {
     const { w, h, lines, activeLineIndex, activePointIndex, grid, tags } = props.state;
+
     const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
@@ -536,7 +552,8 @@ export default class Controls {
       // )
     }
 
-    const { LINE, SAVE, SETTINGS, HELP, ACTIVE } = this.localState;
+    /**@type {localState} */
+    const { LINE, LINES, SETTINGS, HELP, ACTIVE } = this.localState;
     // console.log(`ACTIVE: ${ACTIVE}`);
 
     return (
@@ -547,8 +564,8 @@ export default class Controls {
           active: ACTIVE
         })}
         ${NavComponent({
-          icon: 'save',
-          id: `icon_${SAVE}`,
+          icon: 'lines',
+          id: `icon_${LINES}`,
           active: ACTIVE
         })}    
         ${NavComponent({
@@ -563,7 +580,7 @@ export default class Controls {
         })}
       </nav>
 
-      ${this.Line({
+      ${Line({
         id:`section_${LINE}`,
         icon:`icon_${LINE}`,
         title: LINE,
@@ -571,296 +588,39 @@ export default class Controls {
         activeLineIndex,
         tags,
         lines,
-        pointType
+        pointType,
       })} 
 
-      ${this.Save({
-        id:`section_${SAVE}`,
-        icon:`icon_${SAVE}`,
-        title: SAVE,
+      ${Lines({
+        id:`section_${LINES}`,
+        icon:`icon_${LINES}`,
+        title: LINES,
         active: ACTIVE,
-        tags
+        tags,
+        // localState: this.localState,
       })}
       
-      ${this.Settings({
+      ${Settings({
         id:`section_${SETTINGS}`,
         icon:`icon_${SETTINGS}`,
         title: SETTINGS,
         active: ACTIVE,
         w, 
         h, 
-        grid
+        grid,
+        localState: this.localState
       })}
 
-      ${this.Help({
+      ${Help({
         id:`section_${HELP}`,
         icon:`icon_${HELP}`,
         title: HELP,
         active: ACTIVE,
+        localState: this.localState
       })}
-        
     `);
   }
-
-
-  Title = (props) => {
-    let { title } = props;
-
-    return `
-      <div class="">
-          <h3 class="section-title">${title}</h3>
-      </div>      
-      `;
-  }
-
-
-  Save = (props) => {
-    //id="section_save" title="save" icon="icon_save"
-    const { id, title, icon, tags } = props;
-    let { ACTIVE } = this.localState;
-    const active = ACTIVE == title ? ' active_section' : '';
-
-    return `
-      <div data-icon="${icon}" class="control-section${active}" id="${id}">
-
-        ${this.Title({title})}
-
-        <div class="controls_div flex_row">
-          <h3 class="">Import/Export</h3>
-        </div>
-
-        <div class="flex_row">
-
-        ${Control({
-          type:'button',
-          action:'importFile',
-          value:'Import JSON',
-          // onclick: log()
-        })}
-        ${Control({
-          type:'button',
-          action:'exportFile',
-          value:'export JSON',
-          // onclick: this.removeActivePoint
-          // onClick={ (e) => props.removeActivePoint(e) } />
-        })}
-                  
-        </div>
-
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Tags</h3>
-        </div>
-
-        <div class="ad-Controls-container controls_div flex_row">
-        
-          ${ReturnTags({
-            name:'Create Tag (x to remove)',
-            tags
-          })}
-
-        </div>
-
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Display Lines</h3>
-        </div>
-
-        <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          type:'button',
-          action:'assignUID',
-          value:'Assign UIDs',
-          // onclick: this.removeActivePoint
-          // onClick={ (e) => props.removeActivePoint(e) } />
-        })}
-        ${Control({
-          name:'Line List (x to remove line)',
-          type:'StaticText',
-          value: ''
-          // onchange:log()
-        })}
-        </div>
-
-    </div>`;
-  }
-
-
-  Line = (props) => {
-    const { pointType, title, id, icon, lines, tags, activeLineIndex } = props;
-    let { ACTIVE } = this.localState;
-    const active = ACTIVE == title ? ' active_section' : '';
-    const parsedLine = JSON.stringify(lines[activeLineIndex], null, '  ');
-    const activeLine = lines[activeLineIndex];
-
-    return `
-      <section data-icon="${icon}" class="control-section${active}" id="${id}">
-        ${this.Title({title})}
-
-        <div class="control-group">
-          <span class="control-group-title">Line Functions (i)</span>
-          <div class="control-row">
-            ${Control({
-              type: 'button',
-              action: 'resetLine',
-              value: 'Reset Line'
-            })}
-            ${Control({
-              type:'button',
-              action:'addLine',
-              value:'Add Line',
-            })}
-            ${Control({
-              type:'button',
-              action:'removeLine',
-              value:'Remove Line',
-            })}
-          </div>
-        </div>
-
-        <div class="control-group">
-          <span class="control-group-title">Line Tags (i)</span>
-          ${TagList({
-            name:'Line Tags',
-            tags,
-            activeLine
-          })}
-        </div>
-
-        <div class="control-group">
-          <span class="control-group-title">Line ID (i)</span>
-          ${Control({
-            name:'Line ID',
-            type:'EditableText',
-            value: '000',
-            activeLine
-          })}
-        </div>
-
-      <div class="control-group">
-        <span class="control-group-title">Points (i)</span>
-
-          ${Control({
-            name:'Point type',
-            type:'choices',
-            id:'pointType',
-            choices:[
-                { name: 'L', value: 'l', checked: pointType == 'l' },
-                { name: 'Q', value: 'q', checked: pointType == 'q' },
-                { name: 'C', value: 'c', checked: pointType == 'c' },
-                { name: 'A', value: 'a', checked: pointType == 'a' }
-            ]
-          })}
-
-          
-        <div class="control-row">
-          ${Control({
-            type:'button',
-            action:'addPoint',
-            value:'Add',
-            // onclick: log()
-          })}
-          ${Control({
-            type:'button',
-            action:'removePoint',
-            value:'Remove',
-            // onclick: this.removeActivePoint
-            // onClick={ (e) => props.removeActivePoint(e) } />
-          })} 
-          </div>
-        </div>
-
-        <div class="control-group">
-          <span class="control-group-title">LINE DATA (toggle JSON and <path>. Mimic https://iconsvg.xyz/) (i)</span>
-
-          ${Control({
-            name:'Line path',
-            type:'StaticText',
-            value: parsedLine
-            // onchange:log()
-          })}
-
-        </div>
-      </section>`;
-  }
-
-
-  Settings = (props) => {
-    const { w, h, grid, title, id, icon } = props;
-    let { ACTIVE } = this.localState;
-    const active = ACTIVE == title ? ' active_section' : '';
-
-    return `
-      <div data-icon="${icon}" class="control-section${active}" id="${id}">
-        ${this.Title({title})}
-
-        <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          name:'Width',
-          type:'EditableText',
-          value: w,
-          // onchange:log()
-        })}
-        ${Control({
-          name:'Height',
-          type:'EditableText',
-          value: h,
-          // onChange={ (e) => props.setHeight(e) } />
-        })}
-      </div>
-      <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          name:'Grid size',
-          type:'EditableText',
-          value: grid.size
-          // onChange={ (e) => props.setGridSize(e) }
-        })}
-        ${Control({
-          name:'Snap grid',
-          type:'checkbox',
-          checked: grid.snap,
-          // onChange={ (e) => props.setGridSnap(e) } />
-        })}
-        ${Control({
-          name:'Show grid',
-          type:'checkbox',
-          checked: grid.show
-          // onChange={ (e) => props.setGridShow(e) } />
-        })}
-      </div>
-
-      <div class="controls_div flex_row">
-        <h3 class="ad-Controls-title">JSON</h3>
-      </div>
-
-      <div class="ad-Controls-container controls_div flex_row">
-      ${Control({
-        name:'Show Settings State',
-        type:'text',
-        value: ''
-        // onchange:log()
-      })}
-      </div>
-
-      <div id="coords">
-      </div>
-
-    </div>`;
-  }
-
-
-  Help = (props) => {
-    let { title, id, icon } = props;
-    let { ACTIVE } = this.localState;
-    const active = ACTIVE == title ? ' active_section' : '';
-
-    return `
-    <div data-icon="${icon}" class="control-section${active}" id="${id}">
-        ${this.Title({title})}
-      </div>
-    `
-  }
 }
-// export { Controls, addControlListeners };
-
 
 Controls.Render = (props) => {
 

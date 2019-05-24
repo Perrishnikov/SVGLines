@@ -148,7 +148,7 @@ button:focus {
     /* color: #fff; */
 }
 .text_input {
-    background-color: var(--color-11);
+    background-color: var(--color-green1);
     min-width: 100px;
 }
 .c_label {
@@ -192,7 +192,7 @@ button:focus {
     flex-wrap: wrap;
 }
 .svg_tag {
-    /* background-color: var(--color-10); */
+    /* background-color: var(--color-green0); */
     width: var(--font-size);
     height: var(--font-size);
 }
@@ -222,14 +222,14 @@ button:focus {
     background-color: var(--color-mdgray);
 }
 .line-tag[data-value=true] {
-    background-color: var(--color-3);
+    background-color: var(--color-green);
     /* transition: color .75s;
     transition: stroke .75s; */
 }
 .line-tag[data-value=true]:hover,
 .line-tag[data-value=true]:hover svg {
-    color: var(--color-mdgray);
-    stroke: var(--color-mdgray);
+    color: var(--color-light);
+    stroke: var(--color-light);
 }
 /* SAVE -> Tags */
 #tagConfirmDelete {
@@ -275,14 +275,14 @@ code {
     /* font: 13px/1 'Open Sans', sans-serif; */
     left: 10px;
     top: 4px;
-    content: '\02143';
+    content: '\02143'; /*unicode check mark*/
     transform: rotate(40deg);
 }
 .form-radio-points:hover {
     background-color: var(--color-mdgray);
 }
 .form-radio-points:checked {
-    background-color: var(--color-3)
+    background-color: var(--color-green)
 }
 .choices-label {
     /* font: 15px/1.7 'Open Sans', sans-serif; */

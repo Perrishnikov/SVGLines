@@ -275,6 +275,7 @@ function Range(props) {
   `;
 }
 
+//TODO: Make this more dynamic from localState names
 function NavComponent(props) {
   let { icon, id, active } = props;
   let svg;
@@ -295,7 +296,7 @@ function NavComponent(props) {
     case 'help':
       svg = Icon_Help(active);
       break;
-    case 'save':
+    case 'lines':
       svg = Icon_Save(active);
   }
 
