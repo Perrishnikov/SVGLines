@@ -1,3 +1,4 @@
+//@ts-check
 function Quadratic(props) {
   // circle onMouseDown="${(e) => props.setDraggedQuadratic(props.index)}"
   return `

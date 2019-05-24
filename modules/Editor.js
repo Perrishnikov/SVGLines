@@ -5,16 +5,17 @@ import Main from './Editor.Main.js';
 /**
  * Misc
  * @typedef {HTMLElement} Element
- * @typedef {{x:number,y:number}} coords
- * @typedef {0 | 1 | boolean} anchor
- * @typedef {MouseEvent} e 
- * @typedef {'l'|'q'|'c'|'a'} pointType
+ * @typedef {{x:number,y:number}} Coords
+ * @typedef {0 | 1 } Anchor
+ * @typedef {MouseEvent} E
+ * @typedef {'l'|'q'|'c'|'a'} PointType
+ * @typedef {Array<string>} Tags
  */
 
 /**
  * Line
  * @typedef {Object} Line
- * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} Line.points
+ * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
  * @property {Array<string>} tags
  */
 
@@ -29,7 +30,7 @@ import Main from './Editor.Main.js';
  * @property {number} activeLineIndex 
  * @property {number} activePointIndex  
  * @property {Line[]} lines
- * @property {Array<string>} tags
+ * @property {Tags} tags
  * @property {string} name
  * @property {number} w
  * @property {number} h
@@ -136,7 +137,7 @@ export default class Editor {
   /**
    * Called from handleMouseMove
    * calls setState()
-   * @param {coords} coords
+   * @param {Coords} coords
    */
   setPointCoords = (coords) => {
     const { activePointIndex, lines, activeLineIndex } = this.getState();
@@ -150,8 +151,8 @@ export default class Editor {
   /**
    * Called from handleMouseMove
    * calls setState()
-   * @param {coords} coords
-   * @param {anchor} anchor
+   * @param {Coords} coords
+   * @param {Anchor|boolean} anchor
    */
   setCubicCoords = (coords, anchor) => {
     // console.log('setCubicCoords');
@@ -169,7 +170,7 @@ export default class Editor {
   /**
    * Called from handleMouseMove
    * calls setState()
-   * @param {coords} coords
+   * @param {Coords} coords
    */
   setQuadraticCoords = (coords) => {
     const { activePointIndex, lines, activeLineIndex } = this.getState();
@@ -182,8 +183,8 @@ export default class Editor {
 
 
   /**
-   * @param {e} e 
-   * @returns {coords}
+   * @param {E} e 
+   * @returns {Coords}
    */
   getMouseCoords = (e) => {
     const { grid } = this.getState();
@@ -205,7 +206,7 @@ export default class Editor {
 
   /**
    * passed to Editor.Main
-   * @param {e} e 
+   * @param {E} e 
    */
   handleMouseMove = (e) => {
     e.preventDefault();
@@ -263,7 +264,7 @@ export default class Editor {
   /**
    * Grid
    * calls setState()
-   * @param {e} e
+   * @param {E} e
    */
   setGridSize = (e) => {
     let { grid, w, h } = this.getState();
@@ -283,7 +284,7 @@ export default class Editor {
   /**
    * Grid
    * calls setState()
-   * @param {e} e
+   * @param {E} e
    */
   setGridSnap = (e) => {
     let { grid } = this.getState();
@@ -296,7 +297,7 @@ export default class Editor {
   /**
    * Grid
    * calls setState()
-   * @param {e} e
+   * @param {E} e
    */
   setGridShow = (e) => {
     let { grid } = this.getState();

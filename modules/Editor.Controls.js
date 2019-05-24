@@ -6,22 +6,21 @@ import { Lines } from './Editor.Controls.Lines.js';
 import { Help } from './Editor.Controls.Help.js';
 
 /**
- * @typedef {import('./Editor').anchor} anchor
+ * @typedef {import('./Editor').Anchor} Anchor
  * @typedef {import('./Editor').State} State
- * @typedef {tags} tags
  * @typedef {import('./Editor').Element} Element
  * @typedef {import('./Editor').default} Editor
- * @typedef {import('./Editor').pointType} PointType
+ * @typedef {import('./Editor').PointType} PointType
  * @typedef {import('./Editor').Line} Line
+ * @typedef {import('./Editor').Coords} Coords
+ * @typedef {import('./Editor').E} E
  * 
- * @typedef {{x:number,y:number}} coords
- * @typedef {MouseEvent} e 
- * @typedef {{LINE:string, LINES:string, SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} localState
- * @typedef {string} title
- * @typedef {string} id
- * @typedef {string} icon
- * @typedef {string} active
- * @typedef {string} html
+ * @typedef {{LINE:string, LINES:string, SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
+ * @typedef {string} Title
+ * @typedef {string} Id
+ * @typedef {string} Icon
+ * @typedef {string} Active
+ * @typedef {string} Html
  */
 export default class Controls {
   /**
@@ -508,8 +507,8 @@ export default class Controls {
   /**
    * Render this on every State change
    * @param {object} props
-   * @param {import('./Editor.Controls').tags} props.tags
    * @param {import('./Editor').State} props.state
+   * param {import('./Editor').State} props.tags
    */
   render = (props) => {
     const { w, h, lines, activeLineIndex, activePointIndex, grid, tags } = props.state;
@@ -519,6 +518,7 @@ export default class Controls {
 
     let path = `d="${this.generatePath(lines[activeLineIndex].points)}"`;
 
+    /**@type {PointType} */
     let pointType = 'l';
 
     if (active.q) {
@@ -589,7 +589,7 @@ export default class Controls {
       // )
     }
 
-    /**@type {localState} */
+    /**@type {LocalState} */
     const { LINE, LINES, SETTINGS, HELP, ACTIVE } = this.localState;
     // console.log(`ACTIVE: ${ACTIVE}`);
 
@@ -635,7 +635,6 @@ export default class Controls {
         title: LINES,
         active: ACTIVE,
         tags,
-        // localState: this.localState,
       })}
       
       ${Settings({

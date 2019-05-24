@@ -1,7 +1,7 @@
 //@ts-check
 import { Point, Quadratic, Cubic, Grid } from './Editor.Components.js';
 /**
- * @typedef {import('./Editor').anchor} anchor
+ * @typedef {import('./Editor').Anchor} anchor
  * @typedef {import('./Editor').Element} Element
  * @typedef {import('./Editor').default} Editor
  * @typedef {{x:number,y:number}} coords

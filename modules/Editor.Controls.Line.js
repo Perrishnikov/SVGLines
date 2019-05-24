@@ -4,15 +4,20 @@ import { Section } from './Editor.Controls.Wrappers.js';
 
 /**
  * 
- * @param {object} props 
- * @param {import('./Editor.Controls').id} props.id
- * @param {import('./Editor.Controls').icon} props.icon
- * @param {import('./Editor.Controls').title} props.title
- * @param {import('./Editor.Controls').active} props.active
- * @param {number} props.activeLineIndex
- * @param {import('./Editor.Controls').tags} props.tags
- * @param {import('./Editor.Controls').State} props.lines
- * @param {import('./Editor').pointType} props.pointType
+ * typedef {import('./Editor.Controls').State["tags"]} Tags
+ * typedef {State["tags"]} Tags
+ */
+
+/**
+ * @param {object} props
+ * @param {import('./Editor.Controls').State["tags"]} props.tags
+ * @param {import('./Editor.Controls').State["activeLineIndex"]} props.activeLineIndex
+ * @param {import('./Editor.Controls').State["lines"]} props.lines
+ * @param {import('./Editor.Controls').Id} props.id
+ * @param {import('./Editor.Controls').Icon} props.icon
+ * @param {import('./Editor.Controls').Title} props.title
+ * @param {import('./Editor.Controls').Active} props.active
+ * @param {import('./Editor').PointType} props.pointType - must be in Controls since its shared
  * @param {string} props.path
  */
 export function Line(props) {
@@ -23,7 +28,10 @@ export function Line(props) {
   const activeLine = lines[activeLineIndex];
 
   return Section({
-    title,id,icon,active,
+    title,
+    id,
+    icon,
+    active,
     html: `
     <div class="control-group">
       <span class="control-group-title">Line Functions (i)</span>

@@ -5,15 +5,12 @@ import {Title} from './Editor.Controls.Wrappers.js';
 /**
  * 
  * @param {object} props 
- * @param {import('./Editor.Controls').id} props.id
- * @param {import('./Editor.Controls').icon} props.icon
- * @param {import('./Editor.Controls').title} props.title
- * @param {import('./Editor.Controls').active} props.active
- * param {number} props.activeLineIndex
- * @param {import('./Editor.Controls').State} props.tags
- * param {import('./Editor.Controls').State} props.lines
- * param {import('./Editor').pointType} props.pointType
- * param {import('./Editor.Controls').html} props.html
+ * @param {import('./Editor.Controls').Id} props.id
+ * @param {import('./Editor.Controls').Icon} props.icon
+ * @param {import('./Editor.Controls').Title} props.title
+ * @param {import('./Editor.Controls').Active} props.active
+ * @param {import('./Editor.Controls').State["tags"]} props.tags
+ * param {import('./Editor').PointType} props.pointType - must be in Controls since its shared
  */
 export function Lines(props) {
   //id="section_save" title="save" icon="icon_save"
