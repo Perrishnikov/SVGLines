@@ -19,6 +19,7 @@ export default class Main {
     this.getState = editor.getState;
     this.handleMouseMove = editor.handleMouseMove;
     this.getMouseCoords = editor.getMouseCoords;
+    this.generatePath = editor.generatePath;
 
 
     this.id.addEventListener('mouseup', () => {
@@ -46,7 +47,7 @@ export default class Main {
         //if the target has an anchor, it is Cubic
         const anchor = e.target.dataset.anchor ? e.target.dataset.anchor : null;
 
-        console.log(`index: ${index}, anchor: ${anchor}`);
+        // console.log(`index: ${index}, anchor: ${anchor}`);
 
         if (anchor) {
           /** for Cubic - props = index, anchor */
@@ -105,7 +106,7 @@ export default class Main {
    * @param {string} lineindex
    */
   setDraggedPoint = (index, lineindex) => {
-    console.log(`draggedPoint`);
+    // console.log(`draggedPoint`);
     if (!this.getState().ctrl) {
       this.setState({
         activeLineIndex: parseInt(lineindex),
@@ -122,7 +123,7 @@ export default class Main {
    * @param {string} lineindex
    */
   setDraggedQuadratic = (index, lineindex) => {
-    console.log(`setDraggedQuadratic`);
+    // console.log(`setDraggedQuadratic`);
     if (!this.getState().ctrl) {
       this.setState({
         activeLineIndex: parseInt(lineindex),
@@ -140,7 +141,7 @@ export default class Main {
    * @param {string} index
    */
   setDraggedCubic = (index, anchor, lineindex) => {
-    console.log(`setDraggedCubic`);
+    // console.log(`setDraggedCubic`);
     if (!this.getState().ctrl) {
       this.setState({
         activeLineIndex: parseInt(lineindex),
@@ -197,39 +198,7 @@ export default class Main {
   }
 
 
-  /**
-   * Pass in a line's points. Returns the path
-   * @param {object} points
-   * @returns {string} - a single path
-   */
-  generatePath = (points) => {
-    // let { points, closePath } = props;
-    let d = '';
 
-    points.forEach((p, i) => {
-      if (i === 0) {
-        // first point
-        d += 'M ';
-      } else if (p.q) {
-        // quadratic
-        d += `Q ${ p.q.x } ${ p.q.y } `;
-      } else if (p.c) {
-        // cubic
-        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
-      } else if (p.a) {
-        // arc
-        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
-      } else {
-        d += 'L ';
-      }
-
-      d += `${ p.x } ${ p.y } `;
-    });
-
-    // if (closePath) { d += 'Z'; }
-
-    return d;
-  }
 
   /**
    * Pass in a line's points. Returns the path

@@ -15,14 +15,14 @@ import Main from './Editor.Main.js';
 /**
  * Line
  * @typedef {Object} Line
- * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:{[{x:number,y:number}]}, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
+ * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:Array<{x:number,y:number}, {x:number,y:number}>, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
  * @property {Array<string>} tags
  */
 
 /**
  * State
  * @typedef {Object} State
- * @property {boolean} draggedCubic
+ * @property {Anchor | boolean} draggedCubic
  * @property {boolean} draggedQuadratic
  * @property {boolean} draggedPoint
  * @property {boolean} ctrl
@@ -152,19 +152,20 @@ export default class Editor {
    * Called from handleMouseMove
    * calls setState()
    * @param {Coords} coords
-   * @param {Anchor|boolean} anchor
+   * @param {State["draggedCubic"]} anchor
    */
   setCubicCoords = (coords, anchor) => {
     // console.log('setCubicCoords');
-    // console.log(anchor);
     const { activePointIndex, lines, activeLineIndex } = this.getState();
 
-    // if (anchor) {
-    lines[activeLineIndex].points[activePointIndex].c[anchor].x = coords.x;
-    lines[activeLineIndex].points[activePointIndex].c[anchor].y = coords.y;
+    //Is normally false, but set to 0|1 depending on the active anchor
+    if (typeof anchor === 'string') {
+      
+      lines[activeLineIndex].points[activePointIndex].c[anchor].x = coords.x;
+      lines[activeLineIndex].points[activePointIndex].c[anchor].y = coords.y;
 
-    this.setState({ lines });
-    // }
+      this.setState({ lines });
+    }
   }
 
   /**
@@ -203,6 +204,39 @@ export default class Editor {
     return { x, y };
   }
 
+  /**
+   * Pass in a line's points. Returns the path
+   * @param {object} points
+   * @returns {string} - a single path
+   */
+  generatePath = (points) => {
+    // let { points, closePath } = props;
+    let d = '';
+
+    points.forEach((p, i) => {
+      if (i === 0) {
+        // first point
+        d += 'M ';
+      } else if (p.q) {
+        // quadratic
+        d += `Q ${ p.q.x } ${ p.q.y } `;
+      } else if (p.c) {
+        // cubic
+        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
+      } else if (p.a) {
+        // arc
+        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
+      } else {
+        d += 'L ';
+      }
+
+      d += `${ p.x } ${ p.y } `;
+    });
+
+    // if (closePath) { d += 'Z'; }
+
+    return d;
+  }
 
   /**
    * passed to Editor.Main
@@ -239,7 +273,7 @@ export default class Editor {
         // console.log(`setQuad`);
         this.setQuadraticCoords(this.getMouseCoords(e));
       } else if (draggedCubic !== false) {
-        // console.log(`setCubic`);
+        // console.log(`setCubic: ${draggedCubic}`);
         this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
       }
     }

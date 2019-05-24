@@ -35,6 +35,7 @@ export default class Controls {
     this.setQuadraticCoords = editor.setQuadraticCoords;
     this.setCubicCoords = editor.setCubicCoords;
     this.getState = editor.getState;
+    this.generatePath = editor.generatePath;
 
     this.localState = {
       LINE: 'line',
@@ -353,77 +354,81 @@ export default class Controls {
   }
 
 
-  setArcParam = (param, e) => {
-    const { lines, activePointIndex, activeLineIndex } = this.getState();
-    const ap = lines[activeLineIndex];
-    // const cstate = this.getState();
+  // setArcParam = (param, e) => {
+  //   const { lines, activePointIndex, activeLineIndex } = this.getState();
+  //   const ap = lines[activeLineIndex];
 
-    // const points = cstate.points;
-    // const active = cstate.activePointIndex;
-    let v;
+  //   let v;
 
-    if (['laf', 'sf'].indexOf(param) > -1) {
-      v = e.target.checked ? 1 : 0;
-    } else {
-      v = this.positiveNumber(e.target.value);
-    }
+  //   if (['laf', 'sf'].indexOf(param) > -1) {
+  //     v = e.target.checked ? 1 : 0;
+  //   } else {
+  //     v = this.positiveNumber(e.target.value);
+  //   }
 
-    ap.points[activePointIndex].a[param] = v;
+  //   ap.points[activePointIndex].a[param] = v;
 
-    this.setState({ lines });
-  }
+  //   this.setState({ lines });
+  // }
 
 
-  setPointPosition = (coord, e) => {
-    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-    const ap = lines[activeLineIndex];
+  // setPointPosition = (coord, e) => {
+  //   const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+  //   const ap = lines[activeLineIndex];
 
-    // const cstate = this.getState();
+  //   // const cstate = this.getState();
 
-    const coords = ap.points[activePointIndex];
-    let v = this.positiveNumber(e.target.value);
+  //   const coords = ap.points[activePointIndex];
+  //   let v = this.positiveNumber(e.target.value);
 
-    if (coord === 'x' && v > w) v = w;
-    if (coord === 'y' && v > h) v = h;
+  //   if (coord === 'x' && v > w) v = w;
+  //   if (coord === 'y' && v > h) v = h;
 
-    coords[coord] = v;
+  //   coords[coord] = v;
 
-    this.setPointCoords(coords);
-  }
-
-
-  setQuadraticPosition = (coord, e) => {
-    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-    const ap = lines[activeLineIndex];
-    // const cstate = this.getState();
-
-    const coords = ap.points[activePointIndex].q;
-    let v = this.positiveNumber(e.target.value);
-
-    if (coord === 'x' && v > w) v = w;
-    if (coord === 'y' && v > h) v = h;
-
-    coords[coord] = v;
-
-    this.setQuadraticCoords(coords);
-  }
+  //   this.setPointCoords(coords);
+  // }
 
 
-  setCubicPosition = (coord, anchor, e) => {
-    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-    const ap = lines[activeLineIndex];
-    // const cstate = this.getState();
+  // setQuadraticPosition = (coord, e) => {
+  //   const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+  //   const ap = lines[activeLineIndex];
+  //   // const cstate = this.getState();
 
-    const coords = ap.points[activePointIndex].c[anchor];
-    let v = this.positiveNumber(e.target.value);
+  //   const coords = ap.points[activePointIndex].q;
+  //   let v = this.positiveNumber(e.target.value);
 
-    if (coord === 'x' && v > w) v = w;
-    if (coord === 'y' && v > h) v = h;
+  //   if (coord === 'x' && v > w) v = w;
+  //   if (coord === 'y' && v > h) v = h;
 
-    coords[coord] = v;
+  //   coords[coord] = v;
 
-    this.setCubicCoords(coords, anchor);
-  }
+  //   this.setQuadraticCoords(coords);
+  // }
+
+// /**
+//  *@param {Coords} coords
+//  @param {Anchor} anchor
+//  * @param {E} e
+//  */
+// setCubicPosition = (coords, anchor, e) => {
+//     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+//     const activeLine = lines[activeLineIndex];
+//     let newCoords = coords;
+
+//     // {x: y:}
+//     const coord = activeLine.points[activePointIndex].c[anchor];
+//     let v = this.positiveNumber(e.target.value);
+// console.log(`v: ${v}`);
+//     if (coords.x && v > w) v = w;
+//     if (coords.y && v > h) v = h;
+//     console.log(`v: ${v}`);
+
+//     coord[coords] = v;
+// console.dir(`coords: ${coord}`);
+//     console.log(coord);
+//     this.setCubicCoords(coord, anchor);
+//   }
 
 
   removeActivePoint = () => {
@@ -470,39 +475,6 @@ export default class Controls {
 
   }
 
-  /**
-   * Pass in a line's points. Returns the path
-   * @param {object} points
-   * @returns {string} - a single path
-   */
-  generatePath = (points) => {
-    // let { points, closePath } = props;
-    let d = '';
-
-    points.forEach((p, i) => {
-      if (i === 0) {
-        // first point
-        d += 'M ';
-      } else if (p.q) {
-        // quadratic
-        d += `Q ${ p.q.x } ${ p.q.y } `;
-      } else if (p.c) {
-        // cubic
-        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
-      } else if (p.a) {
-        // arc
-        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
-      } else {
-        d += 'L ';
-      }
-
-      d += `${ p.x } ${ p.y } `;
-    });
-
-    // if (closePath) { d += 'Z'; }
-
-    return d;
-  }
 
   /**
    * Render this on every State change
