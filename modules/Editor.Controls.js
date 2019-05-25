@@ -1,5 +1,5 @@
 //@ts-check
-import {Icon_Line, NavC, Icon_Shuffle,Icon_Help,Icon_Settings } from './Editor.Components.js';
+import { Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings } from './Editor.Components.js';
 import { Line } from './Editor.Controls.Line.js';
 import { Settings } from './Editor.Controls.Settings.js';
 import { Lines } from './Editor.Controls.Lines.js';
@@ -52,7 +52,6 @@ export default class Controls {
       e.preventDefault();
 
       const classList = [...e.target.classList];
-      const id = e.target.id;
       const dataset = e.target.dataset ? e.target.dataset : 'NULL';
       const parent = e.target.parentNode;
       const parentClasses = [...parent.classList];
@@ -249,8 +248,6 @@ export default class Controls {
     const sections = [...document.querySelectorAll('.control-section')];
 
     sections.forEach(section => {
-      // <div data-component="controls-section" id="section_lines">
-
       section.classList.remove('active_section');
 
       // console.log(`icon: ${section.dataset.icon}, taget id: ${value}`);
@@ -278,7 +275,7 @@ export default class Controls {
     // target.children[0].classList.add('active_icon');
     // document.querySelector('data-value=\'line\']');
     document.querySelector(`[data-value="${value}"]`)
-    .classList.add('active_icon');
+      .classList.add('active_icon');
 
     // const sub = target.id.substring(5);
     //Important to update localState...
@@ -460,7 +457,7 @@ export default class Controls {
   }
 
 
-  reset = (e) => {
+  reset = () => {
     const cstate = this.getState();
     const w = cstate.w;
     const h = cstate.h;
