@@ -45,7 +45,7 @@ nav {
     height: var(--icon-dimension);
     transition: stroke .15s;
 }
-.active_icon {
+.active_icon svg{
     stroke: var(--color-icon-active) !important;
 }
 /* SECTION TITLE */

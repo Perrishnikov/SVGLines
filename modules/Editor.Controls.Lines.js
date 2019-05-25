@@ -1,82 +1,77 @@
 //@ts-check
 import { Control, ReturnTags } from './Editor.Components.js';
-import {Title} from './Editor.Controls.Wrappers.js';
+import { Section} from './Editor.Controls.Wrappers.js';
 
 /**
  * 
  * @param {object} props 
- * @param {import('./Editor.Controls').Id} props.id
  * @param {import('./Editor.Controls').Icon} props.icon
  * @param {import('./Editor.Controls').Title} props.title
  * @param {import('./Editor.Controls').Active} props.active
  * @param {import('./Editor.Controls').State["tags"]} props.tags
- * param {import('./Editor').PointType} props.pointType - must be in Controls since its shared
  */
 export function Lines(props) {
-  //id="section_save" title="save" icon="icon_save"
-  const { id, title, active, icon, tags } = props;
-  // let { ACTIVE } = localState;
-  const activeSec = active == title ? ' active_section' : '';
+  const { title, active, icon, tags } = props;
 
-  return `
-      <div data-icon="${icon}" class="control-section${activeSec}" id="${id}">
+  return Section ({
+    title,
+    icon,
+    active,
+    html: `
+    <div class="control-group">
+      <span class="control-group-title">Shit(i)</span>
+      <div class="control-row">
 
-        ${Title({title})}
+      ${Control({
+        type:'button',
+        action:'importFile',
+        value:'Import JSON',
+        // onclick: log()
+      })}
+      ${Control({
+        type:'button',
+        action:'exportFile',
+        value:'export JSON',
+        // onclick: this.removeActivePoint
+        // onClick={ (e) => props.removeActivePoint(e) } />
+      })}
+                
+      </div>
 
-        <div class="controls_div flex_row">
-          <h3 class="">Import/Export</h3>
-        </div>
+      <div class="controls_div flex_row">
+          <h3 class="ad-Controls-title">Tags</h3>
+      </div>
 
-        <div class="flex_row">
-
-        ${Control({
-          type:'button',
-          action:'importFile',
-          value:'Import JSON',
-          // onclick: log()
+      <div class="ad-Controls-container controls_div flex_row">
+      
+        ${ReturnTags({
+          name:'Create Tag (x to remove)',
+          tags
         })}
-        ${Control({
-          type:'button',
-          action:'exportFile',
-          value:'export JSON',
-          // onclick: this.removeActivePoint
-          // onClick={ (e) => props.removeActivePoint(e) } />
-        })}
-                  
-        </div>
 
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Tags</h3>
-        </div>
+      </div>
 
-        <div class="ad-Controls-container controls_div flex_row">
-        
-          ${ReturnTags({
-            name:'Create Tag (x to remove)',
-            tags
-          })}
+      <div class="controls_div flex_row">
+          <h3 class="ad-Controls-title">Display Lines</h3>
+      </div>
 
-        </div>
+      <div class="ad-Controls-container controls_div flex_row">
+      ${Control({
+        type:'button',
+        action:'assignUID',
+        value:'Assign UIDs',
+        // onclick: this.removeActivePoint
+        // onClick={ (e) => props.removeActivePoint(e) } />
+      })}
+      ${Control({
+        name:'Line List (x to remove line)',
+        type:'',
+        value: ''
+        // onchange:log()
+      })}
+      </div>
 
-        <div class="controls_div flex_row">
-            <h3 class="ad-Controls-title">Display Lines</h3>
-        </div>
-
-        <div class="ad-Controls-container controls_div flex_row">
-        ${Control({
-          type:'button',
-          action:'assignUID',
-          value:'Assign UIDs',
-          // onclick: this.removeActivePoint
-          // onClick={ (e) => props.removeActivePoint(e) } />
-        })}
-        ${Control({
-          name:'Line List (x to remove line)',
-          type:'',
-          value: ''
-          // onchange:log()
-        })}
-        </div>
-
-    </div>`;
+    </div>`
+  });
+   
 }

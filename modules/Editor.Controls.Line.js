@@ -3,17 +3,10 @@ import { Control, TagList } from './Editor.Components.js';
 import { Section } from './Editor.Controls.Wrappers.js';
 
 /**
- * 
- * typedef {import('./Editor.Controls').State["tags"]} Tags
- * typedef {State["tags"]} Tags
- */
-
-/**
  * @param {object} props
  * @param {import('./Editor.Controls').State["tags"]} props.tags
  * @param {import('./Editor.Controls').State["activeLineIndex"]} props.activeLineIndex
  * @param {import('./Editor.Controls').State["lines"]} props.lines
- * @param {import('./Editor.Controls').Id} props.id
  * @param {import('./Editor.Controls').Icon} props.icon
  * @param {import('./Editor.Controls').Title} props.title
  * @param {import('./Editor.Controls').Active} props.active
@@ -21,15 +14,12 @@ import { Section } from './Editor.Controls.Wrappers.js';
  * @param {string} props.path
  */
 export function Line(props) {
-  const { id, icon, title, active, activeLineIndex, path, tags, lines, pointType } = props;
-  // let { ACTIVE } = localState;
-  // const activeSec = active == title ? ' active_section' : '';
+  const { icon, title, active, activeLineIndex, path, tags, lines, pointType } = props;
   const parsedLine = JSON.stringify(lines[activeLineIndex], null, '  ');
   const activeLine = lines[activeLineIndex];
 
   return Section({
     title,
-    id,
     icon,
     active,
     html: `

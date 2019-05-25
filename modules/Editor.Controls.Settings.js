@@ -1,17 +1,26 @@
 //@ts-check
 import { Control } from './Editor.Components.js';
-import {Title} from './Editor.Controls.Wrappers.js';
+import { Section} from './Editor.Controls.Wrappers.js';
 
+/**
+ * 
+ * @param {object} props 
+ * @param {import('./Editor.Controls').Icon} props.icon
+ * @param {import('./Editor.Controls').Title} props.title
+ * @param {import('./Editor.Controls').Active} props.active
+ * @param {import('./Editor.Controls').State["grid"]} props.grid
+ * @param {import('./Editor.Controls').State["w"]} props.w
+ * @param {import('./Editor.Controls').State["h"]} props.h
+ */
 export function Settings(props) {
-  const { w, h, grid, title, id, icon, localState } = props;
-  let { ACTIVE } = localState;
-  const active = ACTIVE == title ? ' active_section' : '';
-
-  return `
-    <div data-icon="${icon}" class="control-section${active}" id="${id}">
-      ${Title({title})}
-
-      <div class="ad-Controls-container controls_div flex_row">
+  const { w, h, grid, title, icon, active } = props;
+  
+  return Section ({
+    title,
+    icon,
+    active,
+    html: `
+    <div class="ad-Controls-container controls_div flex_row">
       ${Control({
         name:'Width',
         type:'EditableText',
@@ -57,10 +66,6 @@ export function Settings(props) {
       value: ''
       // onchange:log()
     })}
-    </div>
-
-    <div id="coords">
-    </div>
-
-  </div>`;
+    </div>`
+  });
 }

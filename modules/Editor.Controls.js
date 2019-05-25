@@ -1,5 +1,5 @@
 //@ts-check
-import { NavComponent } from './Editor.Components.js';
+import {Icon_Line, NavC, Icon_Shuffle,Icon_Help,Icon_Settings } from './Editor.Components.js';
 import { Line } from './Editor.Controls.Line.js';
 import { Settings } from './Editor.Controls.Settings.js';
 import { Lines } from './Editor.Controls.Lines.js';
@@ -58,7 +58,10 @@ export default class Controls {
       const parentClasses = [...parent.classList];
 
       // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
-      let action = e.target.dataset.action;
+      const action = e.target.dataset.action; //'nav',...
+      /**@type {string} */
+      const value = e.target.dataset.value; //'line','lines','settings',...
+
       console.log(`action: ${action}`);
       switch (action) {
         case 'resetLine':
@@ -79,17 +82,22 @@ export default class Controls {
         case 'removePoint':
           this.removeActivePoint();
           break;
+        case 'nav':
+          this.showThisSection(value);
+          this.activateThisIcon(value);
+
+          break;
         default:
           console.log(`No action detected.`);
       }
 
       //NAVIGATION ICONS
-      if (classList.includes('nav_icon')) {
-        //target = <nav><div id="icon_lines" class="nav_icons">
+      // if (classList.includes('nav_icon')) {
+      //   //target = <nav><div id="icon_lines" class="nav_icons">
 
-        this.activateThisIcon(e.target);
-        this.showThisSection(e.target);
-      }
+      //   this.activateThisIcon(e.target);
+      //   this.showThisSection(e.target);
+      // }
 
       //SAVE -> TAGS - ADD TAG
       if (e.target.id === 'newTagText') {
@@ -235,17 +243,19 @@ export default class Controls {
   /**
    * Takes all Nav Sections and turns them on or off
    * param {Element} target -  of Controls Section
+   * @param {string} value
    */
-  showThisSection = (target) => {
+  showThisSection = (value) => {
     const sections = [...document.querySelectorAll('.control-section')];
+    console.dir(sections);
 
     sections.forEach(section => {
       // <div data-component="controls-section" id="section_lines">
 
       section.classList.remove('active_section');
 
-      // console.log(`icon: ${section.dataset.icon}, taget id: ${target.id}`);
-      if (section.dataset.icon === target.id) {
+      console.log(`icon: ${section.dataset.icon}, taget id: ${value}`);
+      if (section.dataset.icon === value) {
         section.classList.add('active_section');
       }
     });
@@ -254,23 +264,26 @@ export default class Controls {
   /**
    * Activate the Nav when clicked
    *`Remove and add class active_nav'
-   * param {Element} target
+   * @param {string} value
    */
-  activateThisIcon = (target) => {
+  activateThisIcon = (value) => {
     //get all the NAV icons
     const icons = [...document.querySelectorAll('.nav_icon')];
 
     icons.forEach(icon => {
       // remove 'active_icon' from all svg icons
-      icon.children[0].classList.remove('active_icon');
+      icon.classList.remove('active_icon');
       // console.log(element.classList);
     });
-
     // make the target svg icon active
-    target.children[0].classList.add('active_icon');
+    // target.children[0].classList.add('active_icon');
+    // document.querySelector('data-value=\'line\']');
+    document.querySelector(`[data-value="${value}"]`)
+    .classList.add('active_icon');
 
-    const sub = target.id.substring(5);
-    this.localState.ACTIVE = sub;
+    // const sub = target.id.substring(5);
+    //Important to update localState...
+    this.localState.ACTIVE = value;
   }
 
   /** LOGIC methods */
@@ -406,29 +419,29 @@ export default class Controls {
   //   this.setQuadraticCoords(coords);
   // }
 
-// /**
-//  *@param {Coords} coords
-//  @param {Anchor} anchor
-//  * @param {E} e
-//  */
-// setCubicPosition = (coords, anchor, e) => {
-//     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-//     const activeLine = lines[activeLineIndex];
-//     let newCoords = coords;
+  // /**
+  //  *@param {Coords} coords
+  //  @param {Anchor} anchor
+  //  * @param {E} e
+  //  */
+  // setCubicPosition = (coords, anchor, e) => {
+  //     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+  //     const activeLine = lines[activeLineIndex];
+  //     let newCoords = coords;
 
-//     // {x: y:}
-//     const coord = activeLine.points[activePointIndex].c[anchor];
-//     let v = this.positiveNumber(e.target.value);
-// console.log(`v: ${v}`);
-//     if (coords.x && v > w) v = w;
-//     if (coords.y && v > h) v = h;
-//     console.log(`v: ${v}`);
+  //     // {x: y:}
+  //     const coord = activeLine.points[activePointIndex].c[anchor];
+  //     let v = this.positiveNumber(e.target.value);
+  // console.log(`v: ${v}`);
+  //     if (coords.x && v > w) v = w;
+  //     if (coords.y && v > h) v = h;
+  //     console.log(`v: ${v}`);
 
-//     coord[coords] = v;
-// console.dir(`coords: ${coord}`);
-//     console.log(coord);
-//     this.setCubicCoords(coord, anchor);
-//   }
+  //     coord[coords] = v;
+  // console.dir(`coords: ${coord}`);
+  //     console.log(coord);
+  //     this.setCubicCoords(coord, anchor);
+  //   }
 
 
   removeActivePoint = () => {
@@ -567,31 +580,34 @@ export default class Controls {
 
     return (
       `<nav>
-        ${NavComponent({
-          icon:'line',
-          id:`icon_${LINE}`,
-          active: ACTIVE
+        ${NavC({
+          dataAction: `nav`,
+          dataValue: LINE,
+          svg: Icon_Line(),
+          active:ACTIVE
         })}
-        ${NavComponent({
-          icon: 'lines',
-          id: `icon_${LINES}`,
-          active: ACTIVE
-        })}    
-        ${NavComponent({
-          icon: 'settings',
-          id:`icon_${SETTINGS}`,
-          active: ACTIVE
+        ${NavC({
+          dataAction: `nav`,
+          dataValue: LINES,
+          svg: Icon_Shuffle(),
+          active:ACTIVE
         })}
-        ${NavComponent({
-          icon: 'help',
-          id:`icon_${HELP}`,
-          active: ACTIVE
+        ${NavC({
+          dataAction: `nav`,
+          dataValue: SETTINGS,
+          svg: Icon_Settings(),
+          active:ACTIVE
+        })}
+        ${NavC({
+          dataAction: `nav`,
+          dataValue: HELP,
+          svg: Icon_Help(),
+          active:ACTIVE
         })}
       </nav>
 
       ${Line({ 
-        id:`section_${LINE}`,
-        icon:`icon_${LINE}`,
+        icon: LINE,
         title: LINE,
         active: ACTIVE,
         activeLineIndex,
@@ -602,30 +618,25 @@ export default class Controls {
       })} 
 
       ${Lines({
-        id:`section_${LINES}`,
-        icon:`icon_${LINES}`,
+        icon: LINES,
         title: LINES,
         active: ACTIVE,
         tags,
       })}
       
       ${Settings({
-        id:`section_${SETTINGS}`,
-        icon:`icon_${SETTINGS}`,
+        icon:SETTINGS,
         title: SETTINGS,
         active: ACTIVE,
         w, 
         h, 
         grid,
-        localState: this.localState
       })}
 
       ${Help({
-        id:`section_${HELP}`,
-        icon:`icon_${HELP}`,
+        icon:HELP,
         title: HELP,
         active: ACTIVE,
-        localState: this.localState
       })}
     `);
   }

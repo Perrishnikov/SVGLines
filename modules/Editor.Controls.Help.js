@@ -1,15 +1,22 @@
 //@ts-check
 import { Control } from './Editor.Components.js';
-import {Title} from './Editor.Controls.Wrappers.js';
+import { Section} from './Editor.Controls.Wrappers.js';
 
+/**
+ * 
+ * @param {object} props 
+ * @param {import('./Editor.Controls').Icon} props.icon
+ * @param {import('./Editor.Controls').Title} props.title
+ * @param {import('./Editor.Controls').Active} props.active
+ */
 export function Help(props) {
-  let { title, id, icon, localState } = props;
-  let { ACTIVE } = localState;
-  const active = ACTIVE == title ? ' active_section' : '';
+  const { title, active, icon } = props;
+  
 
-  return `
-  <div data-icon="${icon}" class="control-section${active}" id="${id}">
-      ${Title({title})}
-    </div>
-  `;
+  return Section ({
+    title,
+    icon,
+    active,
+    html: ``
+  });
 }
