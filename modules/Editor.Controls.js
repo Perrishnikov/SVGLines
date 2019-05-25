@@ -247,14 +247,13 @@ export default class Controls {
    */
   showThisSection = (value) => {
     const sections = [...document.querySelectorAll('.control-section')];
-    console.dir(sections);
 
     sections.forEach(section => {
       // <div data-component="controls-section" id="section_lines">
 
       section.classList.remove('active_section');
 
-      console.log(`icon: ${section.dataset.icon}, taget id: ${value}`);
+      // console.log(`icon: ${section.dataset.icon}, taget id: ${value}`);
       if (section.dataset.icon === value) {
         section.classList.add('active_section');
       }

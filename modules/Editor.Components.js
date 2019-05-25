@@ -317,7 +317,7 @@ function NavC(props) {
   let { dataAction, dataValue, svg, active } = props;
 
   const status =  active == dataValue ? ' active_icon' : '';
-console.log(`status: ${status}`);
+  // console.log(`status: ${status}`);
   return `
       <div data-action="${dataAction}" data-value="${dataValue}" class="nav_icon${status}">
         ${svg}
