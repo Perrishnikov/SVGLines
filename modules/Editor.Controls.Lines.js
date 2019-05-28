@@ -19,43 +19,37 @@ export function Lines(props) {
     active,
     html: `
     <div class="control-group">
-      <span class="control-group-title">Shit(i)</span>
+      <span class="control-group-title">Import & Export JSON(i)</span>
       <div class="control-row">
 
-      ${Control({
-        type:'button',
-        action:'importFile',
-        value:'Import JSON',
-        // onclick: log()
-      })}
-      ${Control({
-        type:'button',
-        action:'exportFile',
-        value:'export JSON',
-        // onclick: this.removeActivePoint
-        // onClick={ (e) => props.removeActivePoint(e) } />
-      })}
-                
-      </div>
-
-      <div class="controls_div flex_row">
-          <h3 class="ad-Controls-title">Tags</h3>
-      </div>
-
-      <div class="ad-Controls-container controls_div flex_row">
-      
-        ${ReturnTags({
-          name:'Create Tag (x to remove)',
-          tags
+        ${Control({
+          type:'button',
+          action:'importFile',
+          value:'Import JSON',
+          // onclick: log()
         })}
-
+        ${Control({
+          type:'button',
+          action:'exportFile',
+          value:'export JSON',
+          // onclick: this.removeActivePoint
+          // onClick={ (e) => props.removeActivePoint(e) } />
+        })}
       </div>
+    </div>
 
-      <div class="controls_div flex_row">
-          <h3 class="ad-Controls-title">Display Lines</h3>
-      </div>
+      
+    <div class="control-group">
+      <span class="control-group-title">Tags(i)</span>
+      
+        ${ReturnTags({tags})}
 
-      <div class="ad-Controls-container controls_div flex_row">
+    </div>
+
+    <div class="control-group">
+      <span class="control-group-title">Line ID Options(i)</span>
+
+      <div class="control-row">
       ${Control({
         type:'button',
         action:'assignUID',

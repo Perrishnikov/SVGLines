@@ -166,7 +166,7 @@ function Control(props) {
       control = '<div style="background-color:red">Incorrect code</div>';
   }
 
-  if (name){
+  if (name) {
     label = `<label class="control-label">${ name }</label>`;
   }
 
@@ -193,13 +193,13 @@ function EditableText(props) {
 function StaticText(props) {
   // console.log(props.value);
   // console.trace();
-//   const c = document.createElement('code');
-//   const v = document.createTextNode(props.value);
-//   c.appendChild(v);
-//   console.log(c);
-// return c.textContent;
+  //   const c = document.createElement('code');
+  //   const v = document.createTextNode(props.value);
+  //   c.appendChild(v);
+  //   console.log(c);
+  // return c.textContent;
 
-  return String.raw`<code>${props.value}</code>`;
+  return String.raw `<code>${props.value}</code>`;
 }
 
 
@@ -211,18 +211,18 @@ function Choices(props) {
     <label class="choices-label" for="">${ c.name }</label>
     `;
   }).join('');
-//   <label class="ad-Choice">
-//   <input
-//     class="ad-Choice-input"
-//     type="radio"
-//     value="${ c.value }
-//     ${ c.checked ? 'checked' : ''}"
-//     name="${ props.id }"
-//     />
-//   <div class="ad-Choice-fake">
-//     ${ c.name }
-//   </div>
-// </label>
+  //   <label class="ad-Choice">
+  //   <input
+  //     class="ad-Choice-input"
+  //     type="radio"
+  //     value="${ c.value }
+  //     ${ c.checked ? 'checked' : ''}"
+  //     name="${ props.id }"
+  //     />
+  //   <div class="ad-Choice-fake">
+  //     ${ c.name }
+  //   </div>
+  // </label>
   return `
     <div class="flex_row">
       ${ choices }
@@ -277,38 +277,6 @@ function Range(props) {
   `;
 }
 
-//TODO: Make this more dynamic from localState names
-function NavComponent(props) {
-  let { icon, id, active } = props;
-  let svg;
-
-  if (active == icon) {
-    active = ' active_icon';
-  } else {
-    active = '';
-  }
-
-  switch (icon) {
-    case 'settings':
-      svg = Icon_Settings(active);
-      break;
-    case 'line':
-      svg = Icon_Line(active);
-      break;
-    case 'help':
-      svg = Icon_Help(active);
-      break;
-    case 'lines':
-      //svg = Icon_Save(active);
-  }
-
-  return `
-      <div id="${id}" class="nav_icon">
-        ${svg}
-      </div>
-  `;
-}
-
 /**
  * 
  * @param {*} props 
@@ -316,7 +284,7 @@ function NavComponent(props) {
 function NavC(props) {
   let { dataAction, dataValue, svg, active } = props;
 
-  const status =  active == dataValue ? ' active_icon' : '';
+  const status = active == dataValue ? ' active_icon' : '';
   // console.log(`status: ${status}`);
   return `
       <div data-action="${dataAction}" data-value="${dataValue}" class="nav_icon${status}">
@@ -342,8 +310,9 @@ function Icon_Save() {
   <svg class="svg_icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
   `;
 }
-function Icon_Shuffle(){
-  return`
+
+function Icon_Shuffle() {
+  return `
   <svg class="svg_icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><path d="M16 3h5v5M4 20L20.2 3.8M21 16v5h-5M15 15l5.1 5.1M4 4l5 5"/></svg>
   `;
 }
@@ -362,6 +331,10 @@ function Icon_AddTag() {
   `;
 }
 
+/**
+ * 
+ * @param {string} tag 
+ */
 function Icon_Delete(tag) {
   return `
   <svg data-tag="${tag}" class="svg_tag" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
@@ -387,34 +360,34 @@ function Icon_Check(tag) {
 }
 
 function ReturnTags(props) {
-  const { name, tags = [] } = props;
+  const { tags = [] } = props;
   let label = '';
 
-  if (name) {
-    label = `<label class="ad-Control-label controls_label">${name}</label>`;
-  }
-
-  const mappedTags = tags.map((tag, i) => {
+  const mappedTags = tags.map(tag => {
     return `
-      <div class="line_tag">
-        <span class="">${tag}</span>
-        ${Icon_Delete(tag)}
+      <div data-tag="${tag}" data-value="true" class="line-tag">
+        <span class="" style="line-height:24px">${tag}</span>
+        <span role="button">${Icon_Delete(tag)}</span>
       </div>
     `;
   }).join('');
+//   <div id="" class="tag-row">
+//   <label class="controls_label">Add Tag:</label>
+//   <div id="newTagText" class="text-input" contenteditable="true">
+//   newTag</div>
+// </div>
 
+//<span style="font-size:10px">Add new tag</span>
   return `
     <div class="control">
-      ${label}
-      <div id="" class="tag_row">
-        <label class="controls_label">Add Tag:</label>
-        <div id="newTagText" class="text_input" contenteditable="true">
-        newTag</div>
-      </div>
-      <div class="tag_row">
+
+      <div class="tag-row">
+        <div data-tag="" data-value="true" class="">
+          <div id="newTagText" data-foo="add tag" class="" contenteditable="true" ></div>
+        </div>
         ${mappedTags}
       </div>
-      <div id="tagConfirmDelete" class="tag_row">
+      <div id="tagConfirmDelete" class="tag-row">
         <label class="controls_label">Confirm Delete${Icon_ThumbsUp('confirm-yes')} ${Icon_ThumbsDown('confirm-no')}</label>
       </div>
       
@@ -446,4 +419,4 @@ function TagList(props) {
     `;
 }
 
-export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, NavComponent, ReturnTags, TagList, Icon_Line,NavC, Icon_Shuffle,Icon_Help,Icon_Settings};
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags, TagList, Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings };

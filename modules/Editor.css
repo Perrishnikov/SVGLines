@@ -9,6 +9,7 @@ Custom properties do inherit.
     --color-dkgray: #666;
     --color-dark: #1a343d;  
     --color-green: #24d8ab;
+    --color-green-lt: rgba(36, 216, 171, .4);
     --color-2: #2451d8;
     --color-3: #24aad8;
     --color-3-mono: #46a1bf;

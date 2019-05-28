@@ -42,13 +42,35 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'line',
+      ACTIVE: 'lines',
       TAG_TO_DELETE: ''
     };
 
+
+    this.id.addEventListener('focusin', e => {
+      const newTagText = document.querySelector('#newTagText');
+
+      if(newTagText.id == e.target.id){
+        this.toggleAddTagFocus(newTagText);
+        newTagText.focus();
+      }
+      
+      // console.dir(e.target);
+    });
+
+    this.id.addEventListener('focusout', e => {
+      const newTagText = document.querySelector('#newTagText');
+
+      // console.log(newTagText);
+      this.toggleAddTagFocus(newTagText);
+      // console.dir(e.target);
+    });
+
+
+
     /** CONTROLS Event Listeners */
     this.id.addEventListener('click', (e) => {
-      // e.stopPropagation();
+      e.stopPropagation();
       e.preventDefault();
 
       const classList = [...e.target.classList];
@@ -57,9 +79,9 @@ export default class Controls {
       const parentClasses = [...parent.classList];
 
       // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
-      const action = e.target.dataset.action; //'nav',...
+      const action = dataset.action; //'nav',...
       /**@type {string} */
-      const value = e.target.dataset.value; //'line','lines','settings',...
+      const value = dataset.value; //'line','lines','settings',...
 
       console.log(`action: ${action}`);
       switch (action) {
@@ -81,28 +103,25 @@ export default class Controls {
         case 'removePoint':
           this.removeActivePoint();
           break;
+        //NAVIGATION ICONS
         case 'nav':
           this.showThisSection(value);
           this.activateThisIcon(value);
-
           break;
         default:
           console.log(`No action detected.`);
       }
 
-      //NAVIGATION ICONS
-      // if (classList.includes('nav_icon')) {
-      //   //target = <nav><div id="icon_lines" class="nav_icons">
-
-      //   this.activateThisIcon(e.target);
-      //   this.showThisSection(e.target);
+      console.dir(`document.activeElement: ${document.activeElement.id}`);
+      //SAVE -> TAGS - ADD TAG
+      // if (e.target.id === 'newTagText' || parent.id === 'newTagText') {
+      //   // @ts-ignore
+      //   this.toggleAddTagFocus(e.target);
       // }
 
-      //SAVE -> TAGS - ADD TAG
-      if (e.target.id === 'newTagText') {
-        // @ts-ignore
-        this.toggleAddTagFocus(e.target);
-      }
+      // else if(document.activeElement.id !== 'newTagText'){
+      //   this.removeAddToggleFocus();
+      // }
 
       //SAVE -> TAGS - In EDITOR, the ADD TAG is handled
 
@@ -187,11 +206,41 @@ export default class Controls {
    * @param {Element} target 
    */
   toggleAddTagFocus(target) {
-    if (target.innerText) {
-      target.innerText = '';
-    } else {
-      target.innerText = 'newTag';
+    // console.log(`toggleAddTagFocus`);
+    // console.dir(target);
+    if(!target.style.backgroundColor){
+      // target.style.background = 'pink';
+    
+    }else{
+      // target.style.background = '';
     }
+    
+    // if(target.children[0].style.display !== 'none'){
+    //   target.children[0].style.display = 'none';
+    //   event.target.style.background = 'pink';
+    // } else{
+    //   target.children[0].style.display = 'block';
+    //   event.target.style.background = 'white'
+    // }
+
+    // if(target.id == 'newTagText'){
+    //   if (!target.classList.contains('active')) {
+    //     console.log(`true`);
+    //     target.classList.add('active');
+    //     target.innerHTML = '';
+    //   } 
+    // }
+    // if(target.parentElement.id == 'newTagText'){
+    //   if (!target.parentElement.classList.contains('active')) {
+    //     console.log(`true`);
+    //     target.classList.add('active');
+    //     target.innerHTML = '';
+    //   } 
+    // }
+
+  }
+  removeAddToggleFocus(){
+    document.querySelector('#newTagText').classList.remove('active');
   }
 
 
@@ -201,6 +250,7 @@ export default class Controls {
    * @param {Element} target 
    */
   handleAddTag(target) {
+    console.log('handleAddTag');
     let { tags } = this.getState();
 
     //if all the Tags have been deleted, create a new array
@@ -442,8 +492,6 @@ export default class Controls {
 
   removeActivePoint = () => {
     const { activePointIndex, lines, activeLineIndex } = this.getState();
-    // const points = cstate.points;
-    // const active = cstate.activePointIndex;
 
     if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
       lines[activeLineIndex].points.splice(activePointIndex, 1);
@@ -452,8 +500,8 @@ export default class Controls {
         lines,
         activePointIndex: lines[activeLineIndex].points.length - 1
       });
+      console.log(`Point removed`);
     }
-    console.log(`Point removed`);
   }
 
 
