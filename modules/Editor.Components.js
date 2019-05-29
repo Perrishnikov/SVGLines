@@ -359,17 +359,17 @@ function Icon_Check(tag) {
   `;
 }
 
-function LineIdComponent(id) {
-  let { value = '*' } = id;
+// function LineIdComponent(id) {
+//   let { value = '*' } = id;
 
-  return `
-    <div class="control-row">
-      <div data-tag="" data-value="" class="">
-        <div id="lineId" class="" contenteditable="true" >${value}</div>
-      </div>
-    </div>
-  `
-}
+//   return `
+//     <div class="control-row">
+//       <div data-tag="" data-value="" class="">
+//         <div id="lineId" class="" contenteditable="true" >${value}</div>
+//       </div>
+//     </div>
+//   `;
+// }
 
 /**
  * 
@@ -429,4 +429,4 @@ function TagList(props) {
     `;
 }
 
-export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags, TagList, Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings, LineIdComponent };
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags, TagList, Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings };

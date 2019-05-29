@@ -51,12 +51,16 @@ export function Lines(props) {
 
       <div class="control-row">
       ${Control({
-        type:'button',
-        action:'assignUID',
-        value:'Assign UIDs',
+        // type:'button',
+        // action:'assignUID',
+        // value:'Assign UIDs',
         // onclick: this.removeActivePoint
         // onClick={ (e) => props.removeActivePoint(e) } />
       })}
+      </div>
+    </div>
+    <div>
+      <div class="control-row">
       ${Control({
         name:'Line List (x to remove line)',
         type:'',
@@ -64,7 +68,6 @@ export function Lines(props) {
         // onchange:log()
       })}
       </div>
-
     </div>`
   });
    
