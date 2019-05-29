@@ -1,5 +1,5 @@
 //@ts-check
-import { Control, TagList } from './Editor.Components.js';
+import { Control, TagList, LineIdComponent } from './Editor.Components.js';
 import { Section } from './Editor.Controls.Wrappers.js';
 
 /**
@@ -47,7 +47,7 @@ export function Line(props) {
     <div class="control-group">
       <span class="control-group-title">Line Tags (i)</span>
       ${TagList({
-        name:'Line Tags',
+        // name:'Line Tags',
         tags,
         activeLine
       })}
@@ -55,11 +55,10 @@ export function Line(props) {
 
     <div class="control-group">
       <span class="control-group-title">Line ID (i)</span>
-      ${Control({
-        name:'Line ID',
-        type:'EditableText',
-        value: '000',
-        activeLine
+      ${LineIdComponent({
+        // name:'Line ID',
+        value: activeLine.id,
+        // activeLine
       })}
     </div>
 

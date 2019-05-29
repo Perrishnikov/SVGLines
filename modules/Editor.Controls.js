@@ -42,7 +42,7 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'lines',
+      ACTIVE: 'line',
       TAG_TO_DELETE: ''
     };
 
@@ -50,11 +50,11 @@ export default class Controls {
     this.id.addEventListener('focusin', e => {
       const newTagText = document.querySelector('#newTagText');
 
-      if(newTagText.id == e.target.id){
-        this.toggleAddTagFocus(newTagText);
+      if (newTagText.id == e.target.id) {
+        // this.toggleAddTagFocus(newTagText);
         newTagText.focus();
       }
-      
+
       // console.dir(e.target);
     });
 
@@ -62,7 +62,7 @@ export default class Controls {
       const newTagText = document.querySelector('#newTagText');
 
       // console.log(newTagText);
-      this.toggleAddTagFocus(newTagText);
+      // this.toggleAddTagFocus(newTagText);
       // console.dir(e.target);
     });
 
@@ -103,7 +103,7 @@ export default class Controls {
         case 'removePoint':
           this.removeActivePoint();
           break;
-        //NAVIGATION ICONS
+          //NAVIGATION ICONS
         case 'nav':
           this.showThisSection(value);
           this.activateThisIcon(value);
@@ -113,17 +113,7 @@ export default class Controls {
       }
 
       console.dir(`document.activeElement: ${document.activeElement.id}`);
-      //SAVE -> TAGS - ADD TAG
-      // if (e.target.id === 'newTagText' || parent.id === 'newTagText') {
-      //   // @ts-ignore
-      //   this.toggleAddTagFocus(e.target);
-      // }
 
-      // else if(document.activeElement.id !== 'newTagText'){
-      //   this.removeAddToggleFocus();
-      // }
-
-      //SAVE -> TAGS - In EDITOR, the ADD TAG is handled
 
       //SAVE -> TAGS - REMOVE TAG when (x) clicked
       if (classList.includes('svg_tag') && dataset.tag) {
@@ -157,6 +147,24 @@ export default class Controls {
       }
 
     });
+  }
+
+
+  handleLineIdUpdate(target) {
+    const { lineRules = [], activeLineIndex, lines } = this.getState();
+    const activeLine = lines[activeLineIndex];
+
+    const newLineId = target.innerText.trim();
+    //TODO: validation
+    target.blur();
+
+    //If the Tag is valid, proceed....
+    if (newLineId && newLineId.length < 15) {
+      
+      //Update the line's Id
+      activeLine.id = newLineId;
+      this.setState({ lines });
+    }
   }
 
   /**
@@ -201,47 +209,10 @@ export default class Controls {
     d.classList.toggle('active');
   }
 
-  /**
-   * When User clicks on or off on NewTag, update the text
-   * @param {Element} target 
-   */
-  toggleAddTagFocus(target) {
-    // console.log(`toggleAddTagFocus`);
-    // console.dir(target);
-    if(!target.style.backgroundColor){
-      // target.style.background = 'pink';
-    
-    }else{
-      // target.style.background = '';
-    }
-    
-    // if(target.children[0].style.display !== 'none'){
-    //   target.children[0].style.display = 'none';
-    //   event.target.style.background = 'pink';
-    // } else{
-    //   target.children[0].style.display = 'block';
-    //   event.target.style.background = 'white'
-    // }
-
-    // if(target.id == 'newTagText'){
-    //   if (!target.classList.contains('active')) {
-    //     console.log(`true`);
-    //     target.classList.add('active');
-    //     target.innerHTML = '';
-    //   } 
-    // }
-    // if(target.parentElement.id == 'newTagText'){
-    //   if (!target.parentElement.classList.contains('active')) {
-    //     console.log(`true`);
-    //     target.classList.add('active');
-    //     target.innerHTML = '';
-    //   } 
-    // }
-
-  }
-  removeAddToggleFocus(){
-    document.querySelector('#newTagText').classList.remove('active');
-  }
+  
+  // removeAddToggleFocus() {
+  //   document.querySelector('#newTagText').classList.remove('active');
+  // }
 
 
   /**
@@ -251,10 +222,10 @@ export default class Controls {
    */
   handleAddTag(target) {
     console.log('handleAddTag');
-    let { tags } = this.getState();
+    let { tags = [] } = this.getState();
 
     //if all the Tags have been deleted, create a new array
-    tags = tags ? tags : [];
+    // tags = tags ? tags : [];
 
     //Clean use input on Tag name
     const newTag = target.innerText.trim();
@@ -264,7 +235,7 @@ export default class Controls {
     //If the Tag is valid, proceed....
     if (newTag && newTag.length < 15) {
       tags.push(newTag);
-      this.toggleAddTagFocus(target);
+      // this.toggleAddTagFocus(target);
       this.setState({ tags });
     }
   }
@@ -332,8 +303,8 @@ export default class Controls {
     this.localState.ACTIVE = value;
   }
 
-  /** LOGIC methods */
 
+  /** LOGIC methods */
   setHeight = (e) => {
     let v = this.positiveNumber(e.target.value),
       min = 1;

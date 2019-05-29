@@ -359,7 +359,24 @@ function Icon_Check(tag) {
   `;
 }
 
+function LineIdComponent(id) {
+  let { value = '*' } = id;
+
+  return `
+    <div class="control-row">
+      <div data-tag="" data-value="" class="">
+        <div id="lineId" class="" contenteditable="true" >${value}</div>
+      </div>
+    </div>
+  `
+}
+
+/**
+ * 
+ * param {import('./Editor').State} props
+ */
 function ReturnTags(props) {
+  /**type State["Tags"] */
   const { tags = [] } = props;
   let label = '';
 
@@ -371,19 +388,13 @@ function ReturnTags(props) {
       </div>
     `;
   }).join('');
-//   <div id="" class="tag-row">
-//   <label class="controls_label">Add Tag:</label>
-//   <div id="newTagText" class="text-input" contenteditable="true">
-//   newTag</div>
-// </div>
 
-//<span style="font-size:10px">Add new tag</span>
   return `
     <div class="control">
 
       <div class="tag-row">
         <div data-tag="" data-value="true" class="">
-          <div id="newTagText" data-foo="add tag" class="" contenteditable="true" ></div>
+          <div id="newTagText" data-value="add tag" class="" contenteditable="true" ></div>
         </div>
         ${mappedTags}
       </div>
@@ -413,10 +424,9 @@ function TagList(props) {
 
   return `
     <div id="lineTags" class="tag-row">
-
-        ${mappedTags}
+      ${mappedTags}
     </div>
     `;
 }
 
-export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags, TagList, Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings };
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags, TagList, Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings, LineIdComponent };

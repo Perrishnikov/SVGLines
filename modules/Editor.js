@@ -17,6 +17,7 @@ import Main from './Editor.Main.js';
  * @typedef {Object} Line
  * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:Array<{x:number,y:number}, {x:number,y:number}>, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
  * @property {Array<string>} tags
+ * @property {string} id
  */
 
 /**
@@ -82,10 +83,16 @@ export default class Editor {
       this.setState({ shift: true });
     }
 
-    //If Enter is pressed in the Add Tag Div
+    //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
     if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
       // handle the Add Tag
       this.controls.handleAddTag(e.target);
+    }
+
+    //If Enter is pressed in the LineId Div CONTROLS -> LINE
+    if (e.key === 'Enter' && document.activeElement.id === 'lineId') {
+      // handle the Add Tag
+      this.controls.handleLineIdUpdate(e.target);
     }
 
   }

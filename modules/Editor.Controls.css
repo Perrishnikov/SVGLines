@@ -199,6 +199,33 @@ button:focus {
     /* width: var(--font-size); */
     /* height: var(--font-size); */
 }
+#lineId {
+    outline: 0;
+    margin-right: var(--pad-standard);
+    margin-bottom: var(--pad-standard);
+    padding: var(--pad-standard);
+    padding-top: var(--pad-half);
+    padding-bottom: var(--pad-half);
+    background-color: var(--color-green);
+    color: var(--color-dark);
+    border-radius: calc(var(--border-rad) *3);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    transition: background-color .15s;
+    min-width: 70px;
+    line-height: 24px;
+}
+#lineId:hover,
+#lineId:hover svg {
+    color: var(--color-light);
+    stroke: var(--color-light);
+}
+#lineId:focus-within {
+    background-color: var(--color-green-lt);
+    color: var(--color-dark);
+    stroke: var(--color-dark);
+}
+
 #newTagText {
     outline: 0;
     margin-right: var(--pad-standard);
@@ -219,31 +246,20 @@ button:focus {
     background-color: var(--color-mdgray);
 }
 /* placeholder text */
-#newTagText:empty::before{
-  content: attr(data-foo) '';
-  font-size: calc(var(--font-size) * .8);
-  line-height: 24px;
+#newTagText:empty::before {
+    content: attr(data-value) '';
+    font-size: calc(var(--font-size) * .8);
+    line-height: 24px;
 }
 /* hide placeholder text when 'focused'*/
 #newTagText:focus-within::before {
-  content: '';
-  line-height: 24px;
+    content: '';
+    line-height: 24px;
+}
+#newTagText:focus-within {
+    background-color: var(--color-green-lt);
 }
 
-#newTagText:focus-within {
-  background-color:var(--color-green-lt) !important;
-  
-}
-/* [data-foo]::before {
-  content: attr(data-foo) ' ';
-}
-[data-foo]:focus {
-  content: '';
-} */
-.text-input {
-    /* background-color: var(--color-green1); */
-    /* min-width: 100px; */
-}
 .line-tag {
     display: flex;
     align-items: center;
@@ -337,4 +353,3 @@ code {
     margin-right: var(--pad-standard);
     margin-left: calc(var(--pad-half) * -1);
 }
-

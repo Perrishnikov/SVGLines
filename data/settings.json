@@ -13,5 +13,21 @@
     "show": true,
     "size": 50,
     "numbers": true
-  }
+  },
+  "lineRules":[
+    {"mustHaveUids": {
+      "enabled": true,
+      "name": "Must Have Unique Id's"
+    }}, 
+    {"autoIdNewLines": {
+      "enabled": true,
+      "name": "Auto Id New Lines"
+    }},
+    {"lineStartingId": {
+      "enabled": true,
+      "name": "Starting Line Id",
+      "value": "0000"
+    }}
+
+  ]
 }
