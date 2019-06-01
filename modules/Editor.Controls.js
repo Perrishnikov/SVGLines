@@ -1,9 +1,9 @@
 //@ts-check
 import { Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings } from './Editor.Components.js';
-import { Line } from './Editor.Controls.Line.js';
-import { Settings } from './Editor.Controls.Settings.js';
-import { Lines } from './Editor.Controls.Lines.js';
-import { Help } from './Editor.Controls.Help.js';
+import { Line } from './Controls.Line.js';
+import { Settings } from './Controls.Settings.js';
+import { Lines } from './Controls.Lines.js';
+import { Help } from './Controls.Help.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor

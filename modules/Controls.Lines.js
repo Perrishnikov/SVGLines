@@ -1,7 +1,7 @@
 //@ts-check
 import { Control, ReturnTags } from './Editor.Components.js';
-import { Section } from './Editor.Controls.Wrappers.js';
-import { Lines_ } from './Editor.Controls.Components.js';
+import { Section } from './Controls.Wrappers.js';
+import { Lines_ } from './Controls.Components.js';
 
 /**
  * 

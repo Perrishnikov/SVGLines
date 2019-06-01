@@ -1,7 +1,7 @@
 //@ts-check
 import { Control, TagList } from './Editor.Components.js';
-import { Line_ } from './Editor.Controls.Components.js';
-import { Section } from './Editor.Controls.Wrappers.js';
+import { Line_ } from './Controls.Components.js';
+import { Section } from './Controls.Wrappers.js';
 
 /**
  * @param {object} props

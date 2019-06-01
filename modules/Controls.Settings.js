@@ -1,6 +1,6 @@
 //@ts-check
 import { Control } from './Editor.Components.js';
-import { Section} from './Editor.Controls.Wrappers.js';
+import { Section} from './Controls.Wrappers.js';
 
 /**
  * 
