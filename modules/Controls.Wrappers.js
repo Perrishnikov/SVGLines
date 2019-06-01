@@ -1,14 +1,12 @@
 //@ts-check
 
-
 /**
- * 
  * @param {object} props 
  * @param {import('./Editor.Controls').Title} props.title
  * @param {string} props.icon
- * param {import('./Editor.Controls').localState} props.localState
  * @param {string} props.active
  * @param {string} props.html
+ * @returns {string}
  */
 export function Section(props) {
   const { title, icon, active, html } = props;
@@ -21,6 +19,11 @@ export function Section(props) {
     </section>`;
 }
 
+/**
+ * @param {object} props
+ * @param {string} props.title
+ * @returns {string}
+ */
 export function Title(props) {
   const { title } = props;
 
@@ -28,4 +31,12 @@ export function Title(props) {
     <div class="">
       <h3 class="section-title">${title}</h3>
     </div>`;
+}
+
+export function Control(props) {
+
+}
+
+export function ControlGrou(props) {
+
 }

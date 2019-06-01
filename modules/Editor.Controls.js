@@ -1,9 +1,9 @@
 //@ts-check
 import { Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings } from './Editor.Components.js';
-import { Line } from './Controls.Line.js';
-import { Settings } from './Controls.Settings.js';
-import { Lines } from './Controls.Lines.js';
-import { Help } from './Controls.Help.js';
+import { Line } from './Controls.S.Line.js';
+import { Settings } from './Controls.S.Settings.js';
+import { Lines } from './Controls.S.Lines.js';
+import { Help } from './Controls.S.Help.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor
@@ -15,7 +15,7 @@ import { Help } from './Controls.Help.js';
  * @typedef {import('./Editor').Coords} Coords
  * @typedef {import('./Editor').E} E
  * 
- * @typedef {{LINE:string, LINES:string, SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
+ * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
  * @typedef {string} Title
  * @typedef {string} Id
  * @typedef {string} Icon
@@ -58,6 +58,7 @@ export default class Controls {
       // console.dir(e.target);
     });
 
+    //TODO: Can prolly remove this.
     this.id.addEventListener('focusout', e => {
       const newTagText = document.querySelector('#newTagText');
 
@@ -83,7 +84,7 @@ export default class Controls {
       /**@type {string} */
       const value = dataset.value; //'line','lines','settings',...
 
-      console.log(`action: ${action}`);
+      console.log(`controls action: ${action}`);
       switch (action) {
         //LINE
         case 'resetLine':
