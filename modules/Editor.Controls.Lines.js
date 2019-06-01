@@ -1,6 +1,7 @@
 //@ts-check
 import { Control, ReturnTags } from './Editor.Components.js';
-import { Section} from './Editor.Controls.Wrappers.js';
+import { Section } from './Editor.Controls.Wrappers.js';
+import { Lines_ } from './Editor.Controls.Components.js';
 
 /**
  * 
@@ -9,11 +10,12 @@ import { Section} from './Editor.Controls.Wrappers.js';
  * @param {import('./Editor.Controls').Title} props.title
  * @param {import('./Editor.Controls').Active} props.active
  * @param {import('./Editor.Controls').State["tags"]} props.tags
+ * @param {import('./Editor.Controls').State["lineRules"]} props.lineRules
  */
 export function Lines(props) {
-  const { title, active, icon, tags } = props;
+  const { title, active, icon, tags, lineRules } = props;
 
-  return Section ({
+  return Section({
     title,
     icon,
     active,
@@ -50,12 +52,14 @@ export function Lines(props) {
       <span class="control-group-title">Line ID Options(i)</span>
 
       <div class="control-row">
+        ${Lines_.Rules({rules:lineRules})}
+      </div>
+      <div class="control-row">
       ${Control({
-        // type:'button',
-        // action:'assignUID',
-        // value:'Assign UIDs',
-        // onclick: this.removeActivePoint
-        // onClick={ (e) => props.removeActivePoint(e) } />
+        type:'button',
+        action:'generateLineIds',
+        value:'Generate Line Id',
+        // onclick: log()
       })}
       </div>
     </div>
@@ -70,5 +74,11 @@ export function Lines(props) {
       </div>
     </div>`
   });
-   
+  // ${Control({
+  // type:'button',
+  // action:'assignUID',
+  // value:'Assign UIDs',
+  // onclick: this.removeActivePoint
+  // onClick={ (e) => props.removeActivePoint(e) } />
+  // })}
 }

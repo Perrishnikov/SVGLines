@@ -57,7 +57,6 @@ export function Line(props) {
     <div class="control-group">
       <span class="control-group-title">Line ID (i)</span>
       ${Line_.LineIdComponent({
-        // name:'Line ID',
         value: activeLine.id,
         // activeLine
       })}

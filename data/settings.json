@@ -14,20 +14,33 @@
     "size": 50,
     "numbers": true
   },
-  "lineRules":[
-    {"mustHaveUids": {
+  "lineRules": [{
+      "id": "verifyUniqueId",
+      "name": "Verify Unique Line Id's",
+      "type": "checkbox",
       "enabled": true,
-      "name": "Must Have Unique Id's"
-    }}, 
-    {"autoIdNewLines": {
+      "info": "Are Line Id's required to be unique? Checked on Line change and Generate Line Id's"
+    },
+    {
+      "id": "autoIdNewLines",
+      "name": "Auto Id New Lines",
+      "type": "checkbox",
       "enabled": true,
-      "name": "Auto Id New Lines"
-    }},
-    {"lineStartingId": {
-      "enabled": true,
-      "name": "Starting Line Id",
-      "value": "0000"
-    }}
-
+      "info": "When a new Line is created, should it automatically recieve a unique id?"
+    },
+    {
+      "id": "overwriteExistingId",
+      "name": "Overwrite existing Id's",
+      "type": "checkbox",
+      "enabled": false,
+      "info": "When clicking button 'Generate Line Id', should it overwrite any existing id?"
+    },
+    {
+      "id": "lineStartingBasis",
+      "name": "Starting Line Basis",
+      "type": "text",
+      "value": "0100",
+      "info": "If Id's are auto-incremented, what is the basis?"
+    }
   ]
 }

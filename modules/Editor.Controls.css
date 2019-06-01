@@ -199,31 +199,45 @@ button:focus {
     /* width: var(--font-size); */
     /* height: var(--font-size); */
 }
-#lineId {
-    outline: 0;
-    margin-right: var(--pad-standard);
-    margin-bottom: var(--pad-standard);
-    padding: var(--pad-standard);
-    padding-top: var(--pad-half);
-    padding-bottom: var(--pad-half);
-    background-color: var(--color-green);
-    color: var(--color-dark);
-    border-radius: calc(var(--border-rad) *3);
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
-    transition: background-color .15s;
-    min-width: 70px;
-    line-height: 24px;
+.textInput{
+  outline: 0;
+  margin-right: var(--pad-standard);
+  margin-bottom: var(--pad-standard);
+  padding: var(--pad-standard);
+  padding-top: var(--pad-half);
+  padding-bottom: var(--pad-half);
+  background-color: var(--color-green);
+  color: var(--color-dark);
+  border-radius: calc(var(--border-rad) *3);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+  transition: background-color .15s;
+  /* min-width: 70px; */
+  line-height: 24px;
 }
-#lineId:hover,
-#lineId:hover svg {
+.textInput:hover,
+.textInput:hover svg {
     color: var(--color-light);
     stroke: var(--color-light);
 }
-#lineId:focus-within {
+.textInput:focus-within {
     background-color: var(--color-green-lt);
     color: var(--color-dark);
     stroke: var(--color-dark);
+}
+/*tightly coupled :(*/
+#lineStartingBasis{
+  background-color: var(--color-ltgray);
+}
+#lineId {
+    
+}
+#lineId:hover,
+#lineId:hover svg {
+
+}
+#lineId:focus-within {
+
 }
 
 #newTagText {

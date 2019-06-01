@@ -36,6 +36,7 @@ import Main from './Editor.Main.js';
  * @property {number} w
  * @property {number} h
  * @property {{snap: boolean, size: number,show: boolean}} grid
+ * @property {Array<*>} lineRules
  */
 
 /**

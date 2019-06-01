@@ -27,7 +27,7 @@
     /* stroke-linecap: round; */
 }
 .ad-Point {
-    cursor: pointer;
+    cursor: grab;
     fill: var(--color-dark);
     stroke: var(--color-dark);
     stroke-width: 4px;
@@ -56,4 +56,5 @@
   stroke:var(--color-mdgray);
   stroke-width: 1px;
   stroke-dasharray: 5 5;
+  cursor: pointer;
 }

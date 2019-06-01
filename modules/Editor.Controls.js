@@ -42,7 +42,7 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'line',
+      ACTIVE: 'lines',
       TAG_TO_DELETE: ''
     };
 
@@ -85,6 +85,7 @@ export default class Controls {
 
       console.log(`action: ${action}`);
       switch (action) {
+        //LINE
         case 'resetLine':
           '';
           break;
@@ -107,6 +108,18 @@ export default class Controls {
         case 'nav':
           this.showThisSection(value);
           this.activateThisIcon(value);
+          break;
+          //LINES
+        case 'lineRules':
+          // console.dir(e.target);
+          switch (e.target.attributes.type.value) {
+            case 'checkbox':
+              // console.log(`id: ${e.target.id}`);
+              this.handleLineRuleToggle(e.target.id);
+          }
+          break;
+        case 'generateLineIds':
+          this.handleGenerateLineId();
           break;
         default:
           console.log(`No action detected.`);
@@ -149,6 +162,53 @@ export default class Controls {
     });
   }
 
+  verifyUniqueId() {
+
+  }
+  handleGenerateLineId() {
+    const { lineRules, lines } = this.getState();
+    //returns the value of the first element in the array.value
+    /** @type {string} */
+    const startingLineBasis = lineRules.find(rule => rule.id == 'lineStartingBasis').value;
+    // console.log(`startingLineBasis: ${startingLineBasis}; type: ${typeof(startingLineBasis)} `);
+    const padLength = startingLineBasis.length;
+
+    /**@type {number} */
+    let count = parseInt(startingLineBasis);
+    // const parsed = parseInt(startingLineBasis);
+    // if (isNaN(parsed)) { return 0; }
+
+    const updatedLines = lines.map(line => {
+      // let { id = count } = line;
+
+      line.id = count.toString().padStart(padLength, '0');
+      count++;
+
+      return line;
+    });
+
+    // console.log(`startingLineBasis: ${startingLineBasis}`);
+    this.setState({
+      lines: updatedLines,
+      // lineRules
+    });
+    
+    // console.log(this.getState());
+  }
+
+  handleLineRuleToggle(id) {
+    const { lineRules } = this.getState();
+
+    //map all the lineRules, change enabled att if it matches
+    const mappedLineRules = lineRules.map(rule => {
+      if (rule.id === id) {
+        rule.enabled = rule.enabled ? false : true;
+      }
+      return rule;
+    });
+
+    this.setState({ lineRules: mappedLineRules });
+  }
 
   handleLineIdUpdate(target) {
     const { lineRules = [], activeLineIndex, lines } = this.getState();
@@ -160,7 +220,7 @@ export default class Controls {
 
     //If the Tag is valid, proceed....
     if (newLineId && newLineId.length < 15) {
-      
+
       //Update the line's Id
       activeLine.id = newLineId;
       this.setState({ lines });
@@ -209,7 +269,7 @@ export default class Controls {
     d.classList.toggle('active');
   }
 
-  
+
   // removeAddToggleFocus() {
   //   document.querySelector('#newTagText').classList.remove('active');
   // }
@@ -511,7 +571,7 @@ export default class Controls {
    * param {import('./Editor').State} props.tags
    */
   render = (props) => {
-    const { w, h, lines, activeLineIndex, activePointIndex, grid, tags } = props.state;
+    const { w, h, lines, activeLineIndex, activePointIndex, grid, tags, lineRules } = props.state;
 
     const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
@@ -637,6 +697,7 @@ export default class Controls {
         title: LINES,
         active: ACTIVE,
         tags,
+        lineRules
       })}
       
       ${Settings({
