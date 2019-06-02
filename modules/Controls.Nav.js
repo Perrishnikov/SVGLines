@@ -1,5 +1,6 @@
 //@ts-check
 import { Icon_Help, Icon_Line, Icon_Shuffle, Icon_Settings } from '../icons/index.js';
+import { Listener } from './Listener.js';
 
 
 export class Nav {
@@ -10,12 +11,14 @@ export class Nav {
 
   listeners() {
 
-    return [{
-      caller: 'Nav',
-      selector: '[data-action="nav"]',
-      type: 'click',
-      callback: this.handleNavClick.bind(this)
-    }];
+    return new Listener(
+      {
+        caller: 'Nav',
+        selector: '[data-action="nav"]',
+        type: 'click',
+        callback: this.handleNavClick.bind(this)
+      }
+    );
   }
 
 

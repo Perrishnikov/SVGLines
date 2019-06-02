@@ -1,6 +1,7 @@
 //@ts-check
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
+import { Listener } from './Listener.js';
 
 /**
  * Misc
@@ -59,17 +60,19 @@ export default class Editor {
     // document.addEventListener('keydown', this.handleKeyDown, true);
     // document.addEventListener('keyup', this.handleKeyUp, false);
     //TODO: Test
-    this.registeredListeners = [{
-      caller: 'Editor',
-      selector: 'document',
-      type: 'keydown',
-      callback: this.handleKeyDown
-    }, {
-      caller: 'Editor',
-      selector: 'document',
-      type: 'keyup',
-      callback: this.handleKeyUp
-    }, ];
+    this.registeredListeners = [
+      new Listener({
+        caller: 'Editor',
+        selector: 'document',
+        type: 'keydown',
+        callback: this.handleKeyDown
+      }), new Listener({
+        caller: 'Editor',
+        selector: 'document',
+        type: 'keyup',
+        callback: this.handleKeyUp
+      }),
+    ];
 
     /**@type {Element} */
     const mainId = document.querySelector('#main');
