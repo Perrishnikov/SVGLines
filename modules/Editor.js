@@ -56,24 +56,38 @@ export default class Editor {
     this.id = props.id;
 
     //must be added to document, not Main. Needed in Main, but cant place it in div??
-    document.addEventListener('keydown', this.handleKeyDown, true);
-    document.addEventListener('keyup', this.handleKeyUp, false);
+    // document.addEventListener('keydown', this.handleKeyDown, true);
+    // document.addEventListener('keyup', this.handleKeyUp, false);
+    //TODO: Test
+    this.registeredListeners = [{
+      caller: 'Editor',
+      selector: 'document',
+      type: 'keydown',
+      callback: this.handleKeyDown
+    }, {
+      caller: 'Editor',
+      selector: 'document',
+      type: 'keyup',
+      callback: this.handleKeyUp
+    }, ];
 
     /**@type {Element} */
     const mainId = document.querySelector('#main');
     this.main = new Main(this, mainId);
 
     /**@type {Element} */
-    const controlId = document.querySelector('#controls');
-    this.controls = new Controls(this, controlId);
+    // const controlId = document.querySelector('#controls');
+    this.controls = new Controls(this);
 
     //trigger the everything render()
-    this.setState(props.state);
+    // this.setState(props.state);
+
+
   }
 
 
   handleKeyDown = (e) => {
-    // console.log(`handleKeyDown: ${e.key}`);
+    console.log(`handleKeyDown: ${e.key}`);
 
     if (e.key === 'Alt' || e.key === 'Meta') {
       // console.log('meta');
@@ -102,7 +116,7 @@ export default class Editor {
   handleKeyUp = (e) => {
     //need to account for text entry
     // if (!this.getState().focusText) {
-    // console.log(`handleKeyUp`);
+    console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
     }
@@ -112,6 +126,40 @@ export default class Editor {
     // }
   }
 
+
+  registerListener(listener) {
+
+    if (Array.isArray(listener)) {
+      listener.forEach(one => {
+        this.registeredListeners.push(one);
+      });
+
+    } else {
+      this.registeredListeners.push(listener);
+    }
+
+    console.log(`listener registered: ${listener.caller} ${listener.type}`);
+  }
+
+  addDOMListeners() {
+    // console.log(`Hello addDOMListeners!`);
+
+    this.registeredListeners.forEach(listener => {
+      const { selector, type, callback, caller } = listener;
+      // console.log(listener);
+
+      if (selector == 'document') {
+        document.addEventListener(type, callback);
+        // console.dir(document);
+      } else {
+        //TODO: validate this ...ALL
+        // const el = document.createElement(element);
+        const el = document.querySelectorAll(selector);
+        el.forEach(l => l.addEventListener(type, callback));
+      }
+    });
+
+  }
 
   /**
    * Returns Editor's State
@@ -168,7 +216,7 @@ export default class Editor {
 
     //Is normally false, but set to 0|1 depending on the active anchor
     if (typeof anchor === 'string') {
-      
+
       lines[activeLineIndex].points[activePointIndex].c[anchor].x = coords.x;
       lines[activeLineIndex].points[activePointIndex].c[anchor].y = coords.y;
 
@@ -354,12 +402,12 @@ export default class Editor {
    * @returns void
    */
   render = (props) => {
-    const mainId = document.querySelector('#main');
-    mainId.innerHTML = this.main.render(props);
 
-    /**Controls - auto adds listeners */
-    const controlId = document.querySelector('#controls');
-    controlId.innerHTML = this.controls.render(props);
+    this.id.innerHTML = `
+    ${this.main.render(props)}
+    ${this.controls.render(props)}
+    `;
+
   }
 }
 

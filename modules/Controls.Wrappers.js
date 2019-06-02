@@ -13,13 +13,14 @@ export function Section(props) {
   const activeSec = active == title ? ' active_section' : '';
 
   return `
-    <section data-icon="${icon}" class="control-section${activeSec}" >
+    <section data-link="${icon}" class="control-section${activeSec}" >
       ${Title({title})}
       ${html}
     </section>`;
 }
 
 /**
+ * Used by Nav....
  * @param {object} props
  * @param {string} props.title
  * @returns {string}

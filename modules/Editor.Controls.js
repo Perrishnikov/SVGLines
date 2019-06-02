@@ -1,10 +1,10 @@
 //@ts-check
-import { Icon_Line, NavC, Icon_Shuffle, Icon_Help, Icon_Settings } from './Editor.Components.js';
 import { Line } from './Controls.S.Line.js';
 import { Settings } from './Controls.S.Settings.js';
 import { Lines } from './Controls.S.Lines.js';
 import { Help } from './Controls.S.Help.js';
-
+import { Section } from './Controls.Wrappers.js';
+import { Nav } from './Controls.Nav.js';
 /**
  * @typedef {import('./Editor').Anchor} Anchor
  * @typedef {import('./Editor').State} State
@@ -25,17 +25,22 @@ import { Help } from './Controls.S.Help.js';
 export default class Controls {
   /**
    * @param {Editor} editor 
-   * @param {Element} targetId
+   * param {Element} targetId
    */
-  constructor(editor, targetId) {
-    this.id = targetId;
-    this.setState = editor.setState;
-    this.positiveNumber = editor.positiveNumber;
-    this.setPointCoords = editor.setPointCoords;
-    this.setQuadraticCoords = editor.setQuadraticCoords;
-    this.setCubicCoords = editor.setCubicCoords;
-    this.getState = editor.getState;
-    this.generatePath = editor.generatePath;
+  constructor(editor) {
+    // this.id = targetId;
+    // this.id = document.querySelector('#controls');
+
+    this.editor = {
+      registerListener: editor.registerListener,
+      setState: editor.setState,
+      positiveNumber: editor.positiveNumber,
+      setPointCoords: editor.setPointCoords,
+      setQuadraticCoords: editor.setQuadraticCoords,
+      setCubicCoords: editor.setCubicCoords,
+      getState: editor.getState,
+      generatePath: editor.generatePath,
+    };
 
     this.localState = {
       LINE: 'line',
@@ -46,128 +51,142 @@ export default class Controls {
       TAG_TO_DELETE: ''
     };
 
+    //COMPONENTS 
+    this.nav = new Nav(this.localState);
+    editor.registerListener(this.nav.listeners());
 
-    this.id.addEventListener('focusin', e => {
-      const newTagText = document.querySelector('#newTagText');
 
-      if (newTagText.id == e.target.id) {
-        // this.toggleAddTagFocus(newTagText);
-        newTagText.focus();
-      }
+    // this.id.addEventListener('focusin', e => {
+    //   const newTagText = document.querySelector('#newTagText');
 
-      // console.dir(e.target);
-    });
+    //   if (newTagText.id == e.target.id) {
+    //     // this.toggleAddTagFocus(newTagText);
+    //     newTagText.focus();
+    //   }
+    //   // console.dir(e.target);
+    // });
 
     //TODO: Can prolly remove this.
-    this.id.addEventListener('focusout', e => {
-      const newTagText = document.querySelector('#newTagText');
+    // this.id.addEventListener('focusout', e => {
+    //   const newTagText = document.querySelector('#newTagText');
 
-      // console.log(newTagText);
-      // this.toggleAddTagFocus(newTagText);
-      // console.dir(e.target);
-    });
+    //   // console.log(newTagText);
+    //   // this.toggleAddTagFocus(newTagText);
+    //   // console.dir(e.target);
+    // });
 
 
 
     /** CONTROLS Event Listeners */
-    this.id.addEventListener('click', (e) => {
-      e.stopPropagation();
-      e.preventDefault();
+    // this.id.addEventListener('click', (e) => {
+    //   e.stopPropagation();
+    //   e.preventDefault();
 
-      const classList = [...e.target.classList];
-      const dataset = e.target.dataset ? e.target.dataset : 'NULL';
-      const parent = e.target.parentNode;
-      const parentClasses = [...parent.classList];
+    //   const classList = [...e.target.classList];
+    //   const dataset = e.target.dataset ? e.target.dataset : 'NULL';
+    //   const parent = e.target.parentNode;
+    //   const parentClasses = [...parent.classList];
 
-      // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
-      const action = dataset.action; //'nav',...
-      /**@type {string} */
-      const value = dataset.value; //'line','lines','settings',...
+    //   // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
+    //   const action = dataset.action; //'nav',...
+    //   /**@type {string} */
+    //   const value = dataset.value; //'line','lines','settings',...
 
-      console.log(`controls action: ${action}`);
-      switch (action) {
-        //LINE
-        case 'resetLine':
-          '';
-          break;
-        case 'addLine':
-          '';
-          break;
-        case 'removeLine':
-          '';
-          break;
-        case 'setPointType':
-          this.setPointType(e.target.value);
-          break;
-        case 'addPoint':
-          '';
-          break;
-        case 'removePoint':
-          this.removeActivePoint();
-          break;
-          //NAVIGATION ICONS
-        case 'nav':
-          this.showThisSection(value);
-          this.activateThisIcon(value);
-          break;
-          //LINES
-        case 'lineRules':
-          // console.dir(e.target);
-          switch (e.target.attributes.type.value) {
-            case 'checkbox':
-              // console.log(`id: ${e.target.id}`);
-              this.handleLineRuleToggle(e.target.id);
-          }
-          break;
-        case 'generateLineIds':
-          this.handleGenerateLineId();
-          break;
-        default:
-          console.log(`No action detected.`);
-      }
+    //   console.log(`controls action: ${action}`);
+    //   switch (action) {
+    //     //LINE
+    //     case 'resetLine':
+    //       '';
+    //       break;
+    //     case 'addLine':
+    //       '';
+    //       break;
+    //     case 'removeLine':
+    //       '';
+    //       break;
+    //     case 'setPointType':
+    //       this.setPointType(e.target.value);
+    //       break;
+    //     case 'addPoint':
+    //       '';
+    //       break;
+    //     case 'removePoint':
+    //       this.removeActivePoint();
+    //       break;
+    //       //NAVIGATION ICONS
+    //     case 'nav':
+    //       this.showThisSection(value);
+    //       this.activateThisIcon(value);
+    //       break;
+    //       //LINES
+    //     case 'lineRules':
+    //       // console.dir(e.target);
+    //       switch (e.target.attributes.type.value) {
+    //         case 'checkbox':
+    //           // console.log(`id: ${e.target.id}`);
+    //           this.handleLineRuleToggle(e.target.id);
+    //       }
+    //       break;
+    //     case 'generateLineIds':
+    //       this.handleGenerateLineId();
+    //       break;
+    //     default:
+    //       console.log(`No action detected.`);
+    //   }
 
-      console.dir(`document.activeElement: ${document.activeElement.id}`);
+    //   console.dir(`document.activeElement: ${document.activeElement.id}`);
 
 
-      //SAVE -> TAGS - REMOVE TAG when (x) clicked
-      if (classList.includes('svg_tag') && dataset.tag) {
-        //target = <div><svg class="svg-tag">
-        //set localState so we have a handle on the tag to delete
-        this.localState.TAG_TO_DELETE = dataset.tag;
+    //   //SAVE -> TAGS - REMOVE TAG when (x) clicked
+    //   if (classList.includes('svg_tag') && dataset.tag) {
+    //     //target = <div><svg class="svg-tag">
+    //     //set localState so we have a handle on the tag to delete
+    //     this.localState.TAG_TO_DELETE = dataset.tag;
 
-        //Open Confirm Delete Dialogue
-        this.toggleTagConfirmDelete();
-      }
+    //     //Open Confirm Delete Dialogue
+    //     this.toggleTagConfirmDelete();
+    //   }
 
-      //SAVE -> TAGS -Confirm Delete
-      if (dataset.value === 'confirm-yes') {
-        this.handleRemoveGlobalTag(this.localState.TAG_TO_DELETE);
-        // console.log(dataset);
-      } else if (dataset.value === 'confirm-no') {
-        this.toggleTagConfirmDelete();
-      }
+    //   //SAVE -> TAGS -Confirm Delete
+    //   if (dataset.value === 'confirm-yes') {
+    //     this.handleRemoveGlobalTag(this.localState.TAG_TO_DELETE);
+    //     // console.log(dataset);
+    //   } else if (dataset.value === 'confirm-no') {
+    //     this.toggleTagConfirmDelete();
+    //   }
 
-      //LINE -> TAGS 
-      if (parentClasses.includes('line-tag')) {
-        //LINE -> TAGS - Add
-        if (parent.dataset.value === 'true') {
-          this.handleLineRemoveTag(parent.dataset.tag);
-        }
-        //LINE -> TAGS - Remove
-        else if (parent.dataset.value === 'false') {
-          this.handleLineAddTag(parent.dataset.tag);
-        }
+    //   //LINE -> TAGS 
+    //   if (parentClasses.includes('line-tag')) {
+    //     //LINE -> TAGS - Add
+    //     if (parent.dataset.value === 'true') {
+    //       this.handleLineRemoveTag(parent.dataset.tag);
+    //     }
+    //     //LINE -> TAGS - Remove
+    //     else if (parent.dataset.value === 'false') {
+    //       this.handleLineAddTag(parent.dataset.tag);
+    //     }
 
-      }
+    //   }
 
-    });
+    // });
+  }
+
+  handleFocusIn(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const newTagText = document.querySelector('#newTagText');
+
+    if (newTagText.id == e.target.id) {
+      // this.toggleAddTagFocus(newTagText);
+      newTagText.focus();
+    }
   }
 
   verifyUniqueId() {
 
   }
   handleGenerateLineId() {
-    const { lineRules, lines } = this.getState();
+    const { lineRules, lines } = this.editor.getState();
     //returns the value of the first element in the array.value
     /** @type {string} */
     const startingLineBasis = lineRules.find(rule => rule.id == 'lineStartingBasis').value;
@@ -189,16 +208,16 @@ export default class Controls {
     });
 
     // console.log(`startingLineBasis: ${startingLineBasis}`);
-    this.setState({
+    this.editor.setState({
       lines: updatedLines,
       // lineRules
     });
-    
+
     // console.log(this.getState());
   }
 
   handleLineRuleToggle(id) {
-    const { lineRules } = this.getState();
+    const { lineRules } = this.editor.getState();
 
     //map all the lineRules, change enabled att if it matches
     const mappedLineRules = lineRules.map(rule => {
@@ -208,11 +227,11 @@ export default class Controls {
       return rule;
     });
 
-    this.setState({ lineRules: mappedLineRules });
+    this.editor.setState({ lineRules: mappedLineRules });
   }
 
   handleLineIdUpdate(target) {
-    const { lineRules = [], activeLineIndex, lines } = this.getState();
+    const { lineRules = [], activeLineIndex, lines } = this.editor.getState();
     const activeLine = lines[activeLineIndex];
 
     const newLineId = target.innerText.trim();
@@ -224,7 +243,7 @@ export default class Controls {
 
       //Update the line's Id
       activeLine.id = newLineId;
-      this.setState({ lines });
+      this.editor.setState({ lines });
     }
   }
 
@@ -233,14 +252,14 @@ export default class Controls {
    * @param {string} addTag 
    */
   handleLineAddTag(addTag) {
-    const { activeLineIndex, lines } = this.getState();
+    const { activeLineIndex, lines } = this.editor.getState();
     let activeLine = lines[activeLineIndex];
 
     activeLine.tags ? activeLine.tags : [];
 
     activeLine.tags.push(addTag);
 
-    this.setState({ lines });
+    this.editor.setState({ lines });
   }
 
   /**
@@ -248,7 +267,7 @@ export default class Controls {
    * @param {string} removeTag 
    */
   handleLineRemoveTag(removeTag) {
-    const { activeLineIndex, lines } = this.getState();
+    const { activeLineIndex, lines } = this.editor.getState();
     let activeLine = lines[activeLineIndex];
 
     const filtered = activeLine.tags.filter(tag => tag !== removeTag);
@@ -256,7 +275,7 @@ export default class Controls {
     //assign the Tags to the Line
     activeLine.tags = filtered;
 
-    this.setState({ lines });
+    this.editor.setState({ lines });
   }
 
 
@@ -283,7 +302,7 @@ export default class Controls {
    */
   handleAddTag(target) {
     console.log('handleAddTag');
-    let { tags = [] } = this.getState();
+    let { tags = [] } = this.editor.getState();
 
     //if all the Tags have been deleted, create a new array
     // tags = tags ? tags : [];
@@ -297,7 +316,7 @@ export default class Controls {
     if (newTag && newTag.length < 15) {
       tags.push(newTag);
       // this.toggleAddTagFocus(target);
-      this.setState({ tags });
+      this.editor.setState({ tags });
     }
   }
 
@@ -308,7 +327,7 @@ export default class Controls {
    * @param {string} target 'subway'
    */
   handleRemoveGlobalTag(target) {
-    const { tags: gtags, lines } = this.getState();
+    const { tags: gtags, lines } = this.editor.getState();
     const cleanedTags = gtags.filter(tag => tag !== target);
     const cleanedLines = lines.map(line => {
       const cleanTags = line.tags.filter(tag => tag !== target);
@@ -316,76 +335,35 @@ export default class Controls {
       return line;
     });
 
-    this.setState({ tags: cleanedTags, lines: cleanedLines });
+    this.editor.setState({ tags: cleanedTags, lines: cleanedLines });
   }
 
   /// UI metods
 
-  /**
-   * Takes all Nav Sections and turns them on or off
-   * param {Element} target -  of Controls Section
-   * @param {string} value
-   */
-  showThisSection = (value) => {
-    const sections = [...document.querySelectorAll('.control-section')];
 
-    sections.forEach(section => {
-      section.classList.remove('active_section');
-
-      // console.log(`icon: ${section.dataset.icon}, taget id: ${value}`);
-      if (section.dataset.icon === value) {
-        section.classList.add('active_section');
-      }
-    });
-  }
-
-  /**
-   * Activate the Nav when clicked
-   *`Remove and add class active_nav'
-   * @param {string} value
-   */
-  activateThisIcon = (value) => {
-    //get all the NAV icons
-    const icons = [...document.querySelectorAll('.nav_icon')];
-
-    icons.forEach(icon => {
-      // remove 'active_icon' from all svg icons
-      icon.classList.remove('active_icon');
-      // console.log(element.classList);
-    });
-    // make the target svg icon active
-    // target.children[0].classList.add('active_icon');
-    // document.querySelector('data-value=\'line\']');
-    document.querySelector(`[data-value="${value}"]`)
-      .classList.add('active_icon');
-
-    // const sub = target.id.substring(5);
-    //Important to update localState...
-    this.localState.ACTIVE = value;
-  }
 
 
   /** LOGIC methods */
   setHeight = (e) => {
-    let v = this.positiveNumber(e.target.value),
+    let v = this.editor.positiveNumber(e.target.value),
       min = 1;
     if (v < min) v = min;
 
-    this.setState({ h: v });
+    this.editor.setState({ h: v });
   }
 
 
   setWidth = (e) => {
-    let v = this.positiveNumber(e.target.value),
+    let v = this.editor.positiveNumber(e.target.value),
       min = 1;
     if (v < min) v = min;
 
-    this.setState({ w: v });
+    this.editor.setState({ w: v });
   }
 
 
   setPointType = (value) => {
-    const { lines, activePointIndex, activeLineIndex } = this.getState();
+    const { lines, activePointIndex, activeLineIndex } = this.editor.getState();
     const ap = lines[activeLineIndex];
 
     // not the first point
@@ -440,7 +418,7 @@ export default class Controls {
           break;
       }
 
-      this.setState({ lines });
+      this.editor.setState({ lines });
     }
   }
 
@@ -523,12 +501,12 @@ export default class Controls {
 
 
   removeActivePoint = () => {
-    const { activePointIndex, lines, activeLineIndex } = this.getState();
+    const { activePointIndex, lines, activeLineIndex } = this.editor.getState();
 
     if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
       lines[activeLineIndex].points.splice(activePointIndex, 1);
 
-      this.setState({
+      this.editor.setState({
         lines,
         activePointIndex: lines[activeLineIndex].points.length - 1
       });
@@ -538,11 +516,11 @@ export default class Controls {
 
 
   reset = () => {
-    const cstate = this.getState();
+    const cstate = this.editor.getState();
     const w = cstate.w;
     const h = cstate.h;
 
-    this.setState({
+    this.editor.setState({
       points: [{ x: w / 2, y: h / 2 }],
       activePointIndex: 0
     });
@@ -551,7 +529,7 @@ export default class Controls {
 
   setTextInputs = () => {
     //TODO:
-    console.log(`setText: ${this.getState().w}`);
+    console.log(`setText: ${this.editor.getState().w}`);
     // document.querySelector('#Width').value = this.getState().w;
   }
 
@@ -577,7 +555,7 @@ export default class Controls {
     const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
-    let path = `d="${this.generatePath(lines[activeLineIndex].points)}"`;
+    let path = `d="${this.editor.generatePath(lines[activeLineIndex].points)}"`;
 
     /**@type {PointType} */
     let pointType = 'l';
@@ -654,33 +632,14 @@ export default class Controls {
     const { LINE, LINES, SETTINGS, HELP, ACTIVE } = this.localState;
     // console.log(`ACTIVE: ${ACTIVE}`);
 
+    // const line = new Section()
+
+    
+
     return (
-      `<nav>
-        ${NavC({
-          dataAction: `nav`,
-          dataValue: LINE,
-          svg: Icon_Line(),
-          active:ACTIVE
-        })}
-        ${NavC({
-          dataAction: `nav`,
-          dataValue: LINES,
-          svg: Icon_Shuffle(),
-          active:ACTIVE
-        })}
-        ${NavC({
-          dataAction: `nav`,
-          dataValue: SETTINGS,
-          svg: Icon_Settings(),
-          active:ACTIVE
-        })}
-        ${NavC({
-          dataAction: `nav`,
-          dataValue: HELP,
-          svg: Icon_Help(),
-          active:ACTIVE
-        })}
-      </nav>
+    `<div id="controls" class="controls_wrap">
+
+      ${this.nav.render(this.localState)}
 
       ${Line({ 
         icon: LINE,
@@ -715,6 +674,7 @@ export default class Controls {
         title: HELP,
         active: ACTIVE,
       })}
+      </div>
     `);
   }
 }

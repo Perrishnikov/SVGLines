@@ -19,14 +19,14 @@ window.onload = function() {
             state: solidState,
             id: document.querySelector('#app'),
           });
+          e.setState(solidState);
+          
+          return e
+        }).then(e => {
+          //add all the event listeners once the DOM is ready
+          e.addDOMListeners();
+          console.log(e.registeredListeners);
+        })
 
-          // e.render();
-        });
-      // const e = new Editor({
-      //   state,
-      //   id: document.querySelector('#app'),
-      // });
-
-      // e.render();
     });
 };
