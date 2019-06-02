@@ -1,7 +1,6 @@
 //@ts-check
 import { Control, TagList } from './Editor.Components.js';
 import { Line_ } from './Controls.Components.js';
-import { Section } from './Controls.Wrappers.js';
 
 /**
  * @param {object} props
@@ -113,4 +112,15 @@ export function Line(props) {
     </div>
     `
   });
+}
+
+function Section(props) {
+  const { title, icon, active, html } = props;
+  const activeSec = active == title ? ' active_section' : '';
+
+  return `
+    <section data-link="${icon}" class="control-section${activeSec}" >
+      ${Title({title})}
+      ${html}
+    </section>`;
 }

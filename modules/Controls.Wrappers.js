@@ -34,6 +34,9 @@ export class Section {
     return `
     <section data-link="${this.title}" class="control-section${activeSec}" >
       ${Title(this.title)}
+      ${this.controlGroups.map(group => {
+        return group.render();
+      })}
     </section>`;
   }
 
@@ -41,12 +44,10 @@ export class Section {
 
 /**
  * Used by only by Nav....
- * @param {object} props
- * @param {string} props.title
+ * @param {string} title
  * @returns {string}
  */
-export function Title(props) {
-  const { title } = props;
+export function Title(title) {
 
   return `
     <div class="">

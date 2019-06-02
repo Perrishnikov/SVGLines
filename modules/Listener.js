@@ -7,10 +7,8 @@
  * @typedef {'keydown'|'click'|'keyup'} type
  * @typedef {function} callback
  */
-export class Listener {
-
+export default class Listener {
   /**
-   * 
    * @param {object} props 
    * @param {caller} props.caller
    * @param {selector} props.selector

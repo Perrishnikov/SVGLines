@@ -1,7 +1,7 @@
 //@ts-check
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
-import { Listener } from './Listener.js';
+import Listener from './Listener.js';
 
 /**
  * Misc
@@ -78,11 +78,12 @@ export default class Editor {
     const mainId = document.querySelector('#main');
     this.main = new Main(this, mainId);
 
-    /**@type {Element} */
-    // const controlId = document.querySelector('#controls');
+     // const controlId = document.querySelector('#controls');
+    /**type {Element} */
     this.controls = new Controls(this);
 
     //trigger the everything render()
+    //I am now calling render from index.js
     // this.setState(props.state);
 
 
@@ -131,7 +132,7 @@ export default class Editor {
 
 
   registerListener(listener) {
-
+console.log(listener);
     if (Array.isArray(listener)) {
       listener.forEach(one => {
         this.registeredListeners.push(one);

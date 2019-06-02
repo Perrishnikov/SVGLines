@@ -1,7 +1,8 @@
 //@ts-check
-import { Listener } from './Listener.js';
+import Listener from './Listener.js';
+
 /**
- * @typedef {import('./Editor.Controls').LocalState} Active
+ * @typedef {import('./Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('./Editor.Controls').Sections} Sections
  * @typedef {import('./Editor.Controls').LocalState} LocalState
  * @typedef {import('./Editor.Controls').Icon} Icon
@@ -48,7 +49,7 @@ export default class Nav {
 
   /**@param {import('./Editor.Controls').E} e */
   handleNavClick(e) {
-    /** @type {LocalState} */
+    /** @type {LocalState['HELP']} */
     const value = e.target.dataset.value;
     // console.log(`${this.NAV}: data-value: ${value}`);
 
@@ -88,7 +89,7 @@ export default class Nav {
 /**
  * Activate the Nav when clicked
  *`Remove and add class active_nav'
- * @param {LocalState} value
+ * @param {LocalState['HELP']} value
  * @returns void - DOM manipulation
  */
 function activateThisIcon(value) {
@@ -112,7 +113,7 @@ function activateThisIcon(value) {
 /**
  * Takes all Nav Sections and turns them on or off
  * param {Element} target -  of Controls Section
- * @param {LocalState} value
+ * @param {LocalState['HELP']} value
  * @returns void - DOM manipulation
  */
 function showThisSection(value) {
@@ -132,7 +133,7 @@ function showThisSection(value) {
 /**
  * Make the Nav components
  * @param {object} props
- * @param {LocalState["ACTIVE"]} props.active
+ * @param {LocalState['ACTIVE']} props.active
  * @param {Icon} props.svg
  * @param {NAV} props.dataAction
  * @param {Title} props.dataValue

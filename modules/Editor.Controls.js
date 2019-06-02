@@ -1,11 +1,9 @@
 //@ts-check
-import { Line } from './Controls.S.Line.js';
-import { Settings } from './Controls.S.Settings.js';
-import { Lines } from './Controls.S.Lines.js';
-import { Help } from './Controls.S.Help.js';
+
 import { Section } from './Controls.Wrappers.js';
 import Nav from './Controls.Nav.js';
 import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/index.js';
+import LineFunctions from './CG/LineFunctions.js';
 /**
  * @typedef {import('./Editor').Anchor} Anchor
  * @typedef {import('./Editor').State} State
@@ -15,7 +13,6 @@ import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/inde
  * @typedef {import('./Editor').Line} Line
  * @typedef {import('./Editor').Coords} Coords
  * @typedef {import('./Editor').E} E
- 
  * 
  * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
  * @typedef {string} Title
@@ -31,8 +28,6 @@ export default class Controls {
    * param {Element} targetId
    */
   constructor(editor) {
-    // this.id = targetId;
-    // this.id = document.querySelector('#controls');
 
     this.editor = {
       registerListener: editor.registerListener,
@@ -55,17 +50,19 @@ export default class Controls {
     };
 
     //COMPONENTS 
-    const line = '';
+    const lineFunctions = new LineFunctions();
+    // lineFunctions.render();
 
     /**
      * Make all the sections here. Place name in localState.
-     *  
      */
     this.sections = [
       new Section({
         title: this.localState.LINE,
         icon: Icon_Line(),
-        controlGroups: [],
+        controlGroups: [
+          lineFunctions
+        ],
       }),
       new Section({
         title: this.localState.LINES,
@@ -702,12 +699,13 @@ export default class Controls {
 
 
     return (
-      `<div id="controls" class="controls_wrap">
+    `<div id="controls" class="controls_wrap">
+      ${this.nav.render(this.localState.ACTIVE)}
 
-      ${this.nav.render(this.localState)}
-
-
-      </div>
+      ${this.sections.map(section => {
+        return section.render(this.localState.ACTIVE);
+      }).join('')}
+    </div>
     `);
   }
 }
