@@ -1,73 +1,85 @@
 //@ts-check
-import { Icon_Help, Icon_Line, Icon_Shuffle, Icon_Settings } from '../icons/index.js';
 import { Listener } from './Listener.js';
+/**
+ * @typedef {import('./Editor.Controls').LocalState} Active
+ * @typedef {import('./Editor.Controls').Sections} Sections
+ * @typedef {import('./Editor.Controls').LocalState} LocalState
+ * @typedef {import('./Editor.Controls').Icon} Icon
+ * @typedef {import('./Editor.Controls').Title} Title
+ * @typedef {string} NAV
+ */
 
-
-export class Nav {
-  constructor(localState) {
-    this.localState = localState;
+/**
+ * @typedef {object} This
+ * @property {Active} ACTIVE
+ * @property {Sections} sections
+ * @property {NAV} nav
+ * @property {string} SELECTOR
+ */
+export default class Nav {
+  /**
+   * Creates the Single Navigation Element
+   * @param {object} props 
+   * @param {Active} props.active
+   * @param {Sections} props.sections
+   */
+  constructor(props) {
+    this.ACTIVE = props.active;
+    this.sections = props.sections;
     this.NAV = 'nav'; // <nav data-action="nav"></nav>
+    this.SELECTOR = `[data-action="${this.NAV}"]`; //for listener
   }
 
+  /**
+   * Set up Listeners for Nav
+   * Called from Editor.Controls Constructor
+   * @returns {Array<Listener>|Listener}
+   */
   listeners() {
 
-    return new Listener(
-      {
-        caller: 'Nav',
-        selector: '[data-action="nav"]',
-        type: 'click',
-        callback: this.handleNavClick.bind(this)
-      }
-    );
+    return new Listener({
+      caller: this.NAV,
+      selector: this.SELECTOR,
+      type: 'click',
+      callback: this.handleNavClick.bind(this)
+    });
   }
 
 
+  /**@param {import('./Editor.Controls').E} e */
   handleNavClick(e) {
+    /** @type {LocalState} */
     const value = e.target.dataset.value;
+    // console.log(`${this.NAV}: data-value: ${value}`);
 
-    console.log(`data-value: ${value}`);
     activateThisIcon(value);
     showThisSection(value);
 
     //Important to update localState...
-    this.localState.ACTIVE = value;
+    this.ACTIVE = value;
   }
 
 
   /**
-   * 
-   * @param {import('./Editor.Controls').LocalState} props
+   * @param {LocalState["ACTIVE"]} active
    * @returns {string} HTML to render
    */
-  render(props) {
-    const { LINE, LINES, SETTINGS, HELP, ACTIVE } = props;
+  render(active) {
+    // const { ACTIVE } = props;
 
     return `
     <nav id="nav">
-      ${Comp({
-        dataAction: this.NAV,
-        dataValue: LINE,
-        svg: Icon_Line(),
-        active: ACTIVE
-      })}
-      ${Comp({
-        dataAction: this.NAV,
-        dataValue: LINES,
-        svg: Icon_Shuffle(),
-        active: ACTIVE
-      })}
-      ${Comp({
-        dataAction: this.NAV,
-        dataValue: SETTINGS,
-        svg: Icon_Settings(),
-        active: ACTIVE
-      })}
-      ${Comp({
-        dataAction: this.NAV,
-        dataValue: HELP,
-        svg: Icon_Help(),
-        active: ACTIVE
-      })}
+      ${this.sections.map(section => {
+
+        return `
+        ${NavIcon({
+            dataAction: this.NAV,
+            dataValue: section.title,
+            svg: section.icon,
+            active
+          })}
+          `;
+      }).join('')}
     </nav>
   `;
   }
@@ -76,9 +88,11 @@ export class Nav {
 /**
  * Activate the Nav when clicked
  *`Remove and add class active_nav'
- * @param {string} value
+ * @param {LocalState} value
+ * @returns void - DOM manipulation
  */
 function activateThisIcon(value) {
+  // console.log(`activateThisIcon: ${value}`);
 
   //get all the NAV icons
   const icons = [...document.querySelectorAll('.nav_icon')];
@@ -92,16 +106,14 @@ function activateThisIcon(value) {
   // make the target svg icon active
   document.querySelector(`[data-value="${value}"]`)
     .classList.add('active_icon');
-
-  // //Important to update localState...
-  // this.localState.ACTIVE = value;
 }
 
 
 /**
  * Takes all Nav Sections and turns them on or off
  * param {Element} target -  of Controls Section
- * @param {string} value
+ * @param {LocalState} value
+ * @returns void - DOM manipulation
  */
 function showThisSection(value) {
   const sections = [...document.querySelectorAll('.control-section')];
@@ -116,14 +128,23 @@ function showThisSection(value) {
   });
 }
 
-function Comp(props) {
+
+/**
+ * Make the Nav components
+ * @param {object} props
+ * @param {LocalState["ACTIVE"]} props.active
+ * @param {Icon} props.svg
+ * @param {NAV} props.dataAction
+ * @param {Title} props.dataValue
+ */
+function NavIcon(props) {
   const { dataAction, dataValue, svg, active } = props;
 
   const status = active == dataValue ? ' active_icon' : '';
   // console.log(`status: ${status}`);
   return `
-      <div data-action="${dataAction}" data-value="${dataValue}" class="nav_icon${status}">
-        ${svg}
-      </div>
+  <div data-action="${dataAction}" data-value="${dataValue}" class="nav_icon${status}">
+    ${svg}
+  </div>
   `;
 }

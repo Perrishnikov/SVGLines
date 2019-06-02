@@ -4,7 +4,8 @@ import { Settings } from './Controls.S.Settings.js';
 import { Lines } from './Controls.S.Lines.js';
 import { Help } from './Controls.S.Help.js';
 import { Section } from './Controls.Wrappers.js';
-import { Nav } from './Controls.Nav.js';
+import Nav from './Controls.Nav.js';
+import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/index.js';
 /**
  * @typedef {import('./Editor').Anchor} Anchor
  * @typedef {import('./Editor').State} State
@@ -14,6 +15,7 @@ import { Nav } from './Controls.Nav.js';
  * @typedef {import('./Editor').Line} Line
  * @typedef {import('./Editor').Coords} Coords
  * @typedef {import('./Editor').E} E
+ 
  * 
  * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
  * @typedef {string} Title
@@ -21,6 +23,7 @@ import { Nav } from './Controls.Nav.js';
  * @typedef {string} Icon
  * @typedef {string} Active
  * @typedef {string} Html
+ * @typedef {Array<Section>} Sections
  */
 export default class Controls {
   /**
@@ -52,9 +55,52 @@ export default class Controls {
     };
 
     //COMPONENTS 
-    this.nav = new Nav(this.localState);
-    editor.registerListener(this.nav.listeners());
+    const line = '';
 
+    /**
+     * Make all the sections here. Place name in localState.
+     *  
+     */
+    this.sections = [
+      new Section({
+        title: this.localState.LINE,
+        icon: Icon_Line(),
+        controlGroups: [],
+      }),
+      new Section({
+        title: this.localState.LINES,
+        icon: Icon_Shuffle(),
+        controlGroups: [],
+      }),
+      new Section({
+        title: this.localState.SETTINGS,
+        icon: Icon_Settings(),
+        controlGroups: [],
+      }),
+      new Section({
+        title: this.localState.HELP,
+        icon: Icon_Help(),
+        controlGroups: [],
+      })
+    ];
+
+    //register all the Control Group's Listeners
+    this.sections.forEach(section => {
+      section.controlGroups.forEach(group => {
+        editor.registerListener(group.listeners());
+      });
+    });
+
+    /** 
+     * NAV
+     * This auto creates the Icon Nav sections
+     * Then register the event handler for Nav
+     */
+    this.nav = new Nav({
+      active: this.localState.ACTIVE,
+      sections: this.sections
+    });
+    editor.registerListener(this.nav.listeners());
 
     // this.id.addEventListener('focusin', e => {
     //   const newTagText = document.querySelector('#newTagText');
@@ -632,52 +678,72 @@ export default class Controls {
     const { LINE, LINES, SETTINGS, HELP, ACTIVE } = this.localState;
     // console.log(`ACTIVE: ${ACTIVE}`);
 
+
+    //   class Section2 {
+    //     constructor(dataLink, icon, controlGroups) {
+    //       this.sectionClass = 'control.section';
+    //     }
+
+    //     log() {
+
+    //     }
+    //   }
+
+
     // const line = new Section()
 
-    
+
+    // const navIcons = sections.map((title,icon) => new navIcons(sec));
+
+    // const CGlineFunctions = new something extends ControlGroup({
+
+    // });
+
+
 
     return (
-    `<div id="controls" class="controls_wrap">
+      `<div id="controls" class="controls_wrap">
 
       ${this.nav.render(this.localState)}
 
-      ${Line({ 
-        icon: LINE,
-        title: LINE,
-        active: ACTIVE,
-        activeLineIndex,
-        path,
-        tags,
-        lines,
-        pointType,
-      })} 
 
-      ${Lines({
-        icon: LINES,
-        title: LINES,
-        active: ACTIVE,
-        tags,
-        lineRules
-      })}
-      
-      ${Settings({
-        icon:SETTINGS,
-        title: SETTINGS,
-        active: ACTIVE,
-        w, 
-        h, 
-        grid,
-      })}
-
-      ${Help({
-        icon:HELP,
-        title: HELP,
-        active: ACTIVE,
-      })}
       </div>
     `);
   }
 }
+// ${Line({ 
+//   icon: LINE,
+//   title: LINE,
+//   active: ACTIVE,
+//   activeLineIndex,
+//   path,
+//   tags,
+//   lines,
+//   pointType,
+// })} 
+
+// ${Lines({
+//   icon: LINES,
+//   title: LINES,
+//   active: ACTIVE,
+//   tags,
+//   lineRules
+// })}
+
+// ${Settings({
+//   icon:SETTINGS,
+//   title: SETTINGS,
+//   active: ACTIVE,
+//   w, 
+//   h, 
+//   grid,
+// })}
+
+// ${Help({
+//   icon:HELP,
+//   title: HELP,
+//   active: ACTIVE,
+// })}
 
 Controls.Render = (props) => {
 
