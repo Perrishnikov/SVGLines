@@ -56,7 +56,6 @@ export default class LineFunctions extends ControlGroup {
 
 
   render() {
-console.log(`LineFunctions Render`);
     return super.wrapper({
       title: this.name,
       id: this.id,

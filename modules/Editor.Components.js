@@ -162,7 +162,7 @@ function Control(props) {
       control = Choices(rest);
       break;
     case 'taglist':
-      control = TagList(rest);
+      console.error(`moved to CG.LineTags.js`);
       break;
     default:
       control = '<div style="background-color:red">Incorrect code</div>';
@@ -310,12 +310,6 @@ function Icon_ThumbsDown(value) {
   `;
 }
 
-function Icon_Check(tag) {
-  return `
-  <svg data-tag="${tag}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-  `;
-}
-
 // function LineIdComponent(id) {
 //   let { value = '*' } = id;
 
@@ -363,27 +357,4 @@ function ReturnTags(props) {
     `;
 }
 
-function TagList(props) {
-  // const allTags = props.tags ? props.tags : [];
-  const { name, activeLine, tags = [] } = props;
-
-  const mappedTags = tags.map((tag, i) => {
-    //make sure that Active Line has Tags, if Line Tag matches App Tag...
-    const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
-
-    return `
-      <div data-tag="${tag}" data-value="${active}" class="line-tag">
-        <span class="" style="line-height:24px">${tag}</span>
-        <span role="button">${active ? Icon_Check(tag) : ''}</span>
-      </div>
-    `;
-  }).join('');
-
-  return `
-    <div id="lineTags" class="tag-row">
-      ${mappedTags}
-    </div>
-    `;
-}
-
-export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags, TagList };
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags };

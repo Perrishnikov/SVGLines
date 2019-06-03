@@ -88,6 +88,10 @@ export default class Editor {
   }
 
   /************************ LISTENERS STUFF */
+  /**
+   * Registers each Listener with Editor.registeredListenrs[]
+   * @param {Listener|Array<Listener>} listener 
+   */
   registerListener(listener) {
     // console.log(listener);
 
@@ -103,6 +107,10 @@ export default class Editor {
     // console.log(`listener registered: ${listener.caller} ${listener.type}`);
   }
 
+  /**
+   * Called from index.js
+   * Adds all registeredListers to DOM after all HTML is ready
+   */
   addDOMListeners() {
     // console.log(`Hello addDOMListeners!`);
 
@@ -111,12 +119,13 @@ export default class Editor {
       // console.log(listener);
 
       if (selector == 'document') {
+        // @ts-ignore
         document.addEventListener(type, callback);
         // console.dir(document);
       } else {
-        //TODO: validate this ...ALL
-        // const el = document.createElement(element);
         const el = document.querySelectorAll(selector);
+        // console.dir(el);
+        // @ts-ignore
         el.forEach(l => l.addEventListener(type, callback));
       }
     });
@@ -126,15 +135,15 @@ export default class Editor {
 
   //TEST METHODS FOR CG.LINEFUNCTIONS()
   resetLine(){
-    console.log(`resetLine`);
+    console.log(`CORE: resetLine`);
   }
 
   addLine(){
-    console.log(`addLine`);
+    console.log(`CORE: addLine`);
   }
 
   removeLine(){
-    console.log(`removeLine`);
+    console.log(`CORE: removeLine`);
   }
 
   handleKeyDown = (e) => {
@@ -419,12 +428,10 @@ export default class Editor {
    * @returns void
    */
   render = (props) => {
-    console.log(`Editor Render called`);
     this.id.innerHTML = `
     ${this.main.render(props)}
     ${this.controls.render(props)}
     `;
-
   }
 }
 

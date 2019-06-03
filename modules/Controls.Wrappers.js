@@ -38,13 +38,16 @@ export class Section {
   render(active) {
     // const { active } = props;
     const activeSec = active == this.title ? ' active_section' : '';
+    const controlGroups = this.controlGroups.map(group => {
 
+      return group.render(active);
+    }).join('');
+
+    // return controlGroups;
     return `
     <section data-link="${this.title}" class="control-section${activeSec}" >
       ${Title(this.title)}
-      ${this.controlGroups.map(group => {
-        return group.render();
-      })}
+      ${controlGroups}
     </section>`;
   }
 }

@@ -4,6 +4,8 @@ import { Section } from './Controls.Wrappers.js';
 import Nav from './Controls.Nav.js';
 import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/index.js';
 import LineFunctions from './CG/LineFunctions.js';
+import LineTags from './CG/LineTags.js';
+
 /**
  * @typedef {import('./Editor').Anchor} Anchor
  * @typedef {import('./Editor').State} State
@@ -42,12 +44,15 @@ export default class Controls {
 
     //COMPONENTS 
     const lineFunctions = new LineFunctions({
-        addLine: editor.addLine,
-        resetLine: editor.resetLine,
-        removeLine: editor.removeLine
-      }
-    );
-    // lineFunctions.render();
+      addLine: editor.addLine,
+      resetLine: editor.resetLine,
+      removeLine: editor.removeLine
+    });
+
+    const lineTags = new LineTags({
+      activeLine: this.localState.ACTIVE,
+      tags: this.editor.getState().tags,
+    });
 
     /**
      * Make all the sections here. Place name in localState.
@@ -57,7 +62,8 @@ export default class Controls {
         title: this.localState.LINE,
         icon: Icon_Line(),
         controlGroups: [
-          lineFunctions
+          lineFunctions,
+          lineTags,
         ],
       }),
       new Section({
@@ -667,20 +673,18 @@ export default class Controls {
       // )
     }
 
-    /**@type {LocalState} */
-    const { LINE, LINES, SETTINGS, HELP, ACTIVE } = this.localState;
-    // console.log(`ACTIVE: ${ACTIVE}`);
 
-    return (`
+    const sections = this.sections.map(section => {
+
+      return section.render(this.localState.ACTIVE);
+    }).join('');
+
+    return `
     <div id="controls" class="controls_wrap">
       ${this.nav.render(this.localState.ACTIVE)}
-
-      ${this.sections.map(section => {
-
-        return section.render(this.localState.ACTIVE);
-      }).join('')}
+      ${sections}
     </div>
-    `);
+    `;
   }
 }
 // ${Line({ 

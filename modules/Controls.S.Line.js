@@ -1,5 +1,5 @@
 //@ts-check
-import { Control, TagList } from './Editor.Components.js';
+import { Control } from './Editor.Components.js';
 import { Line_ } from './Controls.Components.js';
 
 /**
@@ -23,35 +23,7 @@ export function Line(props) {
     icon,
     active,
     html: `
-    <div class="control-group">
-      <span class="control-group-title">Line Functions (i)</span>
-      <div class="control-row">
-        ${Control({
-          type: 'button',
-          action: 'resetLine',
-          value: 'Reset Line'
-        })}
-        ${Control({
-          type:'button',
-          action:'addLine',
-          value:'Add Line',
-        })}
-        ${Control({
-          type:'button',
-          action:'removeLine',
-          value:'Remove Line',
-        })}
-      </div>
-    </div>
 
-    <div class="control-group">
-      <span class="control-group-title">Line Tags (i)</span>
-      ${TagList({
-        // name:'Line Tags',
-        tags,
-        activeLine
-      })}
-    </div>
 
     <div class="control-group">
       <span class="control-group-title">Line ID (i)</span>
