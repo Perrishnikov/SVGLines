@@ -54,6 +54,8 @@ export default class Controls {
       tags: this.editor.getState().tags,
     });
 
+    const allTags = n
+
     /**
      * Make all the sections here. Place name in localState.
      */
@@ -675,7 +677,7 @@ export default class Controls {
 
 
     const sections = this.sections.map(section => {
-
+console.log(section);
       return section.render(this.localState.ACTIVE);
     }).join('');
 

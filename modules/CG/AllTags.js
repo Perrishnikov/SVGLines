@@ -15,12 +15,12 @@ import { Icon_Check } from '../../icons/index.js';
  * @class LineFunctions
  * @extends {ControlGroup}
  */
-export default class LineFunctions extends ControlGroup {
+export default class AllTags extends ControlGroup {
   constructor(props) {
     super();
     this.wrapper = super.wrapper;
-    this.name = 'Line Tags (i)';
-    this.id = 'lineTags';
+    this.name = 'All Tags (i)';
+    this.id = 'allTags';
     this.selector = `#${this.id}`;
     this.tags = props.tags;
     this.activeLine = props.activeLine;
@@ -56,27 +56,10 @@ export default class LineFunctions extends ControlGroup {
   render() {
     const { activeLine, tags = [] } = this;
 
-    const mappedTags = tags.map((tag, i) => {
-      //make sure that Active Line has Tags, if Line Tag matches App Tag...
-      const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
-
-      return `
-        <div data-tag="${tag}" data-value="${active}" class="line-tag">
-          <span class="" style="line-height:24px">${tag}</span>
-          <span role="button">${active ? Icon_Check(tag) : ''}</span>
-        </div>
-      `;
-    }).join('');
-
-    return this.wrapper({
-      title: this.name,
-      id: this.id,
-      html: `
-      <div id="used_to_be_just_lineTags" class="tag-row">
-        ${mappedTags}
-      </div>
-      `
-    });
+    return`
+    <h1>Hola</h1>
+    `;
+    
   }
 }
 

@@ -8,6 +8,13 @@ export default class ControlGroup {
     console.error(`ControlGroup Super, Must Override`);
   }
 
+  /** 
+   * @param {import('../Editor.Controls').LocalState["ACTIVE"]} Active 
+   */
+  render(active){
+    console.error(`ControlGroup Super, Must Override`);
+  }
+
   wrapper(props) {
     const {html, title, id} = props;
     
