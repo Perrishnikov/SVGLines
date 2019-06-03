@@ -62,7 +62,7 @@ export default class Editor {
     //TODO: Test
     this.registeredListeners = [
       new Listener({
-        caller: 'Editor',
+        // caller: 'Editor',
         selector: 'document',
         type: 'keydown',
         callback: this.handleKeyDown
@@ -78,20 +78,67 @@ export default class Editor {
     const mainId = document.querySelector('#main');
     this.main = new Main(this, mainId);
 
-     // const controlId = document.querySelector('#controls');
+    // const controlId = document.querySelector('#controls');
     /**type {Element} */
     this.controls = new Controls(this);
 
     //trigger the everything render()
     //I am now calling render from index.js
     // this.setState(props.state);
-
-
   }
 
+  /************************ LISTENERS STUFF */
+  registerListener(listener) {
+    // console.log(listener);
+
+    if (Array.isArray(listener)) {
+      listener.forEach(one => {
+        this.registeredListeners.push(one);
+      });
+
+    } else {
+      this.registeredListeners.push(listener);
+    }
+
+    // console.log(`listener registered: ${listener.caller} ${listener.type}`);
+  }
+
+  addDOMListeners() {
+    // console.log(`Hello addDOMListeners!`);
+
+    this.registeredListeners.forEach(listener => {
+      const { selector, type, callback, caller } = listener;
+      // console.log(listener);
+
+      if (selector == 'document') {
+        document.addEventListener(type, callback);
+        // console.dir(document);
+      } else {
+        //TODO: validate this ...ALL
+        // const el = document.createElement(element);
+        const el = document.querySelectorAll(selector);
+        el.forEach(l => l.addEventListener(type, callback));
+      }
+    });
+  }
+
+  //**************************************** */
+
+  //TEST METHODS FOR CG.LINEFUNCTIONS()
+  resetLine(){
+    console.log(`resetLine`);
+  }
+
+  addLine(){
+    console.log(`addLine`);
+  }
+
+  removeLine(){
+    console.log(`removeLine`);
+  }
 
   handleKeyDown = (e) => {
-    console.log(`handleKeyDown: ${e.key}`);
+    // console.log(`handleKeyDown: ${e.key}`);
 
     if (e.key === 'Alt' || e.key === 'Meta') {
       // console.log('meta');
@@ -120,7 +167,7 @@ export default class Editor {
   handleKeyUp = (e) => {
     //need to account for text entry
     // if (!this.getState().focusText) {
-    console.log(`handleKeyUp`);
+    // console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
     }
@@ -130,40 +177,6 @@ export default class Editor {
     // }
   }
 
-
-  registerListener(listener) {
-console.log(listener);
-    if (Array.isArray(listener)) {
-      listener.forEach(one => {
-        this.registeredListeners.push(one);
-      });
-
-    } else {
-      this.registeredListeners.push(listener);
-    }
-
-    console.log(`listener registered: ${listener.caller} ${listener.type}`);
-  }
-
-  addDOMListeners() {
-    // console.log(`Hello addDOMListeners!`);
-
-    this.registeredListeners.forEach(listener => {
-      const { selector, type, callback, caller } = listener;
-      // console.log(listener);
-
-      if (selector == 'document') {
-        document.addEventListener(type, callback);
-        // console.dir(document);
-      } else {
-        //TODO: validate this ...ALL
-        // const el = document.createElement(element);
-        const el = document.querySelectorAll(selector);
-        el.forEach(l => l.addEventListener(type, callback));
-      }
-    });
-
-  }
 
   /**
    * Returns Editor's State
@@ -184,11 +197,11 @@ console.log(listener);
 
       resolve(this.state = Object.assign({}, this.state, obj));
     }).then((state) => {
-      const props = {
+      const newState = {
         state: this.getState(), // Cloned
       };
 
-      this.render(props);
+      this.render(newState);
     });
 
   }
@@ -406,7 +419,7 @@ console.log(listener);
    * @returns void
    */
   render = (props) => {
-
+    console.log(`Editor Render called`);
     this.id.innerHTML = `
     ${this.main.render(props)}
     ${this.controls.render(props)}

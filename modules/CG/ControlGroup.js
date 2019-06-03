@@ -2,16 +2,20 @@
 //import { Listener } from '../Listener.js';
 
 export default class ControlGroup {
-  constructor(props) {}
+  constructor() {}
 
   listeners() {
     console.error(`ControlGroup Super, Must Override`);
   }
 
-  wrapper(html) {
+  wrapper(props) {
+    const {html, title, id} = props;
+    
     return `
-    <div> Super </div>
-    ${html}
+    <div id="${id}" class="control-group">
+      <span class="control-group-title">${title}</span>
+      ${html}
+    </div>
     `;
   }
 }

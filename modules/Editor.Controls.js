@@ -29,28 +29,24 @@ export default class Controls {
    */
   constructor(editor) {
 
-    this.editor = {
-      registerListener: editor.registerListener,
-      setState: editor.setState,
-      positiveNumber: editor.positiveNumber,
-      setPointCoords: editor.setPointCoords,
-      setQuadraticCoords: editor.setQuadraticCoords,
-      setCubicCoords: editor.setCubicCoords,
-      getState: editor.getState,
-      generatePath: editor.generatePath,
-    };
+    this.editor = editor;
 
     this.localState = {
       LINE: 'line',
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'lines',
+      ACTIVE: 'line',
       TAG_TO_DELETE: ''
     };
 
     //COMPONENTS 
-    const lineFunctions = new LineFunctions();
+    const lineFunctions = new LineFunctions({
+        addLine: editor.addLine,
+        resetLine: editor.resetLine,
+        removeLine: editor.removeLine
+      }
+    );
     // lineFunctions.render();
 
     /**
@@ -675,34 +671,12 @@ export default class Controls {
     const { LINE, LINES, SETTINGS, HELP, ACTIVE } = this.localState;
     // console.log(`ACTIVE: ${ACTIVE}`);
 
-
-    //   class Section2 {
-    //     constructor(dataLink, icon, controlGroups) {
-    //       this.sectionClass = 'control.section';
-    //     }
-
-    //     log() {
-
-    //     }
-    //   }
-
-
-    // const line = new Section()
-
-
-    // const navIcons = sections.map((title,icon) => new navIcons(sec));
-
-    // const CGlineFunctions = new something extends ControlGroup({
-
-    // });
-
-
-
-    return (
-    `<div id="controls" class="controls_wrap">
+    return (`
+    <div id="controls" class="controls_wrap">
       ${this.nav.render(this.localState.ACTIVE)}
 
       ${this.sections.map(section => {
+
         return section.render(this.localState.ACTIVE);
       }).join('')}
     </div>

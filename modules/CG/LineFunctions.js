@@ -2,50 +2,80 @@
 
 import ControlGroup from './ControlGroup.js';
 import Listener from '../Listener.js';
-import { Control} from '../Editor.Components.js';
+import { Button } from '../Controls.Wrappers.js';
 
 /**
- *
- *
- * @export
+ * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
+ * @typedef {import('../Editor.Controls').LocalState} LocalState
+ * @typedef {import('../Editor.Controls').Icon} Icon
+ */
+
+/**
+ * Control Group for manipulating Lines
  * @class LineFunctions
  * @extends {ControlGroup}
  */
 export default class LineFunctions extends ControlGroup {
-  super() {}
+  constructor(props) {
+    super();
 
+    this.name = 'Line Functions';
+    this.id = 'lineFunctions';
+    this.selector = `#${this.id}`;
+    this.addLine = props.addLine;
+    this.removeLine = props.removeLine;
+    this.resetLine = props.resetLine;
+  }
+
+  /**
+   * Place a Listener on the whole component
+   */
   listeners() {
     return new Listener({
-      caller: 'Hola',
-      selector: 'Hi',
+      caller: this.name,
+      selector: this.selector,
       type: 'click',
-      callback: null
+      callback: this.handleClick.bind(this)
     });
   }
 
+  handleClick(e) {
+    /** @type {LocalState['HELP']} */
+    const action = e.target.dataset.action;
+    // console.log(`${this.name}: data-action: ${action}`);
+
+    switch(action){
+      case 'resetLine': this.resetLine();
+      break;
+      case 'addLine': this.addLine();
+      break;
+      case 'removeLine': this.removeLine();
+      break;
+    }
+  }
+
+
   render() {
-    return super.wrapper(`
-    <div class="control-group">
-      <span class="control-group-title">Line Functions (i)</span>
+console.log(`LineFunctions Render`);
+    return super.wrapper({
+      title: this.name,
+      id: this.id,
+      html: `
       <div class="control-row">
-        ${Control({
-          type: 'button',
+        ${Button({
           action: 'resetLine',
-          value: 'Reset Line'
+          name: 'Reset Line'
         })}
-        ${Control({
-          type:'button',
+        ${Button({
           action:'addLine',
-          value:'Add Line',
+          name:'Add Line',
         })}
-        ${Control({
-          type:'button',
+        ${Button({
           action:'removeLine',
-          value:'Remove Line',
+          name:'Remove Line',
         })}
       </div>
-    </div>
-    `);
-    // return `<h1>Hola Ghost</h1>`;
+      `
+    });
   }
 }

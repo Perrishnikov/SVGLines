@@ -154,7 +154,9 @@ function Control(props) {
       control = Checkbox(rest);
       break;
     case 'button':
-      control = Button(rest);
+      // control = Button(rest);
+      console.error(`moved to Controls.wrappers.js`);
+      
       break;
     case 'choices':
       control = Choices(rest);

@@ -1,6 +1,10 @@
 //@ts-check
 
 /**
+ * @typedef {import('./Editor.Controls').LocalState["ACTIVE"]} Active
+ */
+
+/**
  * Sections do not get listeners() - just Control Groups
  * @param {object} props 
  * @param {import('./Editor.Controls').Title} props.title
@@ -27,8 +31,12 @@ export class Section {
     this.controlGroups = props.controlGroups;
   }
 
-  render(props) {
-    const { active } = props;
+  /**
+   * @param {Active} active
+   * @returns {string} HTML to render
+   */
+  render(active) {
+    // const { active } = props;
     const activeSec = active == this.title ? ' active_section' : '';
 
     return `
@@ -39,8 +47,25 @@ export class Section {
       })}
     </section>`;
   }
-
 }
+
+/**
+ * Creates Button 
+ * @param {object} props 
+ * @param {string} props.action
+ * @param {string} props.name
+ * @returns {string}
+ */
+export function Button(props) {
+  const { action, name } = props;
+  return `
+  <button data-action="${action}"
+    class="control-button">
+    ${ name }
+  </button>
+  `;
+}
+
 
 /**
  * Used by only by Nav....
@@ -64,7 +89,7 @@ export class ControlGroup {
 
   }
 
-  listeners(){
+  listeners() {
 
   }
   render() {

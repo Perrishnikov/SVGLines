@@ -66,7 +66,6 @@ export default class Nav {
    * @returns {string} HTML to render
    */
   render(active) {
-    // const { ACTIVE } = props;
 
     return `
     <nav id="nav">

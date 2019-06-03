@@ -10,7 +10,7 @@
 export default class Listener {
   /**
    * @param {object} props 
-   * @param {caller} props.caller
+   * @param {caller} [props.caller]
    * @param {selector} props.selector
    * @param {type} props.type
    * @param {callback} props.callback
