@@ -44,7 +44,7 @@ import Listener from './Listener.js';
  * Editor
  * @typedef {Editor} this
  * @property {Id} id
- * property {State} state
+ * @property {State} state
  * @property {Main} main
  * @property {Controls} controls
  */
@@ -55,6 +55,10 @@ export default class Editor {
    */
   constructor(props) {
     this.id = props.id;
+    //trigger the everything render()
+    // this.setState(props.state);
+    this.state = props.state; //TODO: Just set the state without render...
+
 
     //must be added to document, not Main. Needed in Main, but cant place it in div??
     // document.addEventListener('keydown', this.handleKeyDown, true);
@@ -62,15 +66,24 @@ export default class Editor {
     //TODO: Test
     this.registeredListeners = [
       new Listener({
-        // caller: 'Editor',
+        caller: 'Editor',
         selector: 'document',
         type: 'keydown',
         callback: this.handleKeyDown
-      }), new Listener({
+      }), 
+      new Listener({
         caller: 'Editor',
         selector: 'document',
         type: 'keyup',
         callback: this.handleKeyUp
+      }),
+      new Listener({
+        caller: 'Editor',
+        selector: 'document',
+        type: 'click',
+        callback: (e) => {
+          // console.log(`Editor Click`);
+        }
       }),
     ];
 
@@ -82,9 +95,7 @@ export default class Editor {
     /**type {Element} */
     this.controls = new Controls(this);
 
-    //trigger the everything render()
-    //I am now calling render from index.js
-    // this.setState(props.state);
+
   }
 
   /************************ LISTENERS STUFF */
@@ -122,11 +133,15 @@ export default class Editor {
         // @ts-ignore
         document.addEventListener(type, callback);
         // console.dir(document);
-      } else {
-        const el = document.querySelectorAll(selector);
+      } 
+      //This doesnt work because innerHTML destroys non-document event listeners
+      else {
+        console.error(`Change this Listener: ${selector} on ${caller}`);
+        
+        // const el = document.querySelectorAll(selector);
         // console.dir(el);
-        // @ts-ignore
-        el.forEach(l => l.addEventListener(type, callback));
+        // ts-ignore
+        // el.forEach(l => l.addEventListener(type, callback));
       }
     });
   }
@@ -134,41 +149,42 @@ export default class Editor {
   //**************************************** */
 
   //TEST METHODS FOR CG.LINEFUNCTIONS()
-  resetLine(){
+  resetLine() {
     console.log(`CORE: resetLine`);
   }
 
-  addLine(){
+  addLine() {
     console.log(`CORE: addLine`);
   }
 
-  removeLine(){
+  removeLine() {
     console.log(`CORE: removeLine`);
   }
 
   handleKeyDown = (e) => {
-    // console.log(`handleKeyDown: ${e.key}`);
+    // console.log(`Editor handleKeyDown: ${e.key}`);
 
     if (e.key === 'Alt' || e.key === 'Meta') {
-      // console.log('meta');
+      console.log('meta');
       this.setState({ ctrl: true });
     }
     if (e.key === 'Shift') {
-      // console.log('shift');
+      console.log('shift');
       this.setState({ shift: true });
     }
 
     //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
-    if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
-      // handle the Add Tag
-      this.controls.handleAddTag(e.target);
-    }
+    // if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
+    //   // handle the Add Tag
+    //   console.log('Enter');
+    //   // this.controls.handleAddTag(e.target);
+    // }
 
     //If Enter is pressed in the LineId Div CONTROLS -> LINE
-    if (e.key === 'Enter' && document.activeElement.id === 'lineId') {
-      // handle the Add Tag
-      this.controls.handleLineIdUpdate(e.target);
-    }
+    // if (e.key === 'Enter' && document.activeElement.id === 'lineId') {
+    //   // handle the Add Tag
+    //   this.controls.handleLineIdUpdate(e.target);
+    // }
 
   }
 
@@ -209,7 +225,7 @@ export default class Editor {
       const newState = {
         state: this.getState(), // Cloned
       };
-
+      
       this.render(newState);
     });
 

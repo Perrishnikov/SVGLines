@@ -40,24 +40,37 @@ export default class Nav {
 
     return new Listener({
       caller: this.NAV,
-      selector: this.SELECTOR,
+      selector: 'document',
       type: 'click',
       callback: this.handleNavClick.bind(this)
     });
   }
 
 
-  /**@param {import('./Editor.Controls').E} e */
+  /**@param {} e */
   handleNavClick(e) {
-    /** @type {LocalState['HELP']} */
-    const value = e.target.dataset.value;
-    // console.log(`${this.NAV}: data-value: ${value}`);
 
-    activateThisIcon(value);
-    showThisSection(value);
+    const taggedAncestor = e.target.closest('div[data-action=nav]');
+    const dataset = e.target.dataset;
+    // console.log(taggedAncestor);
+    // console.log(dataset);
+    const nav = e.target.closest('#nav');
 
-    //Important to update localState...
-    this.ACTIVE = value;
+    if (nav) {
+        /** @type {LocalState['HELP']} */
+        // const value = e.target.dataset.value;
+        // console.log(`${this.NAV}: data-value: ${value}`);
+
+        if (taggedAncestor) {
+          activateThisIcon(dataset.value);
+          showThisSection(dataset.value);
+
+          //Important to update localState...
+          this.ACTIVE = dataset.value;
+        }
+      }
+
+
   }
 
 

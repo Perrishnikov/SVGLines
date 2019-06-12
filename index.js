@@ -15,17 +15,17 @@ window.onload = function() {
         .then(defaultState => {
           const solidState = Object.assign({}, settingState, defaultState);
 
-          const e = new Editor({
+          const ed = new Editor({
             state: solidState,
             id: document.querySelector('#app'),
           });
-          e.setState(solidState);
+          ed.setState(solidState);
           
-          return e
-        }).then(e => {
+          return ed;
+        }).then(ed => {
           //add all the event listeners once the DOM is ready
-          e.addDOMListeners();
-          console.log(e.registeredListeners);
+          ed.addDOMListeners();
+          console.log(ed.registeredListeners);
         })
 
     });

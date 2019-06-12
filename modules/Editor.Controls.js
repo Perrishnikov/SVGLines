@@ -4,7 +4,8 @@ import { Section } from './Controls.Wrappers.js';
 import Nav from './Controls.Nav.js';
 import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/index.js';
 import LineFunctions from './CG/LineFunctions.js';
-import LineTags from './CG/LineTags.js';
+import TagLine from './CG/TagLine.js';
+import TagManager from './CG/TagManager.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor
@@ -38,25 +39,35 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'line',
+      ACTIVE: 'lines',
       TAG_TO_DELETE: ''
     };
 
-    //COMPONENTS 
-    const lineFunctions = new LineFunctions({
-      addLine: editor.addLine,
-      resetLine: editor.resetLine,
-      removeLine: editor.removeLine
-    });
-
-    const lineTags = new LineTags({
-      activeLine: this.localState.ACTIVE,
-      tags: this.editor.getState().tags,
-    });
-
-    const allTags = n
+    const state = this.editor.getState();
 
     /**
+     * CONTROL GROUPS
+     */
+    const lineFunctions = new LineFunctions({
+    //   addLine: editor.addLine,
+    //   resetLine: editor.resetLine,
+    //   removeLine: editor.removeLine
+    });
+
+    const tagLine = new TagLine({
+      activeLine: state.lines[state.activeLineIndex],
+      tags: state.tags
+    });
+
+    const tagManager = new TagManager({
+      tags: state.tags,
+      setState: this.editor.setState,
+      getLocalState: this.getLocalState.bind(this),
+      setLocalState: this.setLocalState.bind(this)
+    });
+
+    /**
+     * SECTIONS
      * Make all the sections here. Place name in localState.
      */
     this.sections = [
@@ -65,13 +76,15 @@ export default class Controls {
         icon: Icon_Line(),
         controlGroups: [
           lineFunctions,
-          lineTags,
+          tagLine,
         ],
       }),
       new Section({
         title: this.localState.LINES,
         icon: Icon_Shuffle(),
-        controlGroups: [],
+        controlGroups: [
+          tagManager
+        ],
       }),
       new Section({
         title: this.localState.SETTINGS,
@@ -113,14 +126,6 @@ export default class Controls {
     //   // console.dir(e.target);
     // });
 
-    //TODO: Can prolly remove this.
-    // this.id.addEventListener('focusout', e => {
-    //   const newTagText = document.querySelector('#newTagText');
-
-    //   // console.log(newTagText);
-    //   // this.toggleAddTagFocus(newTagText);
-    //   // console.dir(e.target);
-    // });
 
 
 
@@ -184,50 +189,32 @@ export default class Controls {
     //   console.dir(`document.activeElement: ${document.activeElement.id}`);
 
 
-    //   //SAVE -> TAGS - REMOVE TAG when (x) clicked
-    //   if (classList.includes('svg_tag') && dataset.tag) {
-    //     //target = <div><svg class="svg-tag">
-    //     //set localState so we have a handle on the tag to delete
-    //     this.localState.TAG_TO_DELETE = dataset.tag;
-
-    //     //Open Confirm Delete Dialogue
-    //     this.toggleTagConfirmDelete();
-    //   }
-
-    //   //SAVE -> TAGS -Confirm Delete
-    //   if (dataset.value === 'confirm-yes') {
-    //     this.handleRemoveGlobalTag(this.localState.TAG_TO_DELETE);
-    //     // console.log(dataset);
-    //   } else if (dataset.value === 'confirm-no') {
-    //     this.toggleTagConfirmDelete();
-    //   }
-
-    //   //LINE -> TAGS 
-    //   if (parentClasses.includes('line-tag')) {
-    //     //LINE -> TAGS - Add
-    //     if (parent.dataset.value === 'true') {
-    //       this.handleLineRemoveTag(parent.dataset.tag);
-    //     }
-    //     //LINE -> TAGS - Remove
-    //     else if (parent.dataset.value === 'false') {
-    //       this.handleLineAddTag(parent.dataset.tag);
-    //     }
+ 
 
     //   }
 
     // });
   }
-
-  handleFocusIn(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    const newTagText = document.querySelector('#newTagText');
-
-    if (newTagText.id == e.target.id) {
-      // this.toggleAddTagFocus(newTagText);
-      newTagText.focus();
-    }
+  getLocalState(){
+    // console.log(this);
+    return Object.assign({}, this.localState);
   }
+
+  setLocalState(obj){
+    this.localState = Object.assign({}, this.localState, obj)
+    console.log(`TAG_TO_DELETE after update: ${this.getLocalState().TAG_TO_DELETE}`);
+  }
+
+  // handleFocusIn(e) {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   const newTagText = document.querySelector('#newTagText');
+
+  //   if (newTagText.id == e.target.id) {
+  //     // this.toggleAddTagFocus(newTagText);
+  //     newTagText.focus();
+  //   }
+  // }
 
   verifyUniqueId() {
 
@@ -294,96 +281,7 @@ export default class Controls {
     }
   }
 
-  /**
-   * When User clicks a Tag in Line -> Line Tags, add this Tag to the Line's Tags
-   * @param {string} addTag 
-   */
-  handleLineAddTag(addTag) {
-    const { activeLineIndex, lines } = this.editor.getState();
-    let activeLine = lines[activeLineIndex];
 
-    activeLine.tags ? activeLine.tags : [];
-
-    activeLine.tags.push(addTag);
-
-    this.editor.setState({ lines });
-  }
-
-  /**
-   * When User clicks a Tag in Line -> Line Tags, remove this Tag from the Line's Tags
-   * @param {string} removeTag 
-   */
-  handleLineRemoveTag(removeTag) {
-    const { activeLineIndex, lines } = this.editor.getState();
-    let activeLine = lines[activeLineIndex];
-
-    const filtered = activeLine.tags.filter(tag => tag !== removeTag);
-
-    //assign the Tags to the Line
-    activeLine.tags = filtered;
-
-    this.editor.setState({ lines });
-  }
-
-
-  /**
-   * When user clicks (x) to delete Tag, open the Tag Confirm Dialogue
-   * Toggle the active class 
-   */
-  toggleTagConfirmDelete() {
-    const d = document.querySelector('#tagConfirmDelete');
-
-    d.classList.toggle('active');
-  }
-
-
-  // removeAddToggleFocus() {
-  //   document.querySelector('#newTagText').classList.remove('active');
-  // }
-
-
-  /**
-   * When User hits Enter, add the new Tag to State
-   * Called from Editor keydown Event Listener
-   * @param {Element} target 
-   */
-  handleAddTag(target) {
-    console.log('handleAddTag');
-    let { tags = [] } = this.editor.getState();
-
-    //if all the Tags have been deleted, create a new array
-    // tags = tags ? tags : [];
-
-    //Clean use input on Tag name
-    const newTag = target.innerText.trim();
-    //TODO: validation
-    target.blur();
-
-    //If the Tag is valid, proceed....
-    if (newTag && newTag.length < 15) {
-      tags.push(newTag);
-      // this.toggleAddTagFocus(target);
-      this.editor.setState({ tags });
-    }
-  }
-
-
-  /**
-   * When User clicks Tag's X, pop Tag from State
-   * Then remove the Tag from all Lines
-   * @param {string} target 'subway'
-   */
-  handleRemoveGlobalTag(target) {
-    const { tags: gtags, lines } = this.editor.getState();
-    const cleanedTags = gtags.filter(tag => tag !== target);
-    const cleanedLines = lines.map(line => {
-      const cleanTags = line.tags.filter(tag => tag !== target);
-      line.tags = cleanTags;
-      return line;
-    });
-
-    this.editor.setState({ tags: cleanedTags, lines: cleanedLines });
-  }
 
   /// UI metods
 
@@ -677,8 +575,12 @@ export default class Controls {
 
 
     const sections = this.sections.map(section => {
-console.log(section);
-      return section.render(this.localState.ACTIVE);
+
+      // Sections are in Controls.Wrappers
+      return section.render({
+        active: this.localState.ACTIVE, 
+        state: props.state
+      });
     }).join('');
 
     return `

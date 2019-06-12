@@ -1,20 +1,37 @@
 //@ts-check
-//import { Listener } from '../Listener.js';
+/**
+ * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
+ * @typedef {import('../Editor').State} State
+ * @typedef {import('../Listener').default} Listener
+ */
 
 export default class ControlGroup {
   constructor() {}
 
+  /**
+   * @returns {Listener|Array<Listener>}
+   */
   listeners() {
     console.error(`ControlGroup Super, Must Override`);
+    return null;
   }
 
-  /** 
-   * @param {import('../Editor.Controls').LocalState["ACTIVE"]} Active 
+  /**
+   * @param {State} state
+   * @returns {string} HTML to render
    */
-  render(active){
+  render(state){
     console.error(`ControlGroup Super, Must Override`);
+    return null;
   }
 
+  /**
+   * 
+   * @param {object} props 
+   * @param {string} props.html
+   * @param {string} props.title
+   * @param {string} props.id
+   */
   wrapper(props) {
     const {html, title, id} = props;
     

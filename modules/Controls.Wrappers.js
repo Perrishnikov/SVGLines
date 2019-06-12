@@ -3,8 +3,8 @@
 /**
  * @typedef {import('./Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('./CG/ControlGroup').default} ControlGroup
+ * @typedef {import('./Editor').State} State
  */
-
 
 export class Section {
   /**
@@ -22,15 +22,19 @@ export class Section {
   }
 
   /**
-   * @param {Active} active
+   * @param {object} props
+   * @param {Active} props.active - Active Section
+   * @param {State} props.state - State
    * @returns {string} HTML to render
    */
-  render(active) {
+  render(props) {
+    const {active, state} = props;
     const activeSec = active == this.title ? ' active_section' : '';
 
     const controlGroups = this.controlGroups.map(group => {
 
-      return group.render(active);
+      // Control Groups return HTML from render()
+      return group.render(state);
     }).join('');
 
     // return controlGroups;
@@ -62,7 +66,3 @@ export function Button(props) {
   `;
 }
 
-
-export function Control(props) {
-
-}

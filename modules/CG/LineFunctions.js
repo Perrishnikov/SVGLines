@@ -18,7 +18,7 @@ import { Button } from '../Controls.Wrappers.js';
 export default class LineFunctions extends ControlGroup {
   constructor(props) {
     super();
-
+    
     this.name = 'Line Functions';
     this.id = 'lineFunctions';
     this.selector = `#${this.id}`;
@@ -33,7 +33,7 @@ export default class LineFunctions extends ControlGroup {
   listeners() {
     return new Listener({
       caller: this.name,
-      selector: this.selector,
+      selector: 'document2',
       type: 'click',
       callback: this.handleClick.bind(this)
     });
@@ -56,7 +56,7 @@ export default class LineFunctions extends ControlGroup {
 
 
   render() {
-    return super.wrapper({
+    return this.wrapper({
       title: this.name,
       id: this.id,
       html: `

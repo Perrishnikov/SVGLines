@@ -282,33 +282,9 @@ function Range(props) {
 
 //TAGS
 
-function Icon_AddTag() {
-  return `
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M3 3h18v18H3zM12 8v8m-4-4h8"/></svg>
-  `;
-}
 
-/**
- * 
- * @param {string} tag 
- */
-function Icon_Delete(tag) {
-  return `
-  <svg data-tag="${tag}" class="svg_tag" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-  `;
-}
 
-function Icon_ThumbsUp(value) {
-  return `
-  <svg data-value="${value}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-  `;
-}
 
-function Icon_ThumbsDown(value) {
-  return `
-  <svg data-value="${value}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>
-  `;
-}
 
 // function LineIdComponent(id) {
 //   let { value = '*' } = id;
@@ -326,35 +302,35 @@ function Icon_ThumbsDown(value) {
  * 
  * param {import('./Editor').State} props
  */
-function ReturnTags(props) {
-  /**type State["Tags"] */
-  const { tags = [] } = props;
-  let label = '';
+// function ReturnTags(props) {
+//   /**type State["Tags"] */
+//   const { tags = [] } = props;
+//   let label = '';
 
-  const mappedTags = tags.map(tag => {
-    return `
-      <div data-tag="${tag}" data-value="true" class="line-tag">
-        <span class="" style="line-height:24px">${tag}</span>
-        <span role="button">${Icon_Delete(tag)}</span>
-      </div>
-    `;
-  }).join('');
+//   const mappedTags = tags.map(tag => {
+//     return `
+//       <div data-tag="${tag}" data-value="true" class="line-tag">
+//         <span class="" style="line-height:24px">${tag}</span>
+//         <span role="button">${Icon_Delete(tag)}</span>
+//       </div>
+//     `;
+//   }).join('');
 
-  return `
-    <div class="control">
+//   return `
+//     <div class="control">
 
-      <div class="tag-row">
-        <div data-tag="" data-value="true" class="">
-          <div id="newTagText" data-value="add tag" class="" contenteditable="true" ></div>
-        </div>
-        ${mappedTags}
-      </div>
-      <div id="tagConfirmDelete" class="tag-row">
-        <label class="controls_label">Confirm Delete${Icon_ThumbsUp('confirm-yes')} ${Icon_ThumbsDown('confirm-no')}</label>
-      </div>
+//       <div class="tag-row">
+//         <div data-tag="" data-value="true" class="">
+//           <div id="newTagText" data-value="add tag" class="" contenteditable="true" ></div>
+//         </div>
+//         ${mappedTags}
+//       </div>
+//       <div id="tagConfirmDelete" class="tag-row">
+//         <label class="controls_label">Confirm Delete${Icon_ThumbsUp('confirm-yes')} ${Icon_ThumbsDown('confirm-no')}</label>
+//       </div>
       
-    </div>
-    `;
-}
+//     </div>
+//     `;
+// }
 
-export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices, ReturnTags };
+export { Point, Quadratic, Cubic, Grid, Control, Range, Checkbox, Button, Choices };

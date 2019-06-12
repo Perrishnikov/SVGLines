@@ -2,9 +2,9 @@
 
 /**
  * @typedef {Listener} this
- * @typedef {string} caller
- * @typedef {string} selector
- * @typedef {'keydown'|'click'|'keyup'} type
+ * @typedef {string} caller - string. Name this Caller.
+ * @typedef {'document' | string} selector - HTML object to add the listener to.
+ * @typedef {'keydown'|'click'|'keyup'|'focusin'} type
  * @typedef {function} callback
  */
 export default class Listener {
