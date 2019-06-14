@@ -70,14 +70,16 @@ export default class Editor {
         selector: 'document',
         type: 'keydown',
         key: ['Alt', 'Shift', 'Meta'],
-        callback: this.handleKeyDown
+        callback: this.handleKeyDown,
+        cgId: null
       }),
       new Listener({
         caller: 'Editor',
         selector: 'document',
         type: 'keyup',
         key: [null],
-        callback: this.handleKeyUp
+        callback: this.handleKeyUp,
+        cgId: null
       }),
       new Listener({
         caller: 'Editor',
@@ -85,7 +87,8 @@ export default class Editor {
         type: 'click',
         callback: (e) => {
           console.log(`Editor Click`);
-        }
+        },
+        cgId: null
       }),
     ];
 
@@ -265,7 +268,7 @@ export default class Editor {
       };
 
       this.render(newState);
-      console.log(this.getState());
+      // console.log(this.getState());
     });
 
   }

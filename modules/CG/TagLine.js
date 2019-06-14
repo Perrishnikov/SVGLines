@@ -22,8 +22,12 @@ export default class TagLine extends ControlGroup {
     this.name = 'Line Tags (i)';
     this.id = 'tagLine';
     this.selector = `#${this.id}`;
-    this.tags = props.tags;
-    this.activeLine = props.activeLine;
+    this.getState = props.getState;
+    this.setState = props.setState;
+    this.getLocalState = props.getLocalState;
+    this.setLocalState = props.setLocalState;
+    // this.tags = props.tags;
+    // this.activeLine = props.activeLine;
     //imported functions
   }
 
@@ -36,11 +40,12 @@ export default class TagLine extends ControlGroup {
       caller: this.name,
       selector: 'document',
       type: 'click',
-      callback: this.handleClick.bind(this)
+      callback: this.handleClick.bind(this),
+      cgId: '#tagLine'
     });
   }
 
-    //   //LINE -> TAGS 
+  //   //LINE -> TAGS 
   //   if (parentClasses.includes('line-tag')) {
   //     //LINE -> TAGS - Add
   //     if (parent.dataset.value === 'true') {
@@ -51,12 +56,12 @@ export default class TagLine extends ControlGroup {
   //       this.handleLineAddTag(parent.dataset.tag);
   //     }
 
-    /**
+  /**
    * When User clicks a Tag in Line -> Line Tags, remove this Tag from the Line's Tags
    * @param {string} removeTag 
    */
   handleLineRemoveTag(removeTag) {
-    const { activeLineIndex, lines } = this.editor.getState();
+    const { activeLineIndex, lines } = this.getState();
     let activeLine = lines[activeLineIndex];
 
     const filtered = activeLine.tags.filter(tag => tag !== removeTag);
@@ -64,7 +69,7 @@ export default class TagLine extends ControlGroup {
     //assign the Tags to the Line
     activeLine.tags = filtered;
 
-    this.editor.setState({ lines });
+    this.setState({ lines });
   }
 
 
@@ -73,36 +78,45 @@ export default class TagLine extends ControlGroup {
    * @param {string} addTag 
    */
   handleLineAddTag(addTag) {
-    const { activeLineIndex, lines } = this.editor.getState();
+    const { activeLineIndex, lines } = this.getState();
     let activeLine = lines[activeLineIndex];
 
+    //Make sure that activeLine is not null
     activeLine.tags ? activeLine.tags : [];
 
     activeLine.tags.push(addTag);
 
-    this.editor.setState({ lines });
+    this.setState({ lines });
   }
 
   handleClick(e) {
-    /** @type {LocalState['HELP']} */
-    const action = e.target.dataset.action;
-    // console.log(`${this.name}: data-action: ${action}`);
+    /** @type {HTMLElement} */
+    const dataTag = e.target.closest('[data-tag]'); //subway
 
-    switch (action) {
-      // case 'resetLine': 
-      // break;
-      default:
-        // console.log(`NULL`);
+    if (dataTag) {
+      const value = dataTag.dataset.value; //true or false
+
+      switch (value) {
+        case 'true':
+          this.handleLineRemoveTag(dataTag.dataset.tag);
+          break;
+        case 'false':
+          this.handleLineAddTag(dataTag.dataset.tag);
+          break;
+        default:
+          console.log(`NULL`);
+      }
     }
   }
 
 
   render() {
-    // const { activeLine, tags = [] } = this;
+    const { tags = [] } = this.getState();
 
-    const mappedTags = this.tags.map((tag, i) => {
+    const mappedTags = tags.map(tag => {
+      const activeLine = this.getState().lines[this.getState().activeLineIndex]
       //make sure that Active Line has Tags, if Line Tag matches App Tag...
-      const active = this.activeLine.tags && this.activeLine.tags.includes(tag) ? true : false;
+      const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
 
       return `
         <div data-tag="${tag}" data-value="${active}" class="line-tag">
@@ -123,26 +137,3 @@ export default class TagLine extends ControlGroup {
     });
   }
 }
-
-// function TagList(props) {
-//   // const allTags = props.tags ? props.tags : [];
-//   const { name, activeLine, tags = [] } = props;
-
-//   const mappedTags = tags.map((tag, i) => {
-//     //make sure that Active Line has Tags, if Line Tag matches App Tag...
-//     const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
-
-//     return `
-//       <div data-tag="${tag}" data-value="${active}" class="line-tag">
-//         <span class="" style="line-height:24px">${tag}</span>
-//         <span role="button">${active ? Icon_Check(tag) : ''}</span>
-//       </div>
-//     `;
-//   }).join('');
-
-//   return `
-//     <div id="lineTags" class="tag-row">
-//       ${mappedTags}
-//     </div>
-//     `;
-// }

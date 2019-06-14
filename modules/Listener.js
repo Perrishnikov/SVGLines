@@ -17,7 +17,7 @@ export default class Listener {
    * @param {type} props.type
    * @param {callback} props.callback
    * @param {object} [props.wrappedCallback] -optional
-   * @param {string} [props.cgId] 
+   * @param {string} props.cgId - for CG components with click event. Needs to be ID
    * @param {Array<string>} [props.key]
    */
   constructor(props) {

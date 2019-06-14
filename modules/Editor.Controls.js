@@ -39,7 +39,7 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'lines',
+      ACTIVE: 'line',
       TAG_TO_DELETE: ''
     };
 
@@ -55,13 +55,18 @@ export default class Controls {
     });
 
     const tagLine = new TagLine({
-      activeLine: state.lines[state.activeLineIndex],
-      tags: state.tags
+      // activeLine: state.lines[state.activeLineIndex],
+      // tags: state.tags
+      getState: this.editor.getState,
+      setState: this.editor.setState,
+      getLocalState: this.getLocalState.bind(this),
+      setLocalState: this.setLocalState.bind(this)
     });
 
     const tagManager = new TagManager({
-      tags: state.tags,
+      // tags: state.tags,
       setState: this.editor.setState,
+      getState: this.editor.getState,
       getLocalState: this.getLocalState.bind(this),
       setLocalState: this.setLocalState.bind(this)
     });
@@ -202,7 +207,7 @@ export default class Controls {
 
   setLocalState(obj){
     this.localState = Object.assign({}, this.localState, obj)
-    console.log(`TAG_TO_DELETE after update: ${this.getLocalState().TAG_TO_DELETE}`);
+    // console.log(`TAG_TO_DELETE after update: ${this.getLocalState().TAG_TO_DELETE}`);
   }
 
   // handleFocusIn(e) {

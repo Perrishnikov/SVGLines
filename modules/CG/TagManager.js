@@ -20,8 +20,8 @@ export default class TagManager extends ControlGroup {
   /**
    * 
    * @param {object} props
-   * @param {import('../Editor.Controls').State["tags"]} props.tags
    * @param {function} props.setState
+   * @param {function} props.getState
    * @param {function} props.getLocalState
    * @param {function} props.setLocalState
    */
@@ -31,13 +31,11 @@ export default class TagManager extends ControlGroup {
     this.name = 'Tag Manager (i)';
     this.id = 'tagManager';
     this.selector = `#${this.id}`;
-    this.tags = props.tags || [];
+
     this.setState = props.setState;
+    this.getState = props.getState;
     this.getLocalState = props.getLocalState;
     this.setLocalState = props.setLocalState;
-    //imported functions
-    // console.log(this.tags);
-    // console.log(this.controls.getLocalState());
   }
 
   /**
@@ -59,24 +57,16 @@ export default class TagManager extends ControlGroup {
         type: 'keydown',
         key: ['Enter'],
         callback: this.handleKeyDown.bind(this),
-        // cgId:'#tagManager'
+        cgId: null
       }),
       new Listener({
         caller: this.name,
         selector: 'document',
         type: 'focusin',
-        // callback: (e) => {
-        //   const cg = e.target.closest('#newTagText');
-
-        //   if (cg) {
-        //     return this.focusIn(e);
-        //   }
-        // },
         callback: this.focusIn.bind(this),
         cgId: '#tagManager'
       })
     ];
-    //{cgId: '#newTagText'} - makes sure that all non-key events are registered with this.
   }
 
   focusIn = (e) => {
@@ -84,36 +74,25 @@ export default class TagManager extends ControlGroup {
     e.preventDefault();
 
     console.log(`focusin!`);
-    /**@type {HTMLElement} */
-    // const newTagText = document.querySelector('#newTagText');
-
-    // if (newTagText.id == e.target.id) {
-    // this.toggleAddTagFocus(newTagText);
-    // newTagText.focus();
-    // }
-    // console.dir(e.target);
   }
 
   /**
    *This will be of type 'keypress' 
-   They will have a callback params of e and caller
-   Caller is to make sure the correct CG is called 
-   Without risk of doubling up key events
-   *
-   * @memberof TagManager
+   * They will have a callback params of e and caller
+   * Caller is to make sure the correct CG is called 
+   * Without risk of doubling up key events
    */
   handleKeyDown = (e) => {
-
     // console.log(`TagManager handleKeyDown: ${e.key}`);
     //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
     if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
+
       // handle the Add Tag
-      let tags = this.tags;
+      let { tags } = this.getState();
 
       this.handleAddTag({ target: e.target, tags });
 
     }
-
   }
 
   /**
@@ -122,21 +101,14 @@ export default class TagManager extends ControlGroup {
    * @param {HTMLElement} target 
    */
   handleAddTag(props) {
-    // console.log('handleAddTag');
-    // console.log(target);
-    let { tags = [], target } = props;
-    // let tags = this.tags;
-
-    //if all the Tags have been deleted, create a new array
-    // tags = tags ? tags : [];
+    const { tags = [], target } = props;
 
     //Clean use input on Tag name
     const newTag = target.innerText.trim();
-    //TODO: validation: make sure tag name isnt duplicated
     target.blur();
 
     //If the Tag is valid, proceed....
-    if (newTag && newTag.length < 15) {
+    if (newTag && newTag.length < 15 && !tags.includes(newTag)) {
       tags.push(newTag);
       // this.toggleAddTagFocus(target);
       this.setState({ tags });
@@ -144,7 +116,6 @@ export default class TagManager extends ControlGroup {
   }
 
   handleClick(e) {
-    console.log('TagManager Click');
     // returns <div data-tag="taxi"....></div>
     const cg = e.target.closest(this.selector);
 
@@ -153,69 +124,27 @@ export default class TagManager extends ControlGroup {
       const dataset = e.target.dataset;
 
       if (taggedAncestor) {
-        // console.log('taggedAncestor clicked');
-        // const target = taggedAncestor.dataset.tag
 
         this.toggleTagConfirmDelete();
-        this.setLocalState({ TAG_TO_DELETE: taggedAncestor.dataset.tag });
-        // console.log(`TAG_TO_DELETE: ${taggedAncestor.dataset.tag}`);
-        // this.handleRemoveGlobalTag(target);
+        this.setLocalState({
+          TAG_TO_DELETE: taggedAncestor.dataset.tag
+        });
       }
 
-      // const classList = [...e.target.classList];
-
-      // console.log(classList);
-      // console.log(dataset);
-      //  SAVE -> TAGS - REMOVE TAG when (x) clicked
-      // if (classList.includes('svg_tag') && dataset.tag) {
-      //target = <div><svg class="svg-tag">
-      //set localState so we have a handle on the tag to delete
-      // this.setLocalState({ TAG_TO_DELETE: dataset.tag });
-      // console.log(this.getLocalState());
-      //Open Confirm Delete Dialogue
-
-      // }
-      // console.log(this.localState);
       const parent = e.target.parentNode;
       const parentClasses = [...parent.classList];
 
-      // //SAVE -> TAGS -Confirm Delete
+      //SAVE -> TAGS -Confirm Delete
       if (dataset.value === 'confirm-yes') {
-
         const { TAG_TO_DELETE } = this.getLocalState();
-        // console.log(`TAG_TO_DELETE: ${TAG_TO_DELETE}`);
+
         this.handleRemoveGlobalTag(TAG_TO_DELETE);
-        // console.log(dataset);
       } else if (dataset.value === 'confirm-no') {
+
         this.toggleTagConfirmDelete();
       }
-
-      //   // //LINE -> TAGS 
-      // if (parentClasses.includes('line-tag')) {
-      //   //LINE -> TAGS - Add
-      //   if (parent.dataset.value === 'true') {
-      //     this.handleLineRemoveTag(parent.dataset.tag);
-      //   }
-      //   //LINE -> TAGS - Remove
-      //   else if (parent.dataset.value === 'false') {
-      //     this.handleLineAddTag(parent.dataset.tag);
-      //   }
-      // }
     }
-    // console.log(`taggedAncestor: `);
-    // console.dir(taggedAncestor);
-    // console.dir(`e.target:`);
-    // console.dir(e.target);
-    // console.log(dataset);
-
-
-
   }
-
-
-  // removeAddToggleFocus() {
-  //   document.querySelector('#newTagText').classList.remove('active');
-  // }
 
   /**
    * When user clicks (x) to delete Tag, open the Tag Confirm Dialogue
@@ -233,39 +162,17 @@ export default class TagManager extends ControlGroup {
    * @param {string} target 'subway'
    */
   handleRemoveGlobalTag(target) {
-    // const { tags: gtags, lines } = this.editor.getState();
-    console.log(`target: ${target}`);
-    const cleanedTags = this.tags.filter(tag => tag !== target);
+    const { tags } = this.getState();
+    // console.log(`target: ${target}`);
 
-    console.log(cleanedTags);
+    const cleanedTags = tags.filter(tag => tag !== target);
+
     this.setLocalState({ TAG_TO_DELETE: '' });
     this.setState({ tags: cleanedTags });
     // this.setState({ tags: cleanedTags, lines: cleanedLines });
   }
 
-  //LINES...
-  // removeRemovedTagFromLines() {
-  //   const cleanedLines = lines.map(line => {
-  //     const cleanTags = line.tags.filter(tag => tag !== target);
-  //     line.tags = cleanTags;
-  //     return line;
-  //   });
-  // }
-
-
-
-
-
-
-
-  //   return `
-  //   <div data-tag="${tag}" data-value="true" class="line-tag">
-  //     <span class="" style="line-height:24px">${tag}</span>
-  //     <span role="button">${Icon_Delete(tag)}</span>
-  //   </div>
-  // `;
   /**
-     /**
    * param {object} props
    * @param {State} state
    * @returns {string} HTML to render
@@ -273,7 +180,6 @@ export default class TagManager extends ControlGroup {
   render(state) {
     const { tags = [] } = state;
 
-    console.log(tags);
     const mappedTags = tags.map(tag => {
       return `
         <div data-tag="${tag}" data-value="true" class="line-tag">

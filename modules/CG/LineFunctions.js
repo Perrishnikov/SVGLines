@@ -35,7 +35,8 @@ export default class LineFunctions extends ControlGroup {
       caller: this.name,
       selector: 'document',
       type: 'click',
-      callback: this.handleClick.bind(this)
+      callback: this.handleClick.bind(this),
+      cgId: '#lineFunctions'
     });
   }
 

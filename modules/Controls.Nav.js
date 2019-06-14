@@ -42,7 +42,8 @@ export default class Nav {
       caller: this.NAV,
       selector: 'document',
       type: 'click',
-      callback: this.handleNavClick.bind(this)
+      callback: this.handleNavClick.bind(this),
+      cgId: '#nav'
     });
   }
 
@@ -57,18 +58,18 @@ export default class Nav {
     const nav = e.target.closest('#nav');
 
     if (nav) {
-        /** @type {LocalState['HELP']} */
-        // const value = e.target.dataset.value;
-        // console.log(`${this.NAV}: data-value: ${value}`);
+      /** @type {LocalState['HELP']} */
+      // const value = e.target.dataset.value;
+      // console.log(`${this.NAV}: data-value: ${value}`);
 
-        if (taggedAncestor) {
-          activateThisIcon(dataset.value);
-          showThisSection(dataset.value);
+      if (taggedAncestor) {
+        activateThisIcon(dataset.value);
+        showThisSection(dataset.value);
 
-          //Important to update localState...
-          this.ACTIVE = dataset.value;
-        }
+        //Important to update localState...
+        this.ACTIVE = dataset.value;
       }
+    }
 
 
   }
