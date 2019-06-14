@@ -25,7 +25,7 @@ window.onload = function() {
         }).then(ed => {
           //add all the event listeners once the DOM is ready
           ed.addDOMListeners();
-          console.log(ed.registeredListeners);
+          // console.log(ed.registeredListeners);
         })
 
     });

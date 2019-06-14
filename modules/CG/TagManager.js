@@ -50,51 +50,70 @@ export default class TagManager extends ControlGroup {
         caller: this.name,
         selector: 'document',
         type: 'click',
-        callback: this.handleClick.bind(this)
+        callback: this.handleClick.bind(this),
+        cgId: '#tagManager' //or key - dont need both
       }),
       new Listener({
         caller: this.name,
         selector: 'document',
         type: 'keydown',
-        callback: this.handleKeyDown.bind(this)
+        key: ['Enter'],
+        callback: this.handleKeyDown.bind(this),
+        // cgId:'#tagManager'
       }),
       new Listener({
         caller: this.name,
         selector: 'document',
         type: 'focusin',
-        callback: (e) => {
-          const cg = e.target.closest('#newTagText');
+        // callback: (e) => {
+        //   const cg = e.target.closest('#newTagText');
 
-          if (cg) {
-            return this.focusIn(e);
-          }
-        }
+        //   if (cg) {
+        //     return this.focusIn(e);
+        //   }
+        // },
+        callback: this.focusIn.bind(this),
+        cgId: '#tagManager'
       })
     ];
+    //{cgId: '#newTagText'} - makes sure that all non-key events are registered with this.
   }
 
   focusIn = (e) => {
-    // e.stopPropagation();
-    // e.preventDefault();
+    e.stopPropagation();
+    e.preventDefault();
 
     console.log(`focusin!`);
     /**@type {HTMLElement} */
-    const newTagText = document.querySelector('#newTagText');
+    // const newTagText = document.querySelector('#newTagText');
 
-    if (newTagText.id == e.target.id) {
-      // this.toggleAddTagFocus(newTagText);
-      newTagText.focus();
-    }
-    console.dir(e.target);
+    // if (newTagText.id == e.target.id) {
+    // this.toggleAddTagFocus(newTagText);
+    // newTagText.focus();
+    // }
+    // console.dir(e.target);
   }
+
+  /**
+   *This will be of type 'keypress' 
+   They will have a callback params of e and caller
+   Caller is to make sure the correct CG is called 
+   Without risk of doubling up key events
+   *
+   * @memberof TagManager
+   */
   handleKeyDown = (e) => {
-    // console.log(`handleKeyDown: ${e.key}`);
-    // console.log(e);
+
+    // console.log(`TagManager handleKeyDown: ${e.key}`);
     //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
     if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
       // handle the Add Tag
-      this.handleAddTag(e.target);
+      let tags = this.tags;
+
+      this.handleAddTag({ target: e.target, tags });
+
     }
+
   }
 
   /**
@@ -102,17 +121,18 @@ export default class TagManager extends ControlGroup {
    * Called from Editor keydown Event Listener
    * @param {HTMLElement} target 
    */
-  handleAddTag(target) {
+  handleAddTag(props) {
     // console.log('handleAddTag');
     // console.log(target);
-    let tags = this.tags;
+    let { tags = [], target } = props;
+    // let tags = this.tags;
 
     //if all the Tags have been deleted, create a new array
-    tags = tags ? tags : [];
+    // tags = tags ? tags : [];
 
     //Clean use input on Tag name
     const newTag = target.innerText.trim();
-    //TODO: validation
+    //TODO: validation: make sure tag name isnt duplicated
     target.blur();
 
     //If the Tag is valid, proceed....
@@ -124,7 +144,7 @@ export default class TagManager extends ControlGroup {
   }
 
   handleClick(e) {
-    // console.log('TagManager Click');
+    console.log('TagManager Click');
     // returns <div data-tag="taxi"....></div>
     const cg = e.target.closest(this.selector);
 
@@ -133,7 +153,7 @@ export default class TagManager extends ControlGroup {
       const dataset = e.target.dataset;
 
       if (taggedAncestor) {
-        console.log('taggedAncestor clicked');
+        // console.log('taggedAncestor clicked');
         // const target = taggedAncestor.dataset.tag
 
         this.toggleTagConfirmDelete();
@@ -253,6 +273,7 @@ export default class TagManager extends ControlGroup {
   render(state) {
     const { tags = [] } = state;
 
+    console.log(tags);
     const mappedTags = tags.map(tag => {
       return `
         <div data-tag="${tag}" data-value="true" class="line-tag">

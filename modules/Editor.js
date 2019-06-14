@@ -69,12 +69,14 @@ export default class Editor {
         caller: 'Editor',
         selector: 'document',
         type: 'keydown',
+        key: ['Alt', 'Shift', 'Meta'],
         callback: this.handleKeyDown
-      }), 
+      }),
       new Listener({
         caller: 'Editor',
         selector: 'document',
         type: 'keyup',
+        key: [null],
         callback: this.handleKeyUp
       }),
       new Listener({
@@ -82,7 +84,7 @@ export default class Editor {
         selector: 'document',
         type: 'click',
         callback: (e) => {
-          // console.log(`Editor Click`);
+          console.log(`Editor Click`);
         }
       }),
     ];
@@ -121,28 +123,64 @@ export default class Editor {
   /**
    * Called from index.js
    * Adds all registeredListers to DOM after all HTML is ready
+   * Im doing this so the events are completely modularized.
+   * Only key events that a CG asks for are sent to it.
    */
   addDOMListeners() {
     // console.log(`Hello addDOMListeners!`);
+    /** List of unique event types for all Listners - 'keydown', ... */
+    let keypressTypes = new Set();
+
+    /** List of all Listeners */
+    let keyListeners = [];
 
     this.registeredListeners.forEach(listener => {
-      const { selector, type, callback, caller } = listener;
+      const { selector, type, callback, caller, key, cgId } = listener;
       // console.log(listener);
 
-      if (selector == 'document') {
+      if (['keydown', 'keyup', 'keypress'].includes(type)) {
+
+        keypressTypes.add(type);
+        keyListeners.push(listener)
+
+      } else if (['click', 'focusin'].includes(type)) {
         // @ts-ignore
-        document.addEventListener(type, callback);
-        // console.dir(document);
-      } 
-      //This doesnt work because innerHTML destroys non-document event listeners
-      else {
-        console.error(`Change this Listener: ${selector} on ${caller}`);
-        
-        // const el = document.querySelectorAll(selector);
-        // console.dir(el);
-        // ts-ignore
-        // el.forEach(l => l.addEventListener(type, callback));
+        document.addEventListener(type, e => {
+          const cg = e.target.closest(cgId);
+
+          //if the closeset location finds this id, go.
+          if (cg) {
+            return callback(e);
+          }
+
+        });
+      } else {
+        console.error('Error on Event');
       }
+    });
+
+    /** After all the keypressTypes is done, add those listeners... */
+    [...keypressTypes].forEach(type => {
+
+      document.addEventListener(type, e => {
+
+        /**If the event type and pressed key match, call all Listeners callback */
+        keyListeners.forEach(listener => {
+
+          if (e.type === listener.type) {
+
+            listener.key.forEach(key => {
+
+              if (e.key === key) {
+                console.log(`Key "${key}" called for ${listener.caller}`);
+                return listener.callback(e);
+              }
+
+            });
+
+          }
+        });
+      });
     });
   }
 
@@ -225,8 +263,9 @@ export default class Editor {
       const newState = {
         state: this.getState(), // Cloned
       };
-      
+
       this.render(newState);
+      console.log(this.getState());
     });
 
   }

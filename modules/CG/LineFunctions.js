@@ -33,7 +33,7 @@ export default class LineFunctions extends ControlGroup {
   listeners() {
     return new Listener({
       caller: this.name,
-      selector: 'document2',
+      selector: 'document',
       type: 'click',
       callback: this.handleClick.bind(this)
     });
