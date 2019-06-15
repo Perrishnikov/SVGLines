@@ -39,11 +39,10 @@ export default class Nav {
   listeners() {
 
     return new Listener({
-      caller: this.NAV,
-      selector: 'document',
       type: 'click',
       callback: this.handleNavClick.bind(this),
-      cgId: '#nav'
+      cgId: '#nav',
+      keys: null
     });
   }
 

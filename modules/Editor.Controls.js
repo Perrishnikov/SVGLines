@@ -6,6 +6,7 @@ import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/inde
 import LineFunctions from './CG/LineFunctions.js';
 import TagLine from './CG/TagLine.js';
 import TagManager from './CG/TagManager.js';
+import ControlGroup from './CG/ControlGroup.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor
@@ -103,6 +104,7 @@ export default class Controls {
     ];
 
     //register all the Control Group's Listeners
+    //- will find all the controlGroups in CG and call it's passive listener method.
     this.sections.forEach(section => {
       section.controlGroups.forEach(group => {
         editor.registerListener(group.listeners());
@@ -130,10 +132,6 @@ export default class Controls {
   setLocalState(obj) {
     this.localState = Object.assign({}, this.localState, obj)
     // console.log(`TAG_TO_DELETE after update: ${this.getLocalState().TAG_TO_DELETE}`);
-  }
-
-  verifyUniqueId() {
-
   }
 
   handleGenerateLineId() {
@@ -200,14 +198,10 @@ export default class Controls {
 
 
 
-  /// UI metods
-
-
-
-
   /** LOGIC methods */
+  //TODO: Move to CanvasSettings.js
   setHeight = (e) => {
-    let v = this.editor.positiveNumber(e.target.value),
+    let v = this.editor.CORE.positiveNumber(e.target.value),
       min = 1;
     if (v < min) v = min;
 
@@ -215,194 +209,15 @@ export default class Controls {
   }
 
 
+  //TODO: Move to CanvasSettings.js
   setWidth = (e) => {
-    let v = this.editor.positiveNumber(e.target.value),
+    let v = this.editor.CORE.positiveNumber(e.target.value),
       min = 1;
     if (v < min) v = min;
 
     this.editor.setState({ w: v });
   }
 
-
-  setPointType = (value) => {
-    const { lines, activePointIndex, activeLineIndex } = this.editor.getState();
-    const ap = lines[activeLineIndex];
-
-    // not the first point
-    if (activePointIndex !== 0) {
-      // let v = e.target.value;
-      let v = value;
-
-      switch (v) {
-        case 'l':
-          ap.points[activePointIndex] = {
-            x: ap.points[activePointIndex].x,
-            y: ap.points[activePointIndex].y
-          };
-          break;
-        case 'q':
-          ap.points[activePointIndex] = {
-            x: ap.points[activePointIndex].x,
-            y: ap.points[activePointIndex].y,
-            q: {
-              x: (ap.points[activePointIndex].x + ap.points[activePointIndex - 1].x) / 2,
-              y: (ap.points[activePointIndex].y + ap.points[activePointIndex - 1].y) / 2
-            }
-          };
-          break;
-        case 'c':
-          ap.points[activePointIndex] = {
-            x: ap.points[activePointIndex].x,
-            y: ap.points[activePointIndex].y,
-            c: [{
-                x: (ap.points[activePointIndex].x + ap.points[activePointIndex - 1].x - 50) / 2,
-                y: (ap.points[activePointIndex].y + ap.points[activePointIndex - 1].y) / 2
-              },
-              {
-                x: (ap.points[activePointIndex].x + ap.points[activePointIndex - 1].x + 50) / 2,
-                y: (ap.points[activePointIndex].y + ap.points[activePointIndex - 1].y) / 2
-              }
-            ]
-          };
-          break;
-        case 'a':
-          ap.points[activePointIndex] = {
-            x: ap.points[activePointIndex].x,
-            y: ap.points[activePointIndex].y,
-            a: {
-              rx: 50,
-              ry: 50,
-              rot: 0,
-              laf: 1,
-              sf: 1
-            }
-          };
-          break;
-      }
-
-      this.editor.setState({ lines });
-    }
-  }
-
-
-  // setArcParam = (param, e) => {
-  //   const { lines, activePointIndex, activeLineIndex } = this.getState();
-  //   const ap = lines[activeLineIndex];
-
-  //   let v;
-
-  //   if (['laf', 'sf'].indexOf(param) > -1) {
-  //     v = e.target.checked ? 1 : 0;
-  //   } else {
-  //     v = this.positiveNumber(e.target.value);
-  //   }
-
-  //   ap.points[activePointIndex].a[param] = v;
-
-  //   this.setState({ lines });
-  // }
-
-
-  // setPointPosition = (coord, e) => {
-  //   const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-  //   const ap = lines[activeLineIndex];
-
-  //   // const cstate = this.getState();
-
-  //   const coords = ap.points[activePointIndex];
-  //   let v = this.positiveNumber(e.target.value);
-
-  //   if (coord === 'x' && v > w) v = w;
-  //   if (coord === 'y' && v > h) v = h;
-
-  //   coords[coord] = v;
-
-  //   this.setPointCoords(coords);
-  // }
-
-
-  // setQuadraticPosition = (coord, e) => {
-  //   const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-  //   const ap = lines[activeLineIndex];
-  //   // const cstate = this.getState();
-
-  //   const coords = ap.points[activePointIndex].q;
-  //   let v = this.positiveNumber(e.target.value);
-
-  //   if (coord === 'x' && v > w) v = w;
-  //   if (coord === 'y' && v > h) v = h;
-
-  //   coords[coord] = v;
-
-  //   this.setQuadraticCoords(coords);
-  // }
-
-  // /**
-  //  *@param {Coords} coords
-  //  @param {Anchor} anchor
-  //  * @param {E} e
-  //  */
-  // setCubicPosition = (coords, anchor, e) => {
-  //     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-  //     const activeLine = lines[activeLineIndex];
-  //     let newCoords = coords;
-
-  //     // {x: y:}
-  //     const coord = activeLine.points[activePointIndex].c[anchor];
-  //     let v = this.positiveNumber(e.target.value);
-  // console.log(`v: ${v}`);
-  //     if (coords.x && v > w) v = w;
-  //     if (coords.y && v > h) v = h;
-  //     console.log(`v: ${v}`);
-
-  //     coord[coords] = v;
-  // console.dir(`coords: ${coord}`);
-  //     console.log(coord);
-  //     this.setCubicCoords(coord, anchor);
-  //   }
-
-
-  removeActivePoint = () => {
-    const { activePointIndex, lines, activeLineIndex } = this.editor.getState();
-
-    if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
-      lines[activeLineIndex].points.splice(activePointIndex, 1);
-
-      this.editor.setState({
-        lines,
-        activePointIndex: lines[activeLineIndex].points.length - 1
-      });
-      console.log(`Point removed`);
-    }
-  }
-
-
-  reset = () => {
-    const cstate = this.editor.getState();
-    const w = cstate.w;
-    const h = cstate.h;
-
-    this.editor.setState({
-      points: [{ x: w / 2, y: h / 2 }],
-      activePointIndex: 0
-    });
-  }
-
-
-  setTextInputs = () => {
-    //TODO:
-    console.log(`setText: ${this.editor.getState().w}`);
-    // document.querySelector('#Width').value = this.getState().w;
-  }
-
-  /**
-   *Creates a Line Tag
-   *
-   * @memberof Controls
-   */
-  createTag = () => {
-
-  }
 
 
   /**
@@ -417,7 +232,7 @@ export default class Controls {
     const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
-    let path = `d="${this.editor.generatePath(lines[activeLineIndex].points)}"`;
+    let path = `d="${this.editor.CORE.generatePath(lines[activeLineIndex].points)}"`;
 
     /**@type {PointType} */
     let pointType = 'l';
@@ -508,40 +323,3 @@ export default class Controls {
     `;
   }
 }
-// ${Line({ 
-//   icon: LINE,
-//   title: LINE,
-//   active: ACTIVE,
-//   activeLineIndex,
-//   path,
-//   tags,
-//   lines,
-//   pointType,
-// })} 
-
-// ${Lines({
-//   icon: LINES,
-//   title: LINES,
-//   active: ACTIVE,
-//   tags,
-//   lineRules
-// })}
-
-// ${Settings({
-//   icon:SETTINGS,
-//   title: SETTINGS,
-//   active: ACTIVE,
-//   w, 
-//   h, 
-//   grid,
-// })}
-
-// ${Help({
-//   icon:HELP,
-//   title: HELP,
-//   active: ACTIVE,
-// })}
-
-Controls.Render = (props) => {
-
-};

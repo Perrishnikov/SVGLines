@@ -3,8 +3,6 @@ import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
 import CORE from './CORE.js';
 
-// import Listener from './Listener.js';
-
 /**
  * Misc
  * @typedef {HTMLElement} Element
@@ -51,6 +49,7 @@ import CORE from './CORE.js';
  * @property {Main} main
  * @property {Controls} controls
  * @property {Main} main
+ * @property {Array<Listener} registerListener
  */
 export default class Editor {
   /**
@@ -60,50 +59,20 @@ export default class Editor {
   constructor(props) {
     this.id = props.id;
 
+    /**@type {State} */
     this.state = props.state; //Just set the state without render...
 
-    this.registeredListeners = [
-      //   new Listener({
-      //     // caller: 'Editor',
-      //     // selector: 'document',
-      //     type: 'keydown',
-      //     callback: this.handleKeyDown,
-      //     cgId: null,
-      //     key: ['Alt', 'Shift', 'Meta'],
-      //   }),
-      //   new Listener({
-      //     // caller: 'Editor',
-      //     // selector: 'document',
-      //     type: 'keyup',
-      //     callback: this.handleKeyUp,
-      //     cgId: null,
-      //     key: [null],
-      //   }),
-      //   new Listener({
-      //     // caller: 'Editor',
-      //     // selector: 'document',
-      //     type: 'click',
-      //     callback: (e) => {
-      //       console.log(`Editor Click`);
-      //     },
-      //     cgId: null,
-      //     key: null
-      //   }),
-    ];
+    /** @type {Array<Listener>} */
+    this.registeredListeners = [];
 
-    /** type {Element} */
-    // const mainId = document.querySelector('#main');
+    this.CORE = new CORE(this);
+
     this.main = new Main(this);
 
-    // const controlId = document.querySelector('#controls');
-    /**type {Element} */
     this.controls = new Controls(this);
-
-    this.CORE = new CORE();
-
   }
 
-  /************************ LISTENERS STUFF */
+
   /**
    * Registers each Listener with Editor.registeredListenrs[]
    * @param {Listener|Array<Listener>} listener 
@@ -119,10 +88,8 @@ export default class Editor {
     } else {
       this.registeredListeners.push(listener);
     }
-
-    // console.log(`listener registered:`);
-    // console.log(listener);
   }
+
 
   /**
    * Called from index.js
@@ -153,9 +120,7 @@ export default class Editor {
           keyListeners.push(listener);
         } else {
           console.error(`Keys required for cgId '${listener.cgId}'`);
-
         }
-
 
       } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove', 'keyup'].includes(type)) {
         // @ts-ignore
@@ -224,181 +189,21 @@ export default class Editor {
       };
 
       this.render(newState);
-      // console.log(this.getState());
     });
-
   }
 
 
-  /**
-   * Called from handleMouseMove
-   * calls setState()
-   * @param {Coords} coords
-   */
-  setPointCoords = (coords) => {
-    const { activePointIndex, lines, activeLineIndex } = this.getState();
-
-    lines[activeLineIndex].points[activePointIndex].x = coords.x;
-    lines[activeLineIndex].points[activePointIndex].y = coords.y;
-
-    this.setState({ lines });
-  }
-
-  /**
-   * Called from handleMouseMove
-   * calls setState()
-   * @param {Coords} coords
-   * @param {State["draggedCubic"]} anchor
-   */
-  setCubicCoords = (coords, anchor) => {
-    // console.log('setCubicCoords');
-    const { activePointIndex, lines, activeLineIndex } = this.getState();
-
-    //Is normally false, but set to 0|1 depending on the active anchor
-    if (typeof anchor === 'string') {
-
-      lines[activeLineIndex].points[activePointIndex].c[anchor].x = coords.x;
-      lines[activeLineIndex].points[activePointIndex].c[anchor].y = coords.y;
-
-      this.setState({ lines });
-    }
-  }
-
-  /**
-   * Called from handleMouseMove
-   * calls setState()
-   * @param {Coords} coords
-   */
-  setQuadraticCoords = (coords) => {
-    const { activePointIndex, lines, activeLineIndex } = this.getState();
-
-    lines[activeLineIndex].points[activePointIndex].q.x = coords.x;
-    lines[activeLineIndex].points[activePointIndex].q.y = coords.y;
-
-    this.setState({ lines });
-  }
-
-
-  /**
-   * @param {E} e 
-   * @returns {Coords}
-   */
-  getMouseCoords = (e) => {
-    const { grid } = this.getState();
-    const rect = document.querySelector('#main');
-    const top = rect.getBoundingClientRect().top;
-
-    let x = e.pageX;
-    let y = e.clientY - top;
-
-    if (grid.snap) {
-      x = grid.size * Math.round(x / grid.size);
-      y = grid.size * Math.round(y / grid.size);
-    }
-
-    // console.log(`x:${x}, y:${y}`);
-    return { x, y };
-  }
-
-  /**
-   * Pass in a line's points. Returns the path
-   * @param {object} points
-   * @returns {string} - a single path
-   */
-  generatePath = (points) => {
-    // let { points, closePath } = props;
-    let d = '';
-
-    points.forEach((p, i) => {
-      if (i === 0) {
-        // first point
-        d += 'M ';
-      } else if (p.q) {
-        // quadratic
-        d += `Q ${ p.q.x } ${ p.q.y } `;
-      } else if (p.c) {
-        // cubic
-        d += `C ${ p.c[0].x } ${ p.c[0].y } ${ p.c[1].x } ${ p.c[1].y } `;
-      } else if (p.a) {
-        // arc
-        d += `A ${ p.a.rx } ${ p.a.ry } ${ p.a.rot } ${ p.a.laf } ${ p.a.sf } `;
-      } else {
-        d += 'L ';
-      }
-
-      d += `${ p.x } ${ p.y } `;
-    });
-
-    // if (closePath) { d += 'Z'; }
-
-    return d;
-  }
-
-  /**
-   * passed to Editor.Main
-   * @param {E} e 
-   */
-  handleMouseMove = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { ctrl, shift, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
-
-    //TESTING -> shows mouse coords
-    // const { grid } = this.getState();
-    // const rect = this.main.id;
-    // const top = rect.getBoundingClientRect().top;
-    // // const x = e.clientX + rect.scrollLeft;
-    // const x = e.pageX;
-    // const y = e.clientY - top;
-    // const rx = grid.size * Math.round(x / grid.size);
-    // const ry = grid.size * Math.round(y / grid.size);
-
-    // document.querySelector('#coords').innerText = `
-    // Screen X/Y: ${e.screenX}, ${e.screenY}
-    // Client X/Y: ${e.clientX}, ${e.clientY}
-    // Page X/Y: ${e.pageX}, ${e.pageY}
-    // X/Y: ${x}, ${y}
-    // rounded: ${rx}, ${ry}
-    // top:${top}! scrollLeft:${rect.scrollLeft}!`;
-
-    if (!ctrl && !shift) {
-      if (draggedPoint) {
-        // console.log(`setPoint`);
-        this.setPointCoords(this.getMouseCoords(e));
-      } else if (draggedQuadratic) {
-        // console.log(`setQuad`);
-        this.setQuadraticCoords(this.getMouseCoords(e));
-      } else if (draggedCubic !== false) {
-        // console.log(`setCubic: ${draggedCubic}`);
-        this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
-      }
-    }
-  }
-
-
-  /**
-   * Grid
-   * Parse a string number
-   * @param {string} n 
-   * @returns {number}
-   */
-  positiveNumber(n) {
-    let parsed = parseInt(n);
-
-    if (isNaN(parsed) || parsed < 0) { parsed = 0; }
-
-    return parsed;
-  }
 
 
   /**
    * Grid
    * calls setState()
    * @param {E} e
+   * //TODO: move to Grid CG
    */
   setGridSize = (e) => {
     let { grid, w, h } = this.getState();
-    let v = this.positiveNumber(e.target.value);
+    let v = this.CORE.positiveNumber(e.target.value);
     const min = 1;
     const max = Math.min(w, h);
 
@@ -414,6 +219,7 @@ export default class Editor {
   /**
    * Grid
    * calls setState()
+   * //TODO: move to Grid CG
    * @param {E} e
    */
   setGridSnap = (e) => {
@@ -427,6 +233,7 @@ export default class Editor {
   /**
    * Grid
    * calls setState()
+   * TODO: move to Grid CG
    * @param {E} e
    */
   setGridShow = (e) => {
@@ -448,10 +255,3 @@ export default class Editor {
     `;
   }
 }
-
-
-/** 
- * Interface to render to a DOM
- * @param {{state:State}} props
- */
-Editor.DOMRender = (props) => {};
