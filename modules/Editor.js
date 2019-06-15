@@ -1,6 +1,8 @@
 //@ts-check
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
+import CORE from './CORE.js';
+
 // import Listener from './Listener.js';
 
 /**
@@ -97,6 +99,7 @@ export default class Editor {
     /**type {Element} */
     this.controls = new Controls(this);
 
+    this.CORE = new CORE();
 
   }
 

@@ -18,10 +18,9 @@ import { Button } from '../Controls.Wrappers.js';
 export default class LineFunctions extends ControlGroup {
   constructor(props) {
     super();
-
     this.name = 'Line Functions';
     this.id = 'lineFunctions';
-    this.selector = `#${this.id}`;
+    // this.selector = `#${this.id}`;
   }
 
   /**
@@ -36,23 +35,28 @@ export default class LineFunctions extends ControlGroup {
     });
   }
 
-  /**@param {EventTarget} e*/
+  /**param {EventTarget} e*/
   handleClick(e) {
+    /** @type {HTMLElement} */
     const dataAction = e.target.closest('[data-action]');
-    console.dir(this);
-    // console.log(`${this.name}: data-action: ${action}`);
 
-    switch (dataAction.dataset.action) {
-      case 'resetLine':
-        this.resetLine();
-        break;
-      case 'addLine':
-        this.addLine();
-        break;
-      case 'removeLine':
-        this.removeLine();
-        break;
+    // console.log(`${this.name}: data-action: ${action}`);
+    if (dataAction) {
+      const action = dataAction.dataset.action;
+
+      switch (action) {
+        case 'resetLine':
+          this.resetLine();
+          break;
+        case 'addLine':
+          this.addLine();
+          break;
+        case 'removeLine':
+          this.removeLine();
+          break;
+      }
     }
+
   }
 
   resetLine() {

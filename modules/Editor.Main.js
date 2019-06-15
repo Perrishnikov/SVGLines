@@ -21,6 +21,7 @@ export default class Main {
     // this.handleMouseMove = editor.handleMouseMove;
     // this.getMouseCoords = editor.getMouseCoords;
     // this.generatePath = editor.generatePath;
+
     this.editor.registerListener([
       new Listener({
         // caller: 'Editor',
@@ -66,14 +67,12 @@ export default class Main {
       })
     ]);
 
-
-
-    
-
   }
+
+
   mousedown = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
 
     /**@type {string[]} */
     const classList = [...e.target.classList];

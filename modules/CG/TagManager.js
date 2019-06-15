@@ -94,7 +94,9 @@ export default class TagManager extends ControlGroup {
   /**
    * When User hits Enter, add the new Tag to State
    * Called from Editor keydown Event Listener
-   * @param {HTMLElement} target 
+   * @param  {object} props 
+   * @param {HTMLElement} props.target
+   * @param {Array<string>} props.tags
    */
   handleAddTag(props) {
     const { tags = [], target } = props;

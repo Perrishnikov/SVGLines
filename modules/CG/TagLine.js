@@ -1,5 +1,4 @@
 //@ts-check
-
 import ControlGroup from './ControlGroup.js';
 import Listener from '../Listener.js';
 import { Icon_Check } from '../../icons/index.js';
@@ -8,6 +7,7 @@ import { Icon_Check } from '../../icons/index.js';
  * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('../Editor.Controls').LocalState} LocalState
  * @typedef {import('../Editor.Controls').Icon} Icon
+ * @typedef {import('../Editor').State} State
  */
 
 /**
@@ -21,15 +21,12 @@ export default class TagLine extends ControlGroup {
     this.wrapper = super.wrapper;
     this.name = 'Line Tags (i)';
     this.id = 'tagLine';
-    // this.selector = `#${this.id}`;
     this.getState = props.getState;
     this.setState = props.setState;
     this.getLocalState = props.getLocalState;
     this.setLocalState = props.setLocalState;
-    // this.tags = props.tags;
-    // this.activeLine = props.activeLine;
-    //imported functions
   }
+
 
   /**
    * Place a Listener on the whole component
@@ -37,8 +34,6 @@ export default class TagLine extends ControlGroup {
    */
   listeners() {
     return new Listener({
-      // caller: this.name,
-      // selector: 'document',
       type: 'click',
       callback: this.handleClick.bind(this),
       cgId: '#tagLine',
@@ -46,22 +41,13 @@ export default class TagLine extends ControlGroup {
     });
   }
 
-  //   //LINE -> TAGS 
-  //   if (parentClasses.includes('line-tag')) {
-  //     //LINE -> TAGS - Add
-  //     if (parent.dataset.value === 'true') {
-  //       this.handleLineRemoveTag(parent.dataset.tag);
-  //     }
-  //     //LINE -> TAGS - Remove
-  //     else if (parent.dataset.value === 'false') {
-  //       this.handleLineAddTag(parent.dataset.tag);
-  //     }
 
   /**
    * When User clicks a Tag in Line -> Line Tags, remove this Tag from the Line's Tags
    * @param {string} removeTag 
    */
   handleLineRemoveTag(removeTag) {
+    /**@type {State} */
     const { activeLineIndex, lines } = this.getState();
     let activeLine = lines[activeLineIndex];
 
@@ -79,6 +65,7 @@ export default class TagLine extends ControlGroup {
    * @param {string} addTag 
    */
   handleLineAddTag(addTag) {
+    /**@type {State} */
     const { activeLineIndex, lines } = this.getState();
     let activeLine = lines[activeLineIndex];
 
@@ -90,8 +77,10 @@ export default class TagLine extends ControlGroup {
     this.setLocalState({ 
       ACTIVE: this.getLocalState().LINE
     });
+
     this.setState({ lines });
   }
+
 
   handleClick(e) {
     /** @type {HTMLElement} */
@@ -108,7 +97,7 @@ export default class TagLine extends ControlGroup {
           this.handleLineAddTag(dataTag.dataset.tag);
           break;
         default:
-          console.log(`NULL`);
+          console.log(`tagLine handleClick NULL`);
       }
     }
   }
