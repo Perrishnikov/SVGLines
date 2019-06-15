@@ -142,6 +142,7 @@ export default class TagManager extends ControlGroup {
     }
   }
 
+
   /**
    * When user clicks (x) to delete Tag, open the Tag Confirm Dialogue
    * Toggle the active class 
@@ -151,6 +152,7 @@ export default class TagManager extends ControlGroup {
 
     d.classList.toggle('active');
   }
+
 
   /**
    * When User clicks Tag's X, pop Tag from State
@@ -163,10 +165,14 @@ export default class TagManager extends ControlGroup {
 
     const cleanedTags = tags.filter(tag => tag !== target);
 
-    this.setLocalState({ TAG_TO_DELETE: '' });
+    this.setLocalState({ 
+      TAG_TO_DELETE: '',
+      ACTIVE: this.getLocalState().LINES
+    });
     this.setState({ tags: cleanedTags });
     // this.setState({ tags: cleanedTags, lines: cleanedLines });
   }
+
 
   /**
    * param {object} props

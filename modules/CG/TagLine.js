@@ -87,6 +87,9 @@ export default class TagLine extends ControlGroup {
 
     activeLine.tags.push(addTag);
 
+    this.setLocalState({ 
+      ACTIVE: this.getLocalState().LINE
+    });
     this.setState({ lines });
   }
 
