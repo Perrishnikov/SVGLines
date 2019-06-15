@@ -10,6 +10,7 @@
     top: 0;
     bottom: 0;
     max-width: var(--controls-width);
+    min-width: var(--controls-width);
     margin: 0;
     padding: 0;
     border-left: 1px solid var(--color-dark);

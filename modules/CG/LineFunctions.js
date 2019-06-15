@@ -18,13 +18,10 @@ import { Button } from '../Controls.Wrappers.js';
 export default class LineFunctions extends ControlGroup {
   constructor(props) {
     super();
-    
+
     this.name = 'Line Functions';
     this.id = 'lineFunctions';
     this.selector = `#${this.id}`;
-    this.addLine = props.addLine;
-    this.removeLine = props.removeLine;
-    this.resetLine = props.resetLine;
   }
 
   /**
@@ -32,29 +29,43 @@ export default class LineFunctions extends ControlGroup {
    */
   listeners() {
     return new Listener({
-      caller: this.name,
-      selector: 'document',
       type: 'click',
       callback: this.handleClick.bind(this),
-      cgId: '#lineFunctions'
+      cgId: '#lineFunctions',
+      keys: null
     });
   }
 
+  /**@param {EventTarget} e*/
   handleClick(e) {
-    /** @type {LocalState['HELP']} */
-    const action = e.target.dataset.action;
+    const dataAction = e.target.closest('[data-action]');
+    console.dir(this);
     // console.log(`${this.name}: data-action: ${action}`);
 
-    switch(action){
-      case 'resetLine': this.resetLine();
-      break;
-      case 'addLine': this.addLine();
-      break;
-      case 'removeLine': this.removeLine();
-      break;
+    switch (dataAction.dataset.action) {
+      case 'resetLine':
+        this.resetLine();
+        break;
+      case 'addLine':
+        this.addLine();
+        break;
+      case 'removeLine':
+        this.removeLine();
+        break;
     }
   }
 
+  resetLine() {
+    console.log(`resetLine`);
+  }
+
+  addLine() {
+    console.log(`addLine`);
+  }
+
+  removeLine() {
+    console.log(`removeLine`);
+  }
 
   render() {
     return this.wrapper({

@@ -1,7 +1,7 @@
 //@ts-check
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
-import Listener from './Listener.js';
+// import Listener from './Listener.js';
 
 /**
  * Misc
@@ -11,6 +11,7 @@ import Listener from './Listener.js';
  * @typedef {MouseEvent} E
  * @typedef {'l'|'q'|'c'|'a'} PointType
  * @typedef {Array<string>} Tags
+ * @typedef {import('./Listener').default} Listener
  */
 
 /**
@@ -47,6 +48,7 @@ import Listener from './Listener.js';
  * @property {State} state
  * @property {Main} main
  * @property {Controls} controls
+ * @property {Main} main
  */
 export default class Editor {
   /**
@@ -55,46 +57,41 @@ export default class Editor {
    */
   constructor(props) {
     this.id = props.id;
-    //trigger the everything render()
-    // this.setState(props.state);
-    this.state = props.state; //TODO: Just set the state without render...
 
+    this.state = props.state; //Just set the state without render...
 
-    //must be added to document, not Main. Needed in Main, but cant place it in div??
-    // document.addEventListener('keydown', this.handleKeyDown, true);
-    // document.addEventListener('keyup', this.handleKeyUp, false);
-    //TODO: Test
     this.registeredListeners = [
-      new Listener({
-        caller: 'Editor',
-        selector: 'document',
-        type: 'keydown',
-        key: ['Alt', 'Shift', 'Meta'],
-        callback: this.handleKeyDown,
-        cgId: null
-      }),
-      new Listener({
-        caller: 'Editor',
-        selector: 'document',
-        type: 'keyup',
-        key: [null],
-        callback: this.handleKeyUp,
-        cgId: null
-      }),
-      new Listener({
-        caller: 'Editor',
-        selector: 'document',
-        type: 'click',
-        callback: (e) => {
-          console.log(`Editor Click`);
-        },
-        cgId: null
-      }),
+      //   new Listener({
+      //     // caller: 'Editor',
+      //     // selector: 'document',
+      //     type: 'keydown',
+      //     callback: this.handleKeyDown,
+      //     cgId: null,
+      //     key: ['Alt', 'Shift', 'Meta'],
+      //   }),
+      //   new Listener({
+      //     // caller: 'Editor',
+      //     // selector: 'document',
+      //     type: 'keyup',
+      //     callback: this.handleKeyUp,
+      //     cgId: null,
+      //     key: [null],
+      //   }),
+      //   new Listener({
+      //     // caller: 'Editor',
+      //     // selector: 'document',
+      //     type: 'click',
+      //     callback: (e) => {
+      //       console.log(`Editor Click`);
+      //     },
+      //     cgId: null,
+      //     key: null
+      //   }),
     ];
 
-    /**@type {Element} */
-    const mainId = document.querySelector('#main');
-    this.main = new Main(this, mainId);
+    /** type {Element} */
+    // const mainId = document.querySelector('#main');
+    this.main = new Main(this);
 
     // const controlId = document.querySelector('#controls');
     /**type {Element} */
@@ -120,7 +117,8 @@ export default class Editor {
       this.registeredListeners.push(listener);
     }
 
-    // console.log(`listener registered: ${listener.caller} ${listener.type}`);
+    // console.log(`listener registered:`);
+    // console.log(listener);
   }
 
   /**
@@ -131,56 +129,66 @@ export default class Editor {
    */
   addDOMListeners() {
     // console.log(`Hello addDOMListeners!`);
-    /** List of unique event types for all Listners - 'keydown', ... */
+    /** List of unique event types for all Listners - 'keydown', ... 
+     * @type {Set<string>}
+     */
     let keypressTypes = new Set();
 
-    /** List of all Listeners */
+    /** List of all Listeners
+     * @type {Array<Listener>}
+     */
     let keyListeners = [];
 
     this.registeredListeners.forEach(listener => {
-      const { selector, type, callback, caller, key, cgId } = listener;
-      // console.log(listener);
+      /**@type {Listener} */
+      const { type, callback, keys, cgId } = listener;
 
-      if (['keydown', 'keyup', 'keypress'].includes(type)) {
+      if (['keydown', 'keypress'].includes(type)) {
 
-        keypressTypes.add(type);
-        keyListeners.push(listener)
+        if (listener.keys) {
+          keypressTypes.add(type);
+          keyListeners.push(listener);
+        } else {
+          console.error(`Keys required for cgId '${listener.cgId}'`);
 
-      } else if (['click', 'focusin'].includes(type)) {
+        }
+
+
+      } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove', 'keyup'].includes(type)) {
         // @ts-ignore
-        document.addEventListener(type, e => {
-          const cg = e.target.closest(cgId);
+        document.addEventListener(type, event => {
+          /**@type {HTMLElement} */
+          const cg = event.target.closest(cgId);
 
           //if the closeset location finds this id, go.
           if (cg) {
-            return callback(e);
+            return callback(event);
           }
 
         });
       } else {
-        console.error('Error on Event');
+        console.error(`Error on Event for '${listener.type}'`);
       }
     });
 
     /** After all the keypressTypes is done, add those listeners... */
     [...keypressTypes].forEach(type => {
 
-      document.addEventListener(type, e => {
+      document.addEventListener(type, event => {
 
         /**If the event type and pressed key match, call all Listeners callback */
         keyListeners.forEach(listener => {
+          // console.log(listener);
+          if (event.type === listener.type && listener.keys) {
 
-          if (e.type === listener.type) {
+            listener.keys.forEach(key => {
 
-            listener.key.forEach(key => {
-
-              if (e.key === key) {
-                console.log(`Key "${key}" called for ${listener.caller}`);
-                return listener.callback(e);
+              if (event.key === key) {
+                console.log(`Key "${key}" called for ${listener.cgId}`);
+                return listener.callback(event);
               }
 
             });
-
           }
         });
       });
@@ -188,61 +196,6 @@ export default class Editor {
   }
 
   //**************************************** */
-
-  //TEST METHODS FOR CG.LINEFUNCTIONS()
-  resetLine() {
-    console.log(`CORE: resetLine`);
-  }
-
-  addLine() {
-    console.log(`CORE: addLine`);
-  }
-
-  removeLine() {
-    console.log(`CORE: removeLine`);
-  }
-
-  handleKeyDown = (e) => {
-    // console.log(`Editor handleKeyDown: ${e.key}`);
-
-    if (e.key === 'Alt' || e.key === 'Meta') {
-      console.log('meta');
-      this.setState({ ctrl: true });
-    }
-    if (e.key === 'Shift') {
-      console.log('shift');
-      this.setState({ shift: true });
-    }
-
-    //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
-    // if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
-    //   // handle the Add Tag
-    //   console.log('Enter');
-    //   // this.controls.handleAddTag(e.target);
-    // }
-
-    //If Enter is pressed in the LineId Div CONTROLS -> LINE
-    // if (e.key === 'Enter' && document.activeElement.id === 'lineId') {
-    //   // handle the Add Tag
-    //   this.controls.handleLineIdUpdate(e.target);
-    // }
-
-  }
-
-
-  handleKeyUp = (e) => {
-    //need to account for text entry
-    // if (!this.getState().focusText) {
-    // console.log(`handleKeyUp`);
-    if (this.getState().ctrl === true) {
-      this.setState({ ctrl: false });
-    }
-    if (this.getState().shift === true) {
-      this.setState({ shift: false });
-    }
-    // }
-  }
-
 
   /**
    * Returns Editor's State
@@ -329,7 +282,7 @@ export default class Editor {
    */
   getMouseCoords = (e) => {
     const { grid } = this.getState();
-    const rect = this.main.id;
+    const rect = document.querySelector('#main');
     const top = rect.getBoundingClientRect().top;
 
     let x = e.pageX;

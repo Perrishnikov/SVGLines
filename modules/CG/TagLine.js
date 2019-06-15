@@ -21,7 +21,7 @@ export default class TagLine extends ControlGroup {
     this.wrapper = super.wrapper;
     this.name = 'Line Tags (i)';
     this.id = 'tagLine';
-    this.selector = `#${this.id}`;
+    // this.selector = `#${this.id}`;
     this.getState = props.getState;
     this.setState = props.setState;
     this.getLocalState = props.getLocalState;
@@ -37,11 +37,12 @@ export default class TagLine extends ControlGroup {
    */
   listeners() {
     return new Listener({
-      caller: this.name,
-      selector: 'document',
+      // caller: this.name,
+      // selector: 'document',
       type: 'click',
       callback: this.handleClick.bind(this),
-      cgId: '#tagLine'
+      cgId: '#tagLine',
+      keys: null
     });
   }
 

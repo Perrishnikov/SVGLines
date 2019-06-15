@@ -45,26 +45,22 @@ export default class TagManager extends ControlGroup {
   listeners() {
     return [
       new Listener({
-        caller: this.name,
-        selector: 'document',
         type: 'click',
         callback: this.handleClick.bind(this),
-        cgId: '#tagManager' //or key - dont need both
+        cgId: '#tagManager', //or key - dont need both
+        keys: null
       }),
       new Listener({
-        caller: this.name,
-        selector: 'document',
         type: 'keydown',
-        key: ['Enter'],
         callback: this.handleKeyDown.bind(this),
-        cgId: null
+        cgId: '#tagManager',
+        keys: ['Enter'],
       }),
       new Listener({
-        caller: this.name,
-        selector: 'document',
         type: 'focusin',
         callback: this.focusIn.bind(this),
-        cgId: '#tagManager'
+        cgId: '#tagManager',
+        keys: null
       })
     ];
   }

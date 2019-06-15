@@ -43,18 +43,17 @@ export default class Controls {
       TAG_TO_DELETE: ''
     };
 
-    const state = this.editor.getState();
+    // const state = this.editor.getState();
 
     /**
      * CONTROL GROUPS
      */
-    const lineFunctions = new LineFunctions({
-    //   addLine: editor.addLine,
-    //   resetLine: editor.resetLine,
-    //   removeLine: editor.removeLine
+    const cg_lineFunctions = new LineFunctions({
+      getState: this.editor.getState,
+      setState: this.editor.setState,
     });
 
-    const tagLine = new TagLine({
+    const cg_tagLine = new TagLine({
       // activeLine: state.lines[state.activeLineIndex],
       // tags: state.tags
       getState: this.editor.getState,
@@ -63,7 +62,7 @@ export default class Controls {
       setLocalState: this.setLocalState.bind(this)
     });
 
-    const tagManager = new TagManager({
+    const cg_tagManager = new TagManager({
       // tags: state.tags,
       setState: this.editor.setState,
       getState: this.editor.getState,
@@ -80,15 +79,15 @@ export default class Controls {
         title: this.localState.LINE,
         icon: Icon_Line(),
         controlGroups: [
-          lineFunctions,
-          tagLine,
+          cg_lineFunctions,
+          cg_tagLine,
         ],
       }),
       new Section({
         title: this.localState.LINES,
         icon: Icon_Shuffle(),
         controlGroups: [
-          tagManager
+          cg_tagManager
         ],
       }),
       new Section({
@@ -121,109 +120,22 @@ export default class Controls {
     });
     editor.registerListener(this.nav.listeners());
 
-    // this.id.addEventListener('focusin', e => {
-    //   const newTagText = document.querySelector('#newTagText');
-
-    //   if (newTagText.id == e.target.id) {
-    //     // this.toggleAddTagFocus(newTagText);
-    //     newTagText.focus();
-    //   }
-    //   // console.dir(e.target);
-    // });
-
-
-
-
-    /** CONTROLS Event Listeners */
-    // this.id.addEventListener('click', (e) => {
-    //   e.stopPropagation();
-    //   e.preventDefault();
-
-    //   const classList = [...e.target.classList];
-    //   const dataset = e.target.dataset ? e.target.dataset : 'NULL';
-    //   const parent = e.target.parentNode;
-    //   const parentClasses = [...parent.classList];
-
-    //   // LINE -> BUTTON ACTIONS (addPoint, removePoint, addLine, removeLine, resetLine,...)
-    //   const action = dataset.action; //'nav',...
-    //   /**@type {string} */
-    //   const value = dataset.value; //'line','lines','settings',...
-
-    //   console.log(`controls action: ${action}`);
-    //   switch (action) {
-    //     //LINE
-    //     case 'resetLine':
-    //       '';
-    //       break;
-    //     case 'addLine':
-    //       '';
-    //       break;
-    //     case 'removeLine':
-    //       '';
-    //       break;
-    //     case 'setPointType':
-    //       this.setPointType(e.target.value);
-    //       break;
-    //     case 'addPoint':
-    //       '';
-    //       break;
-    //     case 'removePoint':
-    //       this.removeActivePoint();
-    //       break;
-    //       //NAVIGATION ICONS
-    //     case 'nav':
-    //       this.showThisSection(value);
-    //       this.activateThisIcon(value);
-    //       break;
-    //       //LINES
-    //     case 'lineRules':
-    //       // console.dir(e.target);
-    //       switch (e.target.attributes.type.value) {
-    //         case 'checkbox':
-    //           // console.log(`id: ${e.target.id}`);
-    //           this.handleLineRuleToggle(e.target.id);
-    //       }
-    //       break;
-    //     case 'generateLineIds':
-    //       this.handleGenerateLineId();
-    //       break;
-    //     default:
-    //       console.log(`No action detected.`);
-    //   }
-
-    //   console.dir(`document.activeElement: ${document.activeElement.id}`);
-
-
- 
-
-    //   }
-
-    // });
   }
-  getLocalState(){
+
+  getLocalState() {
     // console.log(this);
     return Object.assign({}, this.localState);
   }
 
-  setLocalState(obj){
+  setLocalState(obj) {
     this.localState = Object.assign({}, this.localState, obj)
     // console.log(`TAG_TO_DELETE after update: ${this.getLocalState().TAG_TO_DELETE}`);
   }
 
-  // handleFocusIn(e) {
-  //   e.stopPropagation();
-  //   e.preventDefault();
-  //   const newTagText = document.querySelector('#newTagText');
-
-  //   if (newTagText.id == e.target.id) {
-  //     // this.toggleAddTagFocus(newTagText);
-  //     newTagText.focus();
-  //   }
-  // }
-
   verifyUniqueId() {
 
   }
+
   handleGenerateLineId() {
     const { lineRules, lines } = this.editor.getState();
     //returns the value of the first element in the array.value
@@ -583,7 +495,7 @@ export default class Controls {
 
       // Sections are in Controls.Wrappers
       return section.render({
-        active: this.localState.ACTIVE, 
+        active: this.localState.ACTIVE,
         state: props.state
       });
     }).join('');
