@@ -2,7 +2,6 @@
 
 import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
-import {} from '../../icons/index.js';
 import { Button } from './_Components.js';
 
 /**
@@ -12,13 +11,10 @@ import { Button } from './_Components.js';
  */
 export default class PointTypes extends ControlGroup {
   /**
-   * 
    * @param {object} props
    * @param {function} props.setState
    * @param {function} props.getState
    * @param {CORE} props.CORE
-   * param {function} props.getLocalState
-   * param {function} props.setLocalState
    */
   constructor(props) {
     super();
@@ -32,9 +28,6 @@ export default class PointTypes extends ControlGroup {
     this.setState = props.setState;
     this.getState = props.getState;
     this.CORE = props.CORE;
-    // this.getLocalState = props.getLocalState;
-    // this.setLocalState = props.setLocalState;
-
   }
 
   listeners = () => {
@@ -42,7 +35,7 @@ export default class PointTypes extends ControlGroup {
       new Listener({
         type: 'click',
         callback: this.handleClick,
-        cgId: this.selector, //or key - dont need both
+        cgId: this.selector,
         keys: null
       })
     ];
@@ -57,6 +50,7 @@ export default class PointTypes extends ControlGroup {
       this.CORE.setPointType(pointOptions.dataset.value);
     }
 
+    /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
     // console.dir(buttonClick);
 

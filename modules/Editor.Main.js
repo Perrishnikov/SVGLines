@@ -76,7 +76,7 @@ export default class Main {
         ${lines.map((line, index) => {
           let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
           const path = this.CORE.generatePath(line.points);
-          const circles = this.CORE.generateCircles(line.points, activePointIndex, al );
+          const circles = this.CORE.generateCircles(line.points, activePointIndex.toString(), al );
           
           return `
             <path class="ad-Path" d="${path}"></path>

@@ -18,14 +18,14 @@
       "id": "verifyUniqueId",
       "name": "Verify Unique Line Id's",
       "type": "checkbox",
-      "enabled": true,
+      "enabled": false,
       "info": "Are Line Id's required to be unique? Checked on Line change and Generate Line Id's"
     },
     {
       "id": "autoIdNewLines",
       "name": "Auto Id New Lines",
       "type": "checkbox",
-      "enabled": true,
+      "enabled": false,
       "info": "When a new Line is created, should it automatically recieve a unique id?"
     },
     {

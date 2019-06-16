@@ -1,8 +1,7 @@
 //@ts-check
-// import { Point, Quadratic, Cubic } from './Editor.Components.js';
 
 /**
- * @typedef {import('./Editor').Anchor} anchor
+ * @typedef {import('./Editor').Anchor} Anchor
  * @typedef {{x:number,y:number}} Coords
  * @typedef {import('./Editor').Element} Element
  * @typedef {import('./Editor').default} Editor
@@ -335,16 +334,13 @@ export default class CORE {
 
 
   handleKeyUp = () => {
-    //need to account for text entry
-    // if (!this.getState().focusText) {
-    console.log(`handleKeyUp`);
+    // console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
     }
     if (this.getState().shift === true) {
       this.setState({ shift: false });
     }
-    // }
   }
 
 
@@ -401,7 +397,7 @@ export default class CORE {
    * Called from mousedown event
    * Sets the active point to this, and draggedCubic to the anchor
    * calls setState
-   * @param {anchor} anchor
+   * @param {Anchor} anchor
    * @param {string} index
    */
   setDraggedCubic = (index, anchor, lineindex) => {
@@ -419,12 +415,15 @@ export default class CORE {
   /**
    * Called from mousedown event
    * calls setState
-   * param {e} e
+   * @param {MouseEvent} e
+   * @param {string} id
    */
-  addLine = (e) => {
+  addLine = (e, id) => {
     const coords = this.getMouseCoords(e);
     let { lines, activeLineIndex } = this.getState();
 
+    // const newLine = new Line();
+    
     const newPoints = { points: [coords], tags: [] };
     lines.push(newPoints);
 
@@ -478,7 +477,7 @@ export default class CORE {
     }
   }
 
-  
+
   removeActiveLine = () => {
     const { lines, activeLineIndex } = this.getState();
 
@@ -682,7 +681,7 @@ export default class CORE {
   setCubicPosition = (coords, anchor, e) => {
     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
     const activeLine = lines[activeLineIndex];
-    let newCoords = coords;
+    // let newCoords = coords;
 
     // {x: y:}
     const coord = activeLine.points[activePointIndex].c[anchor];

@@ -46,27 +46,27 @@ export default class TagManager extends ControlGroup {
     return [
       new Listener({
         type: 'click',
-        callback: this.handleClick.bind(this),
-        cgId: '#tagManager', //or key - dont need both
+        callback: this.handleClick,
+        cgId: this.selector, //or key - dont need both
         keys: null
       }),
       new Listener({
         type: 'keydown',
-        callback: this.handleKeyDown.bind(this),
-        cgId: '#tagManager',
+        callback: this.handleKeyDown,
+        cgId: this.selector,
         keys: ['Enter'],
       }),
       new Listener({
         type: 'focusin',
-        callback: this.focusIn.bind(this),
-        cgId: '#tagManager',
+        callback: this.focusIn,
+        cgId: this.selector,
         keys: null
       })
     ];
   }
 
   focusIn = (e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     e.preventDefault();
 
     console.log(`focusin!`);
@@ -98,7 +98,7 @@ export default class TagManager extends ControlGroup {
    * @param {HTMLElement} props.target
    * @param {Array<string>} props.tags
    */
-  handleAddTag(props) {
+  handleAddTag = (props) => {
     const { tags = [], target } = props;
 
     //Clean use input on Tag name
@@ -113,7 +113,7 @@ export default class TagManager extends ControlGroup {
     }
   }
 
-  handleClick(e) {
+  handleClick = (e) => {
     // returns <div data-tag="taxi"....></div>
     const cg = e.target.closest(this.selector);
 
@@ -149,7 +149,7 @@ export default class TagManager extends ControlGroup {
    * When user clicks (x) to delete Tag, open the Tag Confirm Dialogue
    * Toggle the active class 
    */
-  toggleTagConfirmDelete() {
+  toggleTagConfirmDelete = () => {
     const d = document.querySelector('#tagConfirmDelete');
 
     d.classList.toggle('active');
@@ -161,7 +161,7 @@ export default class TagManager extends ControlGroup {
    * Then remove the Tag from all Lines
    * @param {string} target 'subway'
    */
-  handleRemoveGlobalTag(target) {
+  handleRemoveGlobalTag = (target) => {
     const { tags } = this.getState();
     // console.log(`target: ${target}`);
 

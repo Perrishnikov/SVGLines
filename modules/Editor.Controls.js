@@ -7,6 +7,7 @@ import LineFunctions from './CG/LineFunctions.js';
 import TagLine from './CG/TagLine.js';
 import TagManager from './CG/TagManager.js';
 import PointTypes from './CG/PointTypes.js';
+import LineID from './CG/LineID.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor
@@ -49,6 +50,11 @@ export default class Controls {
     /**
      * CONTROL GROUPS
      */
+    const cg_lineId = new LineID({
+      getState: this.editor.getState,
+      setState: this.editor.setState,
+    });
+
     const cg_lineFunctions = new LineFunctions({
       getState: this.editor.getState,
       setState: this.editor.setState,
@@ -85,7 +91,9 @@ export default class Controls {
         icon: Icon_Line(),
         controlGroups: [
           cg_pointTypes,
+          cg_lineId,
           cg_tagLine,
+          
           cg_lineFunctions,
         ],
       }),
@@ -135,71 +143,70 @@ export default class Controls {
   }
 
   setLocalState(obj) {
-    this.localState = Object.assign({}, this.localState, obj)
-    // console.log(`TAG_TO_DELETE after update: ${this.getLocalState().TAG_TO_DELETE}`);
+    this.localState = Object.assign({}, this.localState, obj);
   }
 
-  handleGenerateLineId() {
-    const { lineRules, lines } = this.editor.getState();
-    //returns the value of the first element in the array.value
-    /** @type {string} */
-    const startingLineBasis = lineRules.find(rule => rule.id == 'lineStartingBasis').value;
-    // console.log(`startingLineBasis: ${startingLineBasis}; type: ${typeof(startingLineBasis)} `);
-    const padLength = startingLineBasis.length;
+  // handleGenerateLineId() {
+  //   const { lineRules, lines } = this.editor.getState();
+  //   //returns the value of the first element in the array.value
+  //   /** @type {string} */
+  //   const startingLineBasis = lineRules.find(rule => rule.id == 'lineStartingBasis').value;
+  //   // console.log(`startingLineBasis: ${startingLineBasis}; type: ${typeof(startingLineBasis)} `);
+  //   const padLength = startingLineBasis.length;
 
-    /**@type {number} */
-    let count = parseInt(startingLineBasis);
-    // const parsed = parseInt(startingLineBasis);
-    // if (isNaN(parsed)) { return 0; }
+  //   /**@type {number} */
+  //   let count = parseInt(startingLineBasis);
+  //   // const parsed = parseInt(startingLineBasis);
+  //   // if (isNaN(parsed)) { return 0; }
 
-    const updatedLines = lines.map(line => {
-      // let { id = count } = line;
+  //   const updatedLines = lines.map(line => {
+  //     // let { id = count } = line;
 
-      line.id = count.toString().padStart(padLength, '0');
-      count++;
+  //     line.id = count.toString().padStart(padLength, '0');
+  //     count++;
 
-      return line;
-    });
+  //     return line;
+  //   });
 
-    // console.log(`startingLineBasis: ${startingLineBasis}`);
-    this.editor.setState({
-      lines: updatedLines,
-      // lineRules
-    });
+  //   // console.log(`startingLineBasis: ${startingLineBasis}`);
+  //   this.editor.setState({
+  //     lines: updatedLines,
+  //     // lineRules
+  //   });
 
-    // console.log(this.getState());
-  }
+  //   // console.log(this.getState());
+  // }
 
-  handleLineRuleToggle(id) {
-    const { lineRules } = this.editor.getState();
+  // handleLineRuleToggle(id) {
+  //   const { lineRules } = this.editor.getState();
 
-    //map all the lineRules, change enabled att if it matches
-    const mappedLineRules = lineRules.map(rule => {
-      if (rule.id === id) {
-        rule.enabled = rule.enabled ? false : true;
-      }
-      return rule;
-    });
+  //   //map all the lineRules, change enabled att if it matches
+  //   const mappedLineRules = lineRules.map(rule => {
+  //     if (rule.id === id) {
+  //       rule.enabled = rule.enabled ? false : true;
+  //     }
+  //     return rule;
+  //   });
 
-    this.editor.setState({ lineRules: mappedLineRules });
-  }
+  //   this.editor.setState({ lineRules: mappedLineRules });
+  // }
 
-  handleLineIdUpdate(target) {
-    const { lineRules = [], activeLineIndex, lines } = this.editor.getState();
-    const activeLine = lines[activeLineIndex];
+  // handleLineIdUpdate(target) {
+  //   const { lineRules = [], activeLineIndex, lines } = this.editor.getState();
+  //   const activeLine = lines[activeLineIndex];
 
-    const newLineId = target.innerText.trim();
-    //TODO: validation
-    target.blur();
+  //   const newLineId = target.innerText.trim();
+  //   //TODO: validation
+  //   target.blur();
 
-    //If the Tag is valid, proceed....
-    if (newLineId && newLineId.length < 15) {
+  //   //If the Tag is valid, proceed....
+  //   if (newLineId && newLineId.length < 15) {
 
-      //Update the line's Id
-      activeLine.id = newLineId;
-      this.editor.setState({ lines });
-    }
-  }
+  //     //Update the line's Id
+  //     activeLine.id = newLineId;
+  //     this.editor.setState({ lines });
+  //   }
+  // }
 
 
 
@@ -229,29 +236,13 @@ export default class Controls {
    * Render this on every State change
    * @param {object} props
    * @param {import('./Editor').State} props.state
-   * param {import('./Editor').State} props.tags
    */
   render = (props) => {
-    const { w, h, lines, activeLineIndex, activePointIndex, grid, tags, lineRules } = props.state;
+    const { h, grid, } = props.state;
 
-    // const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
     // let path = `d="${this.editor.CORE.generatePath(lines[activeLineIndex].points)}"`;
-
-    // /**@type {PointType} */
-    // let pointType = 'l';
-
-    // if (active.q) {
-    //   // console.log(`Hello Active Q`);
-    //   pointType = 'q';
-    // } else if (active.c) {
-    //   // console.log(`Hello Active C!`);
-    //   pointType = 'c';
-    // } else if (active.a) {
-    //   // console.log(`Hello Active A!`);
-    //   pointType = 'a';
-    // }
 
     {
       // params.push(
@@ -310,7 +301,6 @@ export default class Controls {
       // )
     }
 
-
     const sections = this.sections.map(section => {
 
       // Sections are in Controls.Wrappers
@@ -329,6 +319,7 @@ export default class Controls {
     `;
   }
 }
+
 
 class Section {
   /**
@@ -352,7 +343,7 @@ class Section {
    * @returns {string} HTML to render
    */
   render(props) {
-    const {active, state} = props;
+    const { active, state } = props;
     const activeSec = active == this.title ? ' active_section' : '';
 
     const controlGroups = this.controlGroups.map(group => {
