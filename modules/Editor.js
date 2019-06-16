@@ -65,13 +65,13 @@ export default class Editor {
     /** @type {Array<Listener>} */
     this.registeredListeners = [];
 
-    
+    this.CORE = new CORE(this);
 
     this.main = new Main(this);
-
+    this.CORE.mainId = this.main.id;
     this.controls = new Controls(this);
-    
-    this.CORE = new CORE(this, this.main.id);
+
+
   }
 
 

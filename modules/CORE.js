@@ -14,12 +14,11 @@ import { Point, Quadratic, Cubic } from './Editor.Components.js';
 export default class CORE {
   /**
    * @param {Editor} editor
-   * @param {string} mainId
    */
-  constructor(editor, mainId) {
+  constructor(editor) {
     this.setState = editor.setState;
     this.getState = editor.getState;
-    this.mainId = mainId;
+    this.mainId = '';
   }
 
   /**
