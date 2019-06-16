@@ -1,6 +1,6 @@
 //@ts-check
 
-import ControlGroup from './ControlGroup.js';
+import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
 import { Icon_Delete, Icon_ThumbsUp, Icon_ThumbsDown } from '../../icons/index.js';
 

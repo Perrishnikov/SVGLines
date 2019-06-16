@@ -70,7 +70,9 @@ export default class Main {
 
     return `
     <div style="min-height:${h}px; min-width:${w + 300}px" id="main" class="main_wrap">
+      
       <svg class="ad-SVG" width="${w +300}" height="${h}">
+      ${grid}
         ${lines.map((line, index) => {
           let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
           const path = this.CORE.generatePath(line.points);
@@ -82,7 +84,6 @@ export default class Main {
           `;
         }).join('')}
 
-        ${grid}
       </svg>
     </div>
     `;

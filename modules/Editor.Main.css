@@ -14,7 +14,6 @@
 .grid_line{
   /* stroke: var(--color-green1);
   stroke-width: 1px; */
-  z-index: -999;
 }
 
 .ad-Grid.is-hidden {
@@ -30,8 +29,9 @@
     cursor: grab;
     fill: var(--color-dark);
     stroke: var(--color-dark);
-    stroke-width: 4px;
+    /* stroke-width: 4px; */
     transition: fill .2s;
+    z-index: 10;
 }
 .ad-Point:hover,
 .ad-PointGroup.is-active .ad-Point {

@@ -144,6 +144,7 @@ export default class Editor {
           }
 
         });
+
       } else {
         console.error(`Error on Event for '${listener.type}'`);
       }

@@ -1,8 +1,8 @@
 //@ts-check
 
-import ControlGroup from './ControlGroup.js';
+import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
-import { Button } from '../Controls.Wrappers.js';
+import { Button } from './_Components.js';
 
 /**
  * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active

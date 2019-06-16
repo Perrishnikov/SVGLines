@@ -12,7 +12,7 @@ export default class ControlGroup {
    * @returns {Listener|Array<Listener>}
    */
   listeners() {
-    console.error(`ControlGroup Super, Must Override`);
+    console.error(`ControlGroup Super, Must Override "Listeners()`);
     return null;
   }
 
@@ -21,7 +21,7 @@ export default class ControlGroup {
    * @returns {string} HTML to render
    */
   render(state){
-    console.error(`ControlGroup Super, Must Override`);
+    console.error(`ControlGroup Super, Must Override Render()`);
     return null;
   }
 

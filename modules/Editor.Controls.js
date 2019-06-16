@@ -1,12 +1,12 @@
 //@ts-check
 
-import { Section } from './Controls.Wrappers.js';
+// import { Section } from './Controls.Wrappers.js';
 import Nav from './Controls.Nav.js';
 import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/index.js';
 import LineFunctions from './CG/LineFunctions.js';
 import TagLine from './CG/TagLine.js';
 import TagManager from './CG/TagManager.js';
-import ControlGroup from './CG/ControlGroup.js';
+import PointTypes from './CG/PointTypes.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor
@@ -17,6 +17,8 @@ import ControlGroup from './CG/ControlGroup.js';
  * @typedef {import('./Editor').Line} Line
  * @typedef {import('./Editor').Coords} Coords
  * @typedef {import('./Editor').E} E
+ * 
+ * @typedef {import('./CG/_ControlGroup').default} ControlGroup
  * 
  * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
  * @typedef {string} Title
@@ -66,6 +68,12 @@ export default class Controls {
       setLocalState: this.setLocalState.bind(this)
     });
 
+    const cg_pointTypes = new PointTypes({
+      setState: this.editor.setState,
+      getState: this.editor.getState,
+      CORE: this.editor.CORE,
+    });
+
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -76,6 +84,7 @@ export default class Controls {
         icon: Icon_Line(),
         controlGroups: [
           cg_lineFunctions,
+          cg_pointTypes,
           cg_tagLine,
         ],
       }),
@@ -224,24 +233,24 @@ export default class Controls {
   render = (props) => {
     const { w, h, lines, activeLineIndex, activePointIndex, grid, tags, lineRules } = props.state;
 
-    const active = lines[activeLineIndex].points[activePointIndex];
+    // const active = lines[activeLineIndex].points[activePointIndex];
     const step = grid.snap ? grid.size : 1;
 
-    let path = `d="${this.editor.CORE.generatePath(lines[activeLineIndex].points)}"`;
+    // let path = `d="${this.editor.CORE.generatePath(lines[activeLineIndex].points)}"`;
 
-    /**@type {PointType} */
-    let pointType = 'l';
+    // /**@type {PointType} */
+    // let pointType = 'l';
 
-    if (active.q) {
-      // console.log(`Hello Active Q`);
-      pointType = 'q';
-    } else if (active.c) {
-      // console.log(`Hello Active C!`);
-      pointType = 'c';
-    } else if (active.a) {
-      // console.log(`Hello Active A!`);
-      pointType = 'a';
-    }
+    // if (active.q) {
+    //   // console.log(`Hello Active Q`);
+    //   pointType = 'q';
+    // } else if (active.c) {
+    //   // console.log(`Hello Active C!`);
+    //   pointType = 'c';
+    // } else if (active.a) {
+    //   // console.log(`Hello Active A!`);
+    //   pointType = 'a';
+    // }
 
     {
       // params.push(
@@ -317,5 +326,47 @@ export default class Controls {
     </div>
     
     `;
+  }
+}
+
+class Section {
+  /**
+   * Sections do not get listeners() - just Control Groups
+   * @param {object} props 
+   * @param {import('./Editor.Controls').Title} props.title
+   * @param {string} props.icon
+   * @param {Array<ControlGroup>} props.controlGroups
+   */
+  constructor(props) {
+    this.title = props.title;
+    this.sectionClass = '.control-section';
+    this.icon = props.icon;
+    this.controlGroups = props.controlGroups;
+  }
+
+  /**
+   * @param {object} props
+   * @param {Active} props.active - Active Section
+   * @param {State} props.state - State
+   * @returns {string} HTML to render
+   */
+  render(props) {
+    const {active, state} = props;
+    const activeSec = active == this.title ? ' active_section' : '';
+
+    const controlGroups = this.controlGroups.map(group => {
+
+      // Control Groups return HTML from render()
+      return group.render(state);
+    }).join('');
+
+    // return controlGroups;
+    return `
+    <section data-link="${this.title}" class="control-section${activeSec}" >
+      <div class="">
+        <h3 class="section-title">${this.title}</h3>
+      </div>
+      ${controlGroups}
+    </section>`;
   }
 }

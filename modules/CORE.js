@@ -1,5 +1,5 @@
 //@ts-check
-import { Point, Quadratic, Cubic } from './Editor.Components.js';
+// import { Point, Quadratic, Cubic } from './Editor.Components.js';
 
 /**
  * @typedef {import('./Editor').Anchor} anchor
@@ -73,6 +73,8 @@ export default class CORE {
 
 
   /**
+   * Get the mouse position
+   * If null is passed as 'e' return position 100 x 100
    * @param {E} e 
    * @returns {Coords}
    */
@@ -81,16 +83,20 @@ export default class CORE {
     const rect = document.querySelector(`#${this.mainId}`);
     const top = rect.getBoundingClientRect().top;
 
-    let x = e.pageX;
-    let y = e.clientY - top;
+    if (e) {
+      let x = e.pageX;
+      let y = e.clientY - top;
 
-    if (grid.snap) {
-      x = grid.size * Math.round(x / grid.size);
-      y = grid.size * Math.round(y / grid.size);
+      if (grid.snap) {
+        x = grid.size * Math.round(x / grid.size);
+        y = grid.size * Math.round(y / grid.size);
+      }
+
+      // console.log(`x:${x}, y:${y}`);
+      return { x, y };
+    } else {
+      return { x: 100, y: 100 };
     }
-
-    // console.log(`x:${x}, y:${y}`);
-    return { x, y };
   }
 
 
@@ -173,6 +179,78 @@ export default class CORE {
 
 
   /** From Editor.Main ------------------------------- */
+
+  Quadratic(props) {
+    // circle onMouseDown="${(e) => props.setDraggedQuadratic(props.index)}"
+    return `
+    <g class="ad-Anchor">
+      <line 
+        class="ad-Anchor-line" 
+        x1="${props.p1x}"
+        y1="${props.p1y}"
+        x2="${props.x}"
+        y2="${props.y}"/>
+      <line 
+        class="ad-Anchor-line" 
+        x1="${props.x}"
+        y1="${props.y}"
+        x2="${props.p2x}"
+        y2="${props.p2y}"/>
+      <circle 
+        class="ad-Anchor-point"
+        data-index="${props.index}"
+        cx="${props.x}"
+        cy="${props.y}"
+        r="6"/>
+    </g>
+    `;
+  }
+
+  Cubic(props) {
+    //TODO: What do these fucntions do? They are disabled now...
+    //circle top <!--onMouseDown="{ (e) => props.setDraggedCubic(props.index, 0) }"-->
+    //circle bottom <!--onMouseDown="{ (e) => props.setDraggedCubic(props.index, 1) }"-->
+    return `
+    <g class="ad-Anchor">
+      <line
+        class="ad-Anchor-line"
+        x1="${props.p1x}"
+        y1="${props.p1y}"
+        x2="${props.x1}"
+        y2="${props.y1}" />
+      <line
+        class="ad-Anchor-line"
+        x1="${props.p2x}"
+        y1="${props.p2y}"
+        x2="${props.x2}"
+        y2="${props.y2}" />
+      <circle
+        class="ad-Anchor-point"
+        data-index="${props.index}"
+        data-anchor="0"
+        cx="${props.x1}"
+        cy="${props.y1}"
+        r="6"/>
+      <circle
+        class="ad-Anchor-point"
+        data-index="${props.index}"
+        data-anchor="1"
+        cx="${props.x2}"
+        cy="${props.y2}"
+        r="6"/>
+    </g>
+    `;
+  }
+
+  /** Event needed  */
+  Point(props) {
+    const { index, x, y, rad = 4 } = props;
+    //onMouseDown = { (e) => props.setDraggedPoint(props.index) }
+    return `
+      <circle class="ad-Point" data-index="${index}" cx="${x}" cy="${y}" r="${rad}"/>
+    `;
+  }
+
 
   handleMousedown = (e) => {
     // console.log('handleMousedown');
@@ -358,21 +436,16 @@ export default class CORE {
   }
 
   /**
-   * Callled from mousedown event
-   * @memberof Editor
+   * Adds a Point to active Line
    * calls setState
-   * param {e} e
+   * 
+   * @param {MouseEvent | null} e
    */
   addPoint = (e) => {
-
-
-    // if (this.state().ctrl === true) {
     const coords = this.getMouseCoords(e);
-    console.log(`addPoint at x:${coords.x}, y:${coords.y}`);
+    
+    // console.log(`addPoint at x:${coords.x}, y:${coords.y}`);
     const { lines, activeLineIndex } = this.getState();
-    // const { points } = this.getState();
-    // console.log(points);
-    // points.push(coords);
     lines[activeLineIndex].points.push(coords);
 
     this.setState({
@@ -380,9 +453,21 @@ export default class CORE {
       //points
       activePointIndex: lines[activeLineIndex].points.length - 1
     });
-    // }
   }
 
+  removeActivePoint = () => {
+    const { activePointIndex, lines, activeLineIndex } = this.getState();
+
+    if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
+      lines[activeLineIndex].points.splice(activePointIndex, 1);
+
+      this.setState({
+        lines,
+        activePointIndex: lines[activeLineIndex].points.length - 1
+      });
+      console.log(`Point removed`);
+    }
+  }
 
 
   /**
@@ -399,7 +484,7 @@ export default class CORE {
 
       if (p.q) {
         anchors.push(
-          Quadratic({
+          this.Quadratic({
             index: i,
             p1x: a[i - 1].x,
             p1y: a[i - 1].y,
@@ -412,7 +497,7 @@ export default class CORE {
         );
       } else if (p.c) {
         anchors.push(
-          Cubic({
+          this.Cubic({
             index: i,
             p1x: a[i - 1].x,
             p1y: a[i - 1].y,
@@ -432,7 +517,7 @@ export default class CORE {
 
       return (
         `<g class="ad-PointGroup${isFirst}${ap2}">
-          ${Point({
+          ${this.Point({
             index:i,
             x:p.x,
             y:p.y,
@@ -449,7 +534,11 @@ export default class CORE {
   /** End Editor.Main ------------------------------------ */
 
   /** From Editor.Controls-------------------------------- */
-
+  /**
+   *
+   * @param {String} value - "l"|"q"|'c'|'a'
+   * @memberof CORE
+   */
   setPointType = (value) => {
     const { lines, activePointIndex, activeLineIndex } = this.getState();
     const ap = lines[activeLineIndex];
@@ -529,6 +618,7 @@ export default class CORE {
   }
 
 
+  /** Not used */
   setPointPosition = (coord, e) => {
     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
     const ap = lines[activeLineIndex];
@@ -588,21 +678,6 @@ export default class CORE {
   }
 
 
-  removeActivePoint = () => {
-    const { activePointIndex, lines, activeLineIndex } = this.getState();
-
-    if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
-      lines[activeLineIndex].points.splice(activePointIndex, 1);
-
-      this.setState({
-        lines,
-        activePointIndex: lines[activeLineIndex].points.length - 1
-      });
-      console.log(`Point removed`);
-    }
-  }
-
-
   reset = () => {
     const cstate = this.getState();
     const w = cstate.w;
@@ -613,9 +688,10 @@ export default class CORE {
       activePointIndex: 0
     });
   }
-  /** End Editor.Controls------------------ */
 
-  /** Utility - Used by several  */
+  /** End Editor.Controls---------------------------- */
+
+  /** Utility - Used by several --------------------- */
   /**
    * Grid
    * Parse a string number

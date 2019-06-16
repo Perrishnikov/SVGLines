@@ -4,7 +4,7 @@
  * @typedef {Listener} this
  * @typedef {string} caller - string. Name this Caller.
  * @typedef {'document' | string} selector - HTML object to add the listener to.
- * @typedef {'keydown'|'click'|'keyup'|'focusin'|'mouseup'|'mousedown'|'mousemove'} type
+ * @typedef {'keydown'|'click'|'keyup'|'focusin'|'mouseup'|'onchange'|'mousedown'|'mousemove'} type
  * @typedef {function} callback
  * @typedef {string } cgId - required for all non-click events
  * @typedef {Array<string>|null} keys - required for all keyboard events
