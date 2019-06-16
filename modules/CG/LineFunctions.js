@@ -5,9 +5,7 @@ import Listener from '../Listener.js';
 import { Button } from './_Components.js';
 
 /**
- * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
- * @typedef {import('../Editor.Controls').LocalState} LocalState
- * @typedef {import('../Editor.Controls').Icon} Icon
+ * @typedef {import('../CORE').default} CORE
  */
 
 /**
@@ -16,10 +14,19 @@ import { Button } from './_Components.js';
  * @extends {ControlGroup}
  */
 export default class LineFunctions extends ControlGroup {
+  /**
+   * 
+   * @param {object} props
+   * @param {function} props.setState
+   * @param {function} props.getState
+   * @param {CORE} props.CORE
+   */
   constructor(props) {
     super();
     this.name = 'Line Functions';
     this.id = 'lineFunctions';
+
+    this.CORE = props.CORE;
     // this.selector = `#${this.id}`;
   }
 
@@ -48,8 +55,8 @@ export default class LineFunctions extends ControlGroup {
         case 'resetLine':
           this.resetLine();
           break;
-        case 'addLine':
-          this.addLine();
+        case 'undoLine':
+          this.undoLine();
           break;
         case 'removeLine':
           this.removeLine();
@@ -63,12 +70,12 @@ export default class LineFunctions extends ControlGroup {
     console.log(`resetLine`);
   }
 
-  addLine() {
+  undoLine() {
     console.log(`addLine`);
   }
 
   removeLine() {
-    console.log(`removeLine`);
+    this.CORE.removeActiveLine();
   }
 
   render() {
@@ -78,16 +85,16 @@ export default class LineFunctions extends ControlGroup {
       html: `
       <div class="control-row">
         ${Button({
-          action: 'resetLine',
-          name: 'Reset Line'
-        })}
-        ${Button({
-          action:'addLine',
-          name:'Add Line',
-        })}
-        ${Button({
           action:'removeLine',
           name:'Remove Line',
+        })}
+        ${Button({
+          action:'undoLine',
+          name:'Undo Remove',
+        })}
+        ${Button({
+          action: 'resetLine',
+          name: 'Reset Line'
         })}
       </div>
       `

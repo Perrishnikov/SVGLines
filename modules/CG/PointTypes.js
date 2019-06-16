@@ -68,6 +68,9 @@ export default class PointTypes extends ControlGroup {
         case 'removePoint':
           this.CORE.removeActivePoint();
           break;
+        case 'undoPoint':
+          console.log('Not implemented');
+          break;
         default:
           console.error('Couldnt find button');
       }
@@ -122,15 +125,23 @@ export default class PointTypes extends ControlGroup {
           ${choices}
         </div>
         <div class="control-row">
-        ${Button({
-          action: 'addPoint',
-          name: 'Add Point'
-        })}
+        Press Meta and click to add Point
+        <br>Press Shift-Meta to add new Line 
+        </div>
+        <div class="control-row">
         ${Button({
           action:'removePoint',
           name:'Remove Point',
         })}
-      </div>
+        ${Button({
+          action:'undoPoint',
+          name:'Undo Remove',
+        })}
+        ${Button({
+          action: 'resetPoint',
+          name: 'Reset Point'
+        })}
+        </div>  
       </div>
       `
     });

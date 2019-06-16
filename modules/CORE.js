@@ -163,15 +163,15 @@ export default class CORE {
 
     if (!ctrl && !shift) {
       if (draggedPoint) {
-        console.log(`setPoint`);
+        // console.log(`setPoint`);
         this.setPointCoords(this.getMouseCoords(e));
 
       } else if (draggedQuadratic) {
-        console.log(`setQuad`);
+        // console.log(`setQuad`);
         this.setQuadraticCoords(this.getMouseCoords(e));
 
       } else if (draggedCubic !== false) {
-        console.log(`setCubic: ${draggedCubic}`);
+        // console.log(`setCubic: ${draggedCubic}`);
         this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
       }
     }
@@ -435,6 +435,7 @@ export default class CORE {
     });
   }
 
+
   /**
    * Adds a Point to active Line
    * calls setState
@@ -443,7 +444,7 @@ export default class CORE {
    */
   addPoint = (e) => {
     const coords = this.getMouseCoords(e);
-    
+
     // console.log(`addPoint at x:${coords.x}, y:${coords.y}`);
     const { lines, activeLineIndex } = this.getState();
     lines[activeLineIndex].points.push(coords);
@@ -455,18 +456,41 @@ export default class CORE {
     });
   }
 
+
   removeActivePoint = () => {
     const { activePointIndex, lines, activeLineIndex } = this.getState();
 
+    // if there are more than 1 Points && not last point...
     if (lines[activeLineIndex].points.length > 1 && activePointIndex !== 0) {
       lines[activeLineIndex].points.splice(activePointIndex, 1);
+      const newIndex = lines[activeLineIndex].points.length - 1;
 
       this.setState({
         lines,
-        activePointIndex: lines[activeLineIndex].points.length - 1
+        activePointIndex: newIndex
       });
       console.log(`Point removed`);
     }
+    // else, if this is the last point, remove Line
+    else if (lines[activeLineIndex].points.length === 1) {
+
+      this.removeActiveLine();
+    }
+  }
+
+  
+  removeActiveLine = () => {
+    const { lines, activeLineIndex } = this.getState();
+
+    lines.splice(activeLineIndex, 1);
+    const newActiveLineIndex = 0;
+    const newIndex = lines[activeLineIndex].points.length - 1;
+
+    this.setState({
+      activeLineIndex: newActiveLineIndex, //reset this to 0 TODO: make sure there is another Line
+      lines,
+      activePointIndex: newIndex
+    });
   }
 
 
@@ -492,7 +516,6 @@ export default class CORE {
             p2y: p.y,
             x: p.q.x,
             y: p.q.y,
-            //setDraggedQuadratic: setDraggedQuadratic //needs to be caslled higher up
           })
         );
       } else if (p.c) {
@@ -507,7 +530,6 @@ export default class CORE {
             y1: p.c[0].y,
             x2: p.c[1].x,
             y2: p.c[1].y,
-            // setDraggedCubic: setDraggedCubic //needs to be caslled higher up
           })
         );
       }
@@ -522,7 +544,6 @@ export default class CORE {
             x:p.x,
             y:p.y,
             rad: 8,
-            // setDraggedPoint:setDraggedPoint //needs to be caslled higher up
           })}
           ${anchors}
       </g>`

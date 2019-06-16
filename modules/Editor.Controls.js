@@ -52,6 +52,7 @@ export default class Controls {
     const cg_lineFunctions = new LineFunctions({
       getState: this.editor.getState,
       setState: this.editor.setState,
+      CORE: this.editor.CORE,
     });
 
     const cg_tagLine = new TagLine({
@@ -83,9 +84,9 @@ export default class Controls {
         title: this.localState.LINE,
         icon: Icon_Line(),
         controlGroups: [
-          cg_lineFunctions,
           cg_pointTypes,
           cg_tagLine,
+          cg_lineFunctions,
         ],
       }),
       new Section({
