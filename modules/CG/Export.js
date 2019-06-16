@@ -8,11 +8,11 @@ import Listener from '../Listener.js';
  */
 
 /**
- * //TODO: Replace Descriptions
+ * Export
  * @class 
  * @extends {ControlGroup}
  */
-export default class Template extends ControlGroup {
+export default class Export extends ControlGroup {
   /**
    * @param {object} props
    * @param {function} props.setState
@@ -21,8 +21,8 @@ export default class Template extends ControlGroup {
   constructor(props) {
     super();
     this.wrapper = super.wrapper;
-    this.name = 'TODO:';
-    this.id = 'TODO:';
+    this.name = 'Export';
+    this.id = 'export';
     this.selector = `#${this.id}`;
 
     this.setState = props.setState;
@@ -38,8 +38,8 @@ export default class Template extends ControlGroup {
     return [
       new Listener({
         type: 'click',
-        callback: this.handleClick, //dont need to bid
-        cgId: this.selector, //or key - dont need both
+        callback: this.handleClick,
+        cgId: this.selector,
         keys: null
       }),
     ];
@@ -56,7 +56,7 @@ export default class Template extends ControlGroup {
    * @returns {string} HTML to render
    */
   render = (state) => {
-    // Insert the variables here
+
 
     return this.wrapper({
       title: this.name,
@@ -65,7 +65,9 @@ export default class Template extends ControlGroup {
       <div class="control">
 
         <div class="tag-row">
-          <h1>Template</h1>
+          checkboxes for export options:<br>
+          line id's<br>
+          tags<br>
         </div>
       
       </div>

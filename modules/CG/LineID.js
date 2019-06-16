@@ -93,12 +93,13 @@ export default class LineID extends ControlGroup {
     this.setState({ lineRules: mappedLineRules });
   }
 
+  
   autoIdNewLine = () => {
 
   
   }
 
-  
+
   /**
    * When Enter is pressed, make a new ID for the active Line
    * @param {MouseEvent} e

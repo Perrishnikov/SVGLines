@@ -8,6 +8,7 @@ import TagLine from './CG/TagLine.js';
 import TagManager from './CG/TagManager.js';
 import PointTypes from './CG/PointTypes.js';
 import LineID from './CG/LineID.js';
+import Export from './CG/Export.js';
 
 /**
  * @typedef {import('./Editor').Anchor} Anchor
@@ -81,6 +82,12 @@ export default class Controls {
       CORE: this.editor.CORE,
     });
 
+    const cg_export = new Export({
+      setState: this.editor.setState,
+      getState: this.editor.getState,
+      // CORE: this.editor.CORE,
+    })
+
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -94,6 +101,7 @@ export default class Controls {
           cg_lineId,
           cg_tagLine,
           
+
           cg_lineFunctions,
         ],
       }),
@@ -107,7 +115,9 @@ export default class Controls {
       new Section({
         title: this.localState.SETTINGS,
         icon: Icon_Settings(),
-        controlGroups: [],
+        controlGroups: [
+          cg_export
+        ],
       }),
       new Section({
         title: this.localState.HELP,
