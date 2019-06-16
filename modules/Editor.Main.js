@@ -20,6 +20,7 @@ export default class Main {
     this.CORE = editor.CORE;
     this.setState = editor.setState;
     this.getState = editor.getState;
+    this.id = 'main';
 
     editor.registerListener([
       new Listener({

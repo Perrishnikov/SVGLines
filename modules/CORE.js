@@ -13,11 +13,13 @@ import { Point, Quadratic, Cubic } from './Editor.Components.js';
  */
 export default class CORE {
   /**
-   * @param {Editor} editor 
+   * @param {Editor} editor
+   * @param {string} mainId
    */
-  constructor(editor) {
+  constructor(editor, mainId) {
     this.setState = editor.setState;
     this.getState = editor.getState;
+    this.mainId = mainId;
   }
 
   /**
@@ -77,7 +79,7 @@ export default class CORE {
    */
   getMouseCoords = (e) => {
     const { grid } = this.getState();
-    const rect = document.querySelector('#main'); //TODO: side effect :()
+    const rect = document.querySelector(`#${this.mainId}`);
     const top = rect.getBoundingClientRect().top;
 
     let x = e.pageX;
@@ -138,7 +140,7 @@ export default class CORE {
 
     //TESTING -> shows mouse coords
     // const { grid } = this.getState();
-    // const rect = document.querySelector('#main'); //TODO: side effect :()
+    // const rect = document.querySelector(`#{this.mainId}`); //TODO: side effect :()
     // const top = rect.getBoundingClientRect().top;
     // // const x = e.clientX + rect.scrollLeft;
     // const x = e.pageX;
@@ -563,28 +565,28 @@ export default class CORE {
   }
 
   /**
-   *@param {Coords} coords
-   @param {Anchor} anchor
+   * @param {Coords} coords
+   * @param {Anchor} anchor
    * @param {E} e
    */
   setCubicPosition = (coords, anchor, e) => {
-      const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
-      const activeLine = lines[activeLineIndex];
-      let newCoords = coords;
+    const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
+    const activeLine = lines[activeLineIndex];
+    let newCoords = coords;
 
-      // {x: y:}
-      const coord = activeLine.points[activePointIndex].c[anchor];
-      let v = this.positiveNumber(e.target.value);
-  console.log(`v: ${v}`);
-      if (coords.x && v > w) v = w;
-      if (coords.y && v > h) v = h;
-      console.log(`v: ${v}`);
+    // {x: y:}
+    const coord = activeLine.points[activePointIndex].c[anchor];
+    let v = this.positiveNumber(e.target.value);
+    console.log(`v: ${v}`);
+    if (coords.x && v > w) v = w;
+    if (coords.y && v > h) v = h;
+    console.log(`v: ${v}`);
 
-      coord[coords] = v;
-  console.dir(`coords: ${coord}`);
-      console.log(coord);
-      this.setCubicCoords(coord, anchor);
-    }
+    coord[coords] = v;
+    console.dir(`coords: ${coord}`);
+    console.log(coord);
+    this.setCubicCoords(coord, anchor);
+  }
 
 
   removeActivePoint = () => {
@@ -615,7 +617,7 @@ export default class CORE {
   /** End Editor.Controls------------------ */
 
   /** Utility - Used by several  */
-    /**
+  /**
    * Grid
    * Parse a string number
    * @param {string} n 

@@ -65,11 +65,13 @@ export default class Editor {
     /** @type {Array<Listener>} */
     this.registeredListeners = [];
 
-    this.CORE = new CORE(this);
+    
 
     this.main = new Main(this);
 
     this.controls = new Controls(this);
+    
+    this.CORE = new CORE(this, this.main.id);
   }
 
 
@@ -111,7 +113,7 @@ export default class Editor {
 
     this.registeredListeners.forEach(listener => {
       /**@type {Listener} */
-      const { type, callback, keys, cgId } = listener;
+      const { type, callback, cgId } = listener;
 
       if (['keydown', 'keypress', 'keyup'].includes(type)) {
 
