@@ -174,9 +174,8 @@ export default class CORE {
   /** From Editor.Main ------------------------------- */
 
   handleMousedown = (e) => {
-    console.log('handleMousedown');
+    // console.log('handleMousedown');
     e.preventDefault();
-    // e.stopPropagation();
 
     /**@type {string[]} */
     const classList = [...e.target.classList];
@@ -232,11 +231,11 @@ export default class CORE {
     // console.log(`Editor handleKeyDown: ${e.key}`);
 
     if (e.key === 'Alt' || e.key === 'Meta') {
-      console.log('meta or alt');
+      // console.log('meta or alt');
       this.setState({ ctrl: true });
     }
     if (e.key === 'Shift') {
-      console.log('shift');
+      // console.log('shift');
       this.setState({ shift: true });
     }
 
@@ -272,7 +271,7 @@ export default class CORE {
 
   // EVENTS CALLED BY LISTENERS
   cancelDragging = () => {
-    console.log(`cancelDragging`);
+    // console.log(`cancelDragging`);
     let { draggedPoint, draggedQuadratic, draggedCubic } = this.getState();
 
     if (draggedPoint || draggedQuadratic || draggedCubic) {

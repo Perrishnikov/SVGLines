@@ -44,8 +44,6 @@ export default class Controls {
       TAG_TO_DELETE: ''
     };
 
-    // const state = this.editor.getState();
-
     /**
      * CONTROL GROUPS
      */
@@ -55,8 +53,6 @@ export default class Controls {
     });
 
     const cg_tagLine = new TagLine({
-      // activeLine: state.lines[state.activeLineIndex],
-      // tags: state.tags
       getState: this.editor.getState,
       setState: this.editor.setState,
       getLocalState: this.getLocalState.bind(this),
@@ -64,7 +60,6 @@ export default class Controls {
     });
 
     const cg_tagManager = new TagManager({
-      // tags: state.tags,
       setState: this.editor.setState,
       getState: this.editor.getState,
       getLocalState: this.getLocalState.bind(this),
