@@ -113,16 +113,24 @@ export default class Editor {
       /**@type {Listener} */
       const { type, callback, keys, cgId } = listener;
 
-      if (['keydown', 'keypress'].includes(type)) {
+      if (['keydown', 'keypress', 'keyup'].includes(type)) {
 
         if (listener.keys) {
           keypressTypes.add(type);
           keyListeners.push(listener);
+
+        } else if (type === 'keyup') {
+
+          document.addEventListener('keyup', event => {
+            // console.log(`Hello World!`);
+            return callback(event);
+          });
+
         } else {
           console.error(`Keys required for cgId '${listener.cgId}'`);
         }
 
-      } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove', 'keyup'].includes(type)) {
+      } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove'].includes(type)) {
         // @ts-ignore
         document.addEventListener(type, event => {
           /**@type {HTMLElement} */
@@ -152,7 +160,7 @@ export default class Editor {
             listener.keys.forEach(key => {
 
               if (event.key === key) {
-                console.log(`Key "${key}" called for ${listener.cgId}`);
+                // console.log(`Key "${key}" called for ${listener.cgId}`);
                 return listener.callback(event);
               }
 

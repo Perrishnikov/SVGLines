@@ -131,14 +131,14 @@ export default class CORE {
    * passed to Editor.Main
    * @param {E} e 
    */
-  handleMouseMove = (e) => {
+  handleMousemove = (e) => {
     e.preventDefault();
-    e.stopPropagation();
+    // e.stopPropagation();
     const { ctrl, shift, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
 
     //TESTING -> shows mouse coords
     // const { grid } = this.getState();
-    // const rect = this.main.id;
+    // const rect = document.querySelector('#main'); //TODO: side effect :()
     // const top = rect.getBoundingClientRect().top;
     // // const x = e.clientX + rect.scrollLeft;
     // const x = e.pageX;
@@ -156,13 +156,15 @@ export default class CORE {
 
     if (!ctrl && !shift) {
       if (draggedPoint) {
-        // console.log(`setPoint`);
+        console.log(`setPoint`);
         this.setPointCoords(this.getMouseCoords(e));
+
       } else if (draggedQuadratic) {
-        // console.log(`setQuad`);
+        console.log(`setQuad`);
         this.setQuadraticCoords(this.getMouseCoords(e));
+
       } else if (draggedCubic !== false) {
-        // console.log(`setCubic: ${draggedCubic}`);
+        console.log(`setCubic: ${draggedCubic}`);
         this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
       }
     }
@@ -171,8 +173,9 @@ export default class CORE {
 
   /** From Editor.Main ------------------------------- */
 
-  mousedown = (e) => {
-    // e.preventDefault();
+  handleMousedown = (e) => {
+    console.log('handleMousedown');
+    e.preventDefault();
     // e.stopPropagation();
 
     /**@type {string[]} */
@@ -180,7 +183,7 @@ export default class CORE {
     /**@type {string} */
     const index = e.target.dataset.index; //point index value
 
-    // console.log(classList);
+    console.log(classList);
 
     if (classList.includes('ad-Anchor-point')) {
       //if the target has an anchor, it is Cubic
@@ -229,7 +232,7 @@ export default class CORE {
     // console.log(`Editor handleKeyDown: ${e.key}`);
 
     if (e.key === 'Alt' || e.key === 'Meta') {
-      console.log('meta');
+      console.log('meta or alt');
       this.setState({ ctrl: true });
     }
     if (e.key === 'Shift') {
@@ -253,10 +256,10 @@ export default class CORE {
   }
 
 
-  handleKeyUp = (e) => {
+  handleKeyUp = () => {
     //need to account for text entry
     // if (!this.getState().focusText) {
-    // console.log(`handleKeyUp`);
+    console.log(`handleKeyUp`);
     if (this.getState().ctrl === true) {
       this.setState({ ctrl: false });
     }
@@ -266,15 +269,20 @@ export default class CORE {
     // }
   }
 
-  // EVENTS CALLED BY LISTENERS
 
+  // EVENTS CALLED BY LISTENERS
   cancelDragging = () => {
-    // console.log(`cancelDragging`);
-    this.setState({
-      draggedPoint: false,
-      draggedQuadratic: false,
-      draggedCubic: false
-    });
+    console.log(`cancelDragging`);
+    let { draggedPoint, draggedQuadratic, draggedCubic } = this.getState();
+
+    if (draggedPoint || draggedQuadratic || draggedCubic) {
+      this.setState({
+        draggedPoint: false,
+        draggedQuadratic: false,
+        draggedCubic: false
+      });
+    }
+
   }
 
 

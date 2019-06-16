@@ -17,19 +17,11 @@ export default class Main {
    * @param {Editor} editor 
    */
   constructor(editor) {
-    // this.editor = editor;
     this.CORE = editor.CORE;
     this.setState = editor.setState;
     this.getState = editor.getState;
-    // this.handleMouseMove = editor.handleMouseMove;
-    // this.getMouseCoords = editor.getMouseCoords;
-    // this.generatePath = editor.generatePath;
 
-    // this.registerListener();
-
-  }
-  listeners(){
-    return [
+    editor.registerListener([
       new Listener({
         type: 'keydown',
         callback: this.CORE.handleKeyDown,
@@ -44,29 +36,24 @@ export default class Main {
       }),
       new Listener({
         type: 'mouseup',
-        callback: (e) => {
-          let { draggedPoint, draggedQuadratic, draggedCubic } = this.getState();
-
-          if (draggedPoint || draggedQuadratic || draggedCubic) {
-            this.CORE.cancelDragging();
-          }
-        },
+        callback: this.CORE.cancelDragging,
         cgId: '#main',
         keys: null
       }),
       new Listener({
         type: 'mousedown',
-        callback: this.CORE.mousedown.bind(this),
+        callback: this.CORE.handleMousedown,
         cgId: '#main',
         keys: null
       }),
       new Listener({
         type: 'mousemove',
-        callback: this.CORE.handleMouseMove,
+        callback: this.CORE.handleMousemove,
         cgId: '#main',
         keys: null
       })
-    ]
+    ]);
+
   }
 
 
@@ -76,17 +63,13 @@ export default class Main {
    * @param {import('./Editor').State} props.state
    */
   render = (props) => {
-    // console.log(`from Main render()`);
     const { w, h, activePointIndex, activeLineIndex } = props.state;
     const grid = Grid(props.state);
     const lines = props.state.lines;
-    /* SIDE EFFECT - set the width and height of Main based off of line.json*/
-    // this.id.style.minHeight = `${props.state.h}px`;
-    // this.id.style.minWidth = `${props.state.w + 300}px`; //300px is width of Controls
 
     return `
-    <div id="main" class="main_wrap">
-      <svg class="ad-SVG" width="${w}" height="${h}">
+    <div style="min-height:${h}px; min-width:${w + 300}px" id="main" class="main_wrap">
+      <svg class="ad-SVG" width="${w +300}" height="${h}">
         ${lines.map((line, index) => {
           let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
           const path = this.CORE.generatePath(line.points);
@@ -106,6 +89,3 @@ export default class Main {
 
 }
 
-Main.Render = () => {
-
-}

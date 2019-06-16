@@ -320,6 +320,7 @@ export default class Controls {
       ${this.nav.render(this.localState.ACTIVE)}
       ${sections}
     </div>
+    
     `;
   }
 }
