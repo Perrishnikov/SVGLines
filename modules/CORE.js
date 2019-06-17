@@ -1,16 +1,13 @@
 //@ts-check
 
 /**
- * @typedef {import('./Editor').Anchor} Anchor
- * @typedef {{x:number,y:number}} Coords
- * @typedef {import('./Editor').Element} Element
+ * @typedef {0 | 1 } Anchor
  * @typedef {import('./Editor').default} Editor
- * @typedef {{x:number,y:number}} coords
- * @typedef {MouseEvent} E
- * @typedef {import('./Editor').State} State
- * 
+ * @typedef {{x:number,y:number}} Coords
+ * @typedef {MouseEvent} E 
+ * @typedef {'l'|'q'|'c'|'a'} PointType
  */
-export default class CORE {
+export class CORE {
   /**
    * @param {Editor} editor
    */
@@ -39,7 +36,7 @@ export default class CORE {
    * Called from handleMouseMove
    * calls setState()
    * @param {Coords} coords
-   * @param {State["draggedCubic"]} anchor
+   * @param {Anchor} anchor
    */
   setCubicCoords = (coords, anchor) => {
     // console.log('setCubicCoords');
@@ -423,7 +420,7 @@ export default class CORE {
     let { lines, activeLineIndex } = this.getState();
 
     // const newLine = new Line();
-    
+
     const newPoints = { points: [coords], tags: [] };
     lines.push(newPoints);
 
@@ -483,7 +480,7 @@ export default class CORE {
 
     lines.splice(activeLineIndex, 1);
     const newActiveLineIndex = 0;
-    const newIndex = lines[activeLineIndex].points.length - 1;
+    const newIndex = lines[newActiveLineIndex].points.length - 1;
 
     this.setState({
       activeLineIndex: newActiveLineIndex, //reset this to 0 TODO: make sure there is another Line
@@ -724,6 +721,28 @@ export default class CORE {
     if (isNaN(parsed) || parsed < 0) { parsed = 0; }
 
     return parsed;
+  }
+}
+
+
+/**
+ * @typedef {object} line
+ * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:Array<{x:number,y:number}, {x:number,y:number}>, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>}line.points
+ * @property {Array<string>} line.tags - array of strings
+ * @property {string} line.id - unique id
+ * @property {string} line.z - z-index for css
+ */
+export class Line {
+  constructor() {
+    /**@type {line["points"]} */
+    this.points = [{ x: null, y: null }];
+    /**@type {line["z"]} */
+    this.z = null;
+    /**@type {line["tags"]} */
+    this.tags = [null];
+    /**@type {line["id"]} */
+    this.id = null;
+
   }
 
 }

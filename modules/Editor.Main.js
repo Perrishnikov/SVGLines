@@ -3,18 +3,10 @@
 import Listener from './Listener.js';
 import { Grid } from './Editor.Components.js';
 
-/**
- * @typedef {import('./Editor').Anchor} anchor
- * @typedef {import('./Editor').Element} Element
- * @typedef {import('./Editor').default} Editor
- * @typedef {{x:number,y:number}} coords
- * @typedef {MouseEvent} e
- * @typedef {import('./Editor').State} State
- * 
- */
+
 export default class Main {
   /**
-   * @param {Editor} editor 
+   * @param {import('./Editor').default} editor 
    */
   constructor(editor) {
     this.CORE = editor.CORE;
@@ -62,6 +54,7 @@ export default class Main {
    * Render this on every State change
    * @param {object} props
    * @param {import('./Editor').State} props.state
+   * @returns {string}
    */
   render = (props) => {
     const { w, h, activePointIndex, activeLineIndex } = props.state;

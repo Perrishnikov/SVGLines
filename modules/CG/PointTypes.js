@@ -6,8 +6,8 @@ import { Button } from './_Components.js';
 
 /**
  * @typedef {import('../Editor').State} State
- * @typedef {import('../Editor').PointType} PointType
- * @typedef {import('../CORE').default} CORE
+ * @typedef {import('../CORE').PointType} PointType
+ * @typedef {import('../CORE').CORE} CORE
  */
 export default class PointTypes extends ControlGroup {
   /**

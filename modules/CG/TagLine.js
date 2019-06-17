@@ -6,7 +6,7 @@ import { Icon_Check } from '../../icons/index.js';
 /**
  * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('../Editor.Controls').LocalState} LocalState
- * @typedef {import('../Editor.Controls').Icon} Icon
+ * typedef {import('../Editor.Controls').Icon} Icon
  * @typedef {import('../Editor').State} State
  */
 

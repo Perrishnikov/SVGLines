@@ -7,7 +7,7 @@ import { Icon_Delete, Icon_ThumbsUp, Icon_ThumbsDown } from '../../icons/index.j
 /**
  * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('../Editor.Controls').LocalState} LocalState
- * @typedef {import('../Editor.Controls').Icon} Icon
+ * typedef {import('../Editor.Controls').Icon} Icon
  * @typedef {import('../Editor').State} State
  */
 

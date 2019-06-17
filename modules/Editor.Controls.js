@@ -1,6 +1,5 @@
 //@ts-check
 
-// import { Section } from './Controls.Wrappers.js';
 import Nav from './Controls.Nav.js';
 import { Icon_Line, Icon_Shuffle, Icon_Settings, Icon_Help } from '../icons/index.js';
 import LineFunctions from './CG/LineFunctions.js';
@@ -10,35 +9,19 @@ import PointTypes from './CG/PointTypes.js';
 import LineID from './CG/LineID.js';
 import Export from './CG/Export.js';
 
-/**
- * @typedef {import('./Editor').Anchor} Anchor
- * @typedef {import('./Editor').State} State
- * @typedef {import('./Editor').Element} Element
- * @typedef {import('./Editor').default} Editor
- * @typedef {import('./Editor').PointType} PointType
- * @typedef {import('./Editor').Line} Line
- * @typedef {import('./Editor').Coords} Coords
- * @typedef {import('./Editor').E} E
- * 
- * @typedef {import('./CG/_ControlGroup').default} ControlGroup
- * 
- * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
- * @typedef {string} Title
- * @typedef {string} Id
- * @typedef {string} Icon
- * @typedef {string} Active
- * @typedef {string} Html
- * @typedef {Array<Section>} Sections
- */
+
 export default class Controls {
   /**
-   * @param {Editor} editor 
-   * param {Element} targetId
+   * @param {import('./Editor').default} editor 
    */
   constructor(editor) {
 
-    this.editor = editor;
+    // this.editor = editor;
+    this.getState = editor.getState;
+    this.setState = editor.setState;
+    this.CORE = editor.CORE;
 
+    /**@type {LocalState} */
     this.localState = {
       LINE: 'line',
       LINES: 'lines',
@@ -52,39 +35,39 @@ export default class Controls {
      * CONTROL GROUPS
      */
     const cg_lineId = new LineID({
-      getState: this.editor.getState,
-      setState: this.editor.setState,
+      getState: this.getState,
+      setState: this.setState,
     });
 
     const cg_lineFunctions = new LineFunctions({
-      getState: this.editor.getState,
-      setState: this.editor.setState,
-      CORE: this.editor.CORE,
+      getState: this.getState,
+      setState: this.setState,
+      CORE: this.CORE,
     });
 
     const cg_tagLine = new TagLine({
-      getState: this.editor.getState,
-      setState: this.editor.setState,
-      getLocalState: this.getLocalState.bind(this),
-      setLocalState: this.setLocalState.bind(this)
+      getState: this.getState,
+      setState: this.setState,
+      getLocalState: this.getLocalState,
+      setLocalState: this.setLocalState,
     });
 
     const cg_tagManager = new TagManager({
-      setState: this.editor.setState,
-      getState: this.editor.getState,
-      getLocalState: this.getLocalState.bind(this),
-      setLocalState: this.setLocalState.bind(this)
+      setState: this.setState,
+      getState: this.getState,
+      getLocalState: this.getLocalState,
+      setLocalState: this.setLocalState,
     });
 
     const cg_pointTypes = new PointTypes({
-      setState: this.editor.setState,
-      getState: this.editor.getState,
-      CORE: this.editor.CORE,
+      setState: this.setState,
+      getState: this.getState,
+      CORE: this.CORE,
     });
 
     const cg_export = new Export({
-      setState: this.editor.setState,
-      getState: this.editor.getState,
+      setState: this.setState,
+      getState: this.getState,
       // CORE: this.editor.CORE,
     })
 
@@ -100,7 +83,7 @@ export default class Controls {
           cg_pointTypes,
           cg_lineId,
           cg_tagLine,
-          
+
 
           cg_lineFunctions,
         ],
@@ -147,12 +130,12 @@ export default class Controls {
 
   }
 
-  getLocalState() {
+  getLocalState = () => {
     // console.log(this);
     return Object.assign({}, this.localState);
   }
 
-  setLocalState(obj) {
+  setLocalState = (obj) => {
     this.localState = Object.assign({}, this.localState, obj);
   }
 
@@ -223,21 +206,21 @@ export default class Controls {
   /** LOGIC methods */
   //TODO: Move to CanvasSettings.js
   setHeight = (e) => {
-    let v = this.editor.CORE.positiveNumber(e.target.value),
+    let v = this.CORE.positiveNumber(e.target.value),
       min = 1;
     if (v < min) v = min;
 
-    this.editor.setState({ h: v });
+    this.setState({ h: v });
   }
 
 
   //TODO: Move to CanvasSettings.js
   setWidth = (e) => {
-    let v = this.editor.CORE.positiveNumber(e.target.value),
+    let v = this.CORE.positiveNumber(e.target.value),
       min = 1;
     if (v < min) v = min;
 
-    this.editor.setState({ w: v });
+    this.setState({ w: v });
   }
 
 
@@ -335,9 +318,9 @@ class Section {
   /**
    * Sections do not get listeners() - just Control Groups
    * @param {object} props 
-   * @param {import('./Editor.Controls').Title} props.title
+   * @param {string} props.title
    * @param {string} props.icon
-   * @param {Array<ControlGroup>} props.controlGroups
+   * @param {Array<import('./CG/_ControlGroup').default>} props.controlGroups
    */
   constructor(props) {
     this.title = props.title;
@@ -348,8 +331,8 @@ class Section {
 
   /**
    * @param {object} props
-   * @param {Active} props.active - Active Section
-   * @param {State} props.state - State
+   * @param {string} props.active - Active Section
+   * @param {import('./Editor').State} props.state
    * @returns {string} HTML to render
    */
   render(props) {
@@ -372,3 +355,7 @@ class Section {
     </section>`;
   }
 }
+
+/**
+ * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
+ */

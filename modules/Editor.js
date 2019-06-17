@@ -1,55 +1,20 @@
 //@ts-check
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
-import CORE from './CORE.js';
+import { CORE, Line } from './CORE.js';
 
-/**
- * Misc
- * @typedef {HTMLElement} Element
- * @typedef {{x:number,y:number}} Coords
- * @typedef {0 | 1 } Anchor
- * @typedef {MouseEvent} E
- * @typedef {'l'|'q'|'c'|'a'} PointType
- * @typedef {Array<string>} Tags
- * @typedef {import('./Listener').default} Listener
- */
 
-/**
- * Line
- * @typedef {Object} Line
- * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:Array<{x:number,y:number}, {x:number,y:number}>, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>} points
- * @property {Array<string>} tags
- * @property {string} id
- */
 
-/**
- * State
- * @typedef {Object} State
- * @property {Anchor | boolean} draggedCubic
- * @property {boolean} draggedQuadratic
- * @property {boolean} draggedPoint
- * @property {boolean} ctrl
- * @property {boolean} shift
- * @property {number} activeLineIndex 
- * @property {number} activePointIndex  
- * @property {Line[]} lines
- * @property {Tags} tags
- * @property {string} name
- * @property {number} w
- * @property {number} h
- * @property {{snap: boolean, size: number,show: boolean}} grid
- * @property {Array<*>} lineRules
- */
 
 /**
  * Editor
- * @typedef {Editor} this
- * @property {Id} id
- * @property {State} state
- * @property {Main} main
- * @property {Controls} controls
- * @property {Main} main
- * @property {Array<Listener} registerListener
+ * @typedef {object} editor
+ * @property {Element} editor.id
+ * @property {State} editor.state
+ * @property {Main} editor.main
+ * @property {Controls} editor.controls
+ * @property {Array<Listener>} editor.registeredListeners
+ * @property {CORE} editor.core
  */
 export default class Editor {
   /**
@@ -57,21 +22,25 @@ export default class Editor {
    * @param {{state:State,id:Element}} props
    */
   constructor(props) {
+    /**@type {editor["id"]} */
     this.id = props.id;
 
-    /**@type {State} */
+    /**@type {editor["state"]} */
     this.state = props.state; //Just set the state without render...
 
-    /** @type {Array<Listener>} */
+    /**@type {editor["registeredListeners"]} */
     this.registeredListeners = [];
 
+    /**@type {editor["core"]} */
     this.CORE = new CORE(this);
 
+    /**@type {editor["main"]} */
     this.main = new Main(this);
-    this.CORE.mainId = this.main.id;
+
+    /**@type {editor["controls"]} */
     this.controls = new Controls(this);
 
-
+    this.CORE.mainId = this.main.id; //assign this to CORE to avoid side effects
   }
 
 
@@ -194,7 +163,7 @@ export default class Editor {
     new Promise((resolve, reject) => {
 
       resolve(this.state = Object.assign({}, this.state, obj));
-    }).then((state) => {
+    }).then(() => {
       const newState = {
         state: this.getState(), // Cloned
       };
@@ -209,7 +178,6 @@ export default class Editor {
   /**
    * Grid
    * calls setState()
-   * @param {E} e
    * //TODO: move to Grid CG
    */
   setGridSize = (e) => {
@@ -231,7 +199,6 @@ export default class Editor {
    * Grid
    * calls setState()
    * //TODO: move to Grid CG
-   * @param {E} e
    */
   setGridSnap = (e) => {
     let { grid } = this.getState();
@@ -245,7 +212,6 @@ export default class Editor {
    * Grid
    * calls setState()
    * TODO: move to Grid CG
-   * @param {E} e
    */
   setGridShow = (e) => {
     let { grid } = this.getState();
@@ -266,3 +232,29 @@ export default class Editor {
     `;
   }
 }
+
+/**
+ * State
+ * @typedef {Object} State
+ * @property {import('./CORE').Anchor | boolean} draggedCubic
+ * @property {boolean} draggedQuadratic
+ * @property {boolean} draggedPoint
+ * @property {boolean} ctrl
+ * @property {boolean} shift
+ * @property {number} activeLineIndex 
+ * @property {number} activePointIndex  
+ * @property {Line[]} lines
+ * @property {Array<string>} tags
+ * @property {string} name
+ * @property {number} w
+ * @property {number} h
+ * @property {{snap: boolean, size: number,show: boolean}} grid
+ * @property {Array<*>} lineRules
+ */
+
+ /**
+ * Misc
+ * typedef {HTMLElement} Element
+ * typedef {{x:number,y:number}} Coords
+ * @typedef {import('./Listener').default} Listener
+ */

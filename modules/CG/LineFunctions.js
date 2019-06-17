@@ -5,7 +5,7 @@ import Listener from '../Listener.js';
 import { Button } from './_Components.js';
 
 /**
- * @typedef {import('../CORE').default} CORE
+ * @typedef {import('../CORE').CORE} CORE
  */
 
 /**

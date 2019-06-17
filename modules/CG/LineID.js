@@ -93,8 +93,8 @@ export default class LineID extends ControlGroup {
     this.setState({ lineRules: mappedLineRules });
   }
 
-  
-  autoIdNewLine = () => {
+
+  generateNewLineId = () => {
 
   
   }
