@@ -5,9 +5,7 @@ import Listener from '../Listener.js';
 import { Icon_Delete, Icon_ThumbsUp, Icon_ThumbsDown } from '../../icons/index.js';
 
 /**
- * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('../Editor.Controls').LocalState} LocalState
- * typedef {import('../Editor.Controls').Icon} Icon
  * @typedef {import('../Editor').State} State
  */
 
@@ -47,7 +45,7 @@ export default class TagManager extends ControlGroup {
       new Listener({
         type: 'click',
         callback: this.handleClick,
-        cgId: this.selector, //or key - dont need both
+        cgId: this.selector,
         keys: null
       }),
       new Listener({
@@ -66,7 +64,6 @@ export default class TagManager extends ControlGroup {
   }
 
   focusIn = (e) => {
-    // e.stopPropagation();
     e.preventDefault();
 
     console.log(`focusin!`);
