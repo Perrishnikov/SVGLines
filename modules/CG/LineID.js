@@ -40,7 +40,7 @@ export default class LineID extends ControlGroup {
     return [
       new Listener({
         type: 'keydown',
-        callback: this.handleLineIdUpdate,
+        callback: this.updateLineId,
         cgId: this.selector,
         keys: ['Enter'],
       }),
@@ -49,7 +49,7 @@ export default class LineID extends ControlGroup {
 
 
 
-  handleGenerateLineId = () => {
+  setLineId = () => {
     /**@type {State} */
     const { lineRules, lines } = this.getState();
     //returns the value of the first element in the array.value
@@ -104,7 +104,7 @@ export default class LineID extends ControlGroup {
    * When Enter is pressed, make a new ID for the active Line
    * @param {MouseEvent} e
    */
-  handleLineIdUpdate = (e) => {
+  updateLineId = (e) => {
 
     if (e.key === 'Enter' && document.activeElement.id === this.idInput) {
 
@@ -132,7 +132,7 @@ export default class LineID extends ControlGroup {
         this.setState({ lines });
       } else {
         //Put the old id back
-        //TODO: add message
+        //TODO: add message if not changed
         idInput.innerText = activeLine.id;
       }
     }

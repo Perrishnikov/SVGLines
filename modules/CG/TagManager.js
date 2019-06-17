@@ -86,40 +86,20 @@ export default class TagManager extends ControlGroup {
       // handle the Add Tag
       let { tags } = this.getState();
 
-      this.handleAddTag({ target: e.target, tags });
+      this.addGlobalTag({ target: e.target, tags });
 
     }
   }
 
-  /**
-   * When User hits Enter, add the new Tag to State
-   * Called from Editor keydown Event Listener
-   * @param  {object} props 
-   * @param {HTMLElement} props.target
-   * @param {Array<string>} props.tags
-   */
-  handleAddTag = (props) => {
-    const { tags = [], target } = props;
-
-    //Clean use input on Tag name
-    const newTag = target.innerText.trim();
-    target.blur();
-
-    //If the Tag is valid, proceed....
-    if (newTag && newTag.length < 15 && !tags.includes(newTag)) {
-      tags.push(newTag);
-      // this.toggleAddTagFocus(target);
-      this.setState({ tags });
-    }
-  }
 
   handleClick = (e) => {
     // returns <div data-tag="taxi"....></div>
+    /**@type {HTMLElement} */
     const cg = e.target.closest(this.selector);
 
     if (cg) {
+      /**@type {HTMLElement} */
       const taggedAncestor = e.target.closest('div[data-tag]');
-      const dataset = e.target.dataset;
 
       if (taggedAncestor) {
 
@@ -129,14 +109,15 @@ export default class TagManager extends ControlGroup {
         });
       }
 
-      const parent = e.target.parentNode;
-      const parentClasses = [...parent.classList];
-
+      /**@type {HTMLDataElement} */
+      const dataset = e.target.dataset;
       //SAVE -> TAGS -Confirm Delete
       if (dataset.value === 'confirm-yes') {
+
+        /**@type {LocalState} */
         const { TAG_TO_DELETE } = this.getLocalState();
 
-        this.handleRemoveGlobalTag(TAG_TO_DELETE);
+        this.removeGlobalTag(TAG_TO_DELETE);
       } else if (dataset.value === 'confirm-no') {
 
         this.toggleTagConfirmDelete();
@@ -157,31 +138,67 @@ export default class TagManager extends ControlGroup {
 
 
   /**
-   * When User clicks Tag's X, pop Tag from State
-   * Then remove the Tag from all Lines
-   * @param {string} target 'subway'
+   * When User hits Enter, add the new Tag to State
+   * Called from Editor keydown Event Listener
+   * @param  {object} props 
+   * @param {HTMLElement} props.target
+   * @param {Array<string>} props.tags
    */
-  handleRemoveGlobalTag = (target) => {
-    const { tags } = this.getState();
-    // console.log(`target: ${target}`);
+  addGlobalTag = (props) => {
+    const { tags = [], target } = props;
 
-    const cleanedTags = tags.filter(tag => tag !== target);
+    //Clean use input on Tag name
+    const newTag = target.innerText.trim();
+    target.blur();
 
-    this.setLocalState({ 
-      TAG_TO_DELETE: '',
-      ACTIVE: this.getLocalState().LINES
-    });
-    this.setState({ tags: cleanedTags });
-    // this.setState({ tags: cleanedTags, lines: cleanedLines });
+    //If the Tag is valid, proceed....
+    if (newTag && newTag.length < 15 && !tags.includes(newTag)) {
+      tags.push(newTag);
+      // this.toggleAddTagFocus(target);
+      this.setState({ tags });
+    }
   }
 
 
   /**
-   * param {object} props
+   * When User clicks Tag's X, pop Tag from State
+   * Then remove the Tag from all Lines
+   * @param {string} target 'subway'
+   */
+  removeGlobalTag = (target) => {
+    /**@type {State} */
+    const { tags, lines } = this.getState();
+    // console.log(`target: ${target}`);
+
+    const cleanedTags = tags.filter(tag => tag !== target);
+
+    const cleanedLines = lines.map(line => {
+
+      //remove the removed Tag from all Lines
+      const filteredTags = line.tags.filter(tag => tag !== target);
+      line.tags = filteredTags;
+
+      return line;
+    });
+
+    this.setLocalState({
+      TAG_TO_DELETE: '',
+      ACTIVE: this.getLocalState().LINES
+    });
+
+    this.setState({
+      tags: cleanedTags,
+      lines: cleanedLines,
+    });
+  }
+
+
+  /**
    * @param {State} state
    * @returns {string} HTML to render
    */
   render(state) {
+    /**@type {State} */
     const { tags = [] } = state;
 
     const mappedTags = tags.map(tag => {

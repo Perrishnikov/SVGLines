@@ -14,7 +14,7 @@ export class CORE {
   constructor(editor) {
     this.setState = editor.setState;
     this.getState = editor.getState;
-    this.mainId = '';
+    this.mainId = ''; //assigned in Editor.js in constructor
   }
 
   /**
@@ -635,7 +635,7 @@ export class CORE {
   }
 
 
-  /** Not used */
+  /** Not used - why/*/
   setPointPosition = (coord, e) => {
     const { lines, activePointIndex, activeLineIndex, w, h } = this.getState();
     const ap = lines[activeLineIndex];

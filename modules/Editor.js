@@ -173,7 +173,27 @@ export default class Editor {
   }
 
 
+  /** TAGS ---------------------------- */
+  addLineTag = () => {
+  }
 
+  removeLineTag = () => {
+
+  }
+
+  /** ID's ----------------------------- */
+
+  getLineId = () => {
+
+  }
+
+  setLineId = () => {
+
+  }
+
+  updateLineId = () => {
+
+  }
 
   /**
    * Grid
@@ -252,7 +272,7 @@ export default class Editor {
  * @property {Array<*>} lineRules
  */
 
- /**
+/**
  * Misc
  * typedef {HTMLElement} Element
  * typedef {{x:number,y:number}} Coords
