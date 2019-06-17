@@ -14,6 +14,7 @@
     "size": 50,
     "numbers": true
   },
+  "lineStartingBasis": "0001",
   "lineRules": [{
       "id": "verifyUniqueId",
       "name": "Verify Unique Line Id's",

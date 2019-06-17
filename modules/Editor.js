@@ -173,18 +173,29 @@ export default class Editor {
   }
 
 
-  /** TAGS ---------------------------- */
-  addLineTag = () => {
-  }
+  /* TAGS ---------------------------- */
+  addLineTag = () => {}
 
   removeLineTag = () => {
 
   }
 
-  /** ID's ----------------------------- */
+  /* ID's ----------------------------- */
 
-  getLineId = () => {
+  /**
+   * Gets the next valid Line ID
+   * @param {State["lineStartingBasis"]} currentId
+   * @return {State["lineStartingBasis"]} - next id
+   */
+  getLineId = (currentId) => {
+    const padLength = currentId.length; // '0001' -> 4'
 
+    let count = parseInt(currentId); // 4
+    count++; // 5
+
+    const nextID = count.toString().padStart(padLength, '0'); // '0005'
+
+    return nextID;
   }
 
   setLineId = () => {
@@ -270,6 +281,7 @@ export default class Editor {
  * @property {number} h
  * @property {{snap: boolean, size: number,show: boolean}} grid
  * @property {Array<*>} lineRules
+ * @property {string} lineStartingBasis
  */
 
 /**

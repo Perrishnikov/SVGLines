@@ -15,7 +15,154 @@ export class CORE {
     this.setState = editor.setState;
     this.getState = editor.getState;
     this.mainId = ''; //assigned in Editor.js in constructor
+    this.getLineId = editor.getLineId;
   }
+
+
+  /** Event Handlers -------------------------------- */
+  handleMousedown = (e) => {
+    // console.log('handleMousedown');
+    e.preventDefault();
+
+    /**@type {string[]} */
+    const classList = [...e.target.classList];
+    /**@type {string} */
+    const index = e.target.dataset.index; //point index value
+
+    console.log(classList);
+
+    if (classList.includes('ad-Anchor-point')) {
+      //if the target has an anchor, it is Cubic
+      const anchor = e.target.dataset.anchor ? e.target.dataset.anchor : null;
+
+      // console.log(`index: ${index}, anchor: ${anchor}`);
+
+      if (anchor) {
+        /** for Cubic - props = index, anchor */
+        const lineindex = e.target.parentElement.parentElement.parentElement.dataset.lineindex;
+
+        this.setDraggedCubic(index, anchor, lineindex);
+      } else {
+        /** for Quadratic - props = index */
+        const lineindex = e.target.parentElement.parentElement.parentElement.dataset.lineindex;
+
+        this.setDraggedQuadratic(index, lineindex);
+      }
+    } /** This is a regular Point */
+    else if (classList.includes('ad-Point')) {
+      // console.log('ad-Point classList');
+      const lineindex = e.target.parentElement.parentElement.dataset.lineindex;
+      // console.log(`lineindex: ${lineindex}`);
+
+      this.setDraggedPoint(index, lineindex);
+
+    } else if (classList.includes('ad-SVG')) {
+      //This is the canvas area
+      /** Add the AddPoint Event */
+      // console.log(`this.state.ctrl:${this.getState().ctrl}, true:${true}, equal:${this.getState().ctrl == true}`);
+      // console.log(`this.state.shift:${this.getState().shift}, true:${true}, equal:${this.getState().shift == true}`);
+
+      /** Add new Point */
+      if (this.getState().ctrl && !this.getState().shift) {
+        this.addPoint(e);
+      }
+      /** Add new Line */
+      else if (this.getState().ctrl && this.getState().shift) {
+        console.log(`addLine`);
+
+        this.addLine(e);
+      }
+
+    } else {
+      console.log(`There might be an error here`);
+    }
+  };
+
+
+  handleKeyDown = (e) => {
+    // console.log(`Editor handleKeyDown: ${e.key}`);
+
+    if (e.key === 'Alt' || e.key === 'Meta') {
+      // console.log('meta or alt');
+      this.setState({ ctrl: true });
+    }
+    if (e.key === 'Shift') {
+      // console.log('shift');
+      this.setState({ shift: true });
+    }
+
+    //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
+    // if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
+    //   // handle the Add Tag
+    //   console.log('Enter');
+    //   // this.controls.handleAddTag(e.target);
+    // }
+
+    //If Enter is pressed in the LineId Div CONTROLS -> LINE
+    // if (e.key === 'Enter' && document.activeElement.id === 'lineId') {
+    //   // handle the Add Tag
+    //   this.controls.handleLineIdUpdate(e.target);
+    // }
+
+  }
+
+
+  handleKeyUp = () => {
+    // console.log(`handleKeyUp`);
+    if (this.getState().ctrl === true) {
+      this.setState({ ctrl: false });
+    }
+    if (this.getState().shift === true) {
+      this.setState({ shift: false });
+    }
+  }
+
+
+  /**
+   * passed to Editor.Main
+   * @param {E} e 
+   */
+  handleMousemove = (e) => {
+    e.preventDefault();
+    // e.stopPropagation();
+    const { ctrl, shift, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
+
+    //TESTING -> shows mouse coords
+    // const { grid } = this.getState();
+    // const rect = document.querySelector(`#{this.mainId}`); //TODO: side effect :()
+    // const top = rect.getBoundingClientRect().top;
+    // // const x = e.clientX + rect.scrollLeft;
+    // const x = e.pageX;
+    // const y = e.clientY - top;
+    // const rx = grid.size * Math.round(x / grid.size);
+    // const ry = grid.size * Math.round(y / grid.size);
+
+    // document.querySelector('#coords').innerText = `
+    // Screen X/Y: ${e.screenX}, ${e.screenY}
+    // Client X/Y: ${e.clientX}, ${e.clientY}
+    // Page X/Y: ${e.pageX}, ${e.pageY}
+    // X/Y: ${x}, ${y}
+    // rounded: ${rx}, ${ry}
+    // top:${top}! scrollLeft:${rect.scrollLeft}!`;
+
+    if (!ctrl && !shift) {
+      if (draggedPoint) {
+        // console.log(`setPoint`);
+        this.setPointCoords(this.getMouseCoords(e));
+
+      } else if (draggedQuadratic) {
+        // console.log(`setQuad`);
+        this.setQuadraticCoords(this.getMouseCoords(e));
+
+      } else if (draggedCubic !== false) {
+        // console.log(`setCubic: ${draggedCubic}`);
+        this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
+      }
+    }
+  }
+
+  /** End Event Handlers ------------------------- */
+
 
   /**
    * Called from LineEditor handleMouseMove
@@ -130,49 +277,6 @@ export class CORE {
     return d;
   }
 
-  /**
-   * passed to Editor.Main
-   * @param {E} e 
-   */
-  handleMousemove = (e) => {
-    e.preventDefault();
-    // e.stopPropagation();
-    const { ctrl, shift, draggedCubic, draggedQuadratic, draggedPoint } = this.getState();
-
-    //TESTING -> shows mouse coords
-    // const { grid } = this.getState();
-    // const rect = document.querySelector(`#{this.mainId}`); //TODO: side effect :()
-    // const top = rect.getBoundingClientRect().top;
-    // // const x = e.clientX + rect.scrollLeft;
-    // const x = e.pageX;
-    // const y = e.clientY - top;
-    // const rx = grid.size * Math.round(x / grid.size);
-    // const ry = grid.size * Math.round(y / grid.size);
-
-    // document.querySelector('#coords').innerText = `
-    // Screen X/Y: ${e.screenX}, ${e.screenY}
-    // Client X/Y: ${e.clientX}, ${e.clientY}
-    // Page X/Y: ${e.pageX}, ${e.pageY}
-    // X/Y: ${x}, ${y}
-    // rounded: ${rx}, ${ry}
-    // top:${top}! scrollLeft:${rect.scrollLeft}!`;
-
-    if (!ctrl && !shift) {
-      if (draggedPoint) {
-        // console.log(`setPoint`);
-        this.setPointCoords(this.getMouseCoords(e));
-
-      } else if (draggedQuadratic) {
-        // console.log(`setQuad`);
-        this.setQuadraticCoords(this.getMouseCoords(e));
-
-      } else if (draggedCubic !== false) {
-        // console.log(`setCubic: ${draggedCubic}`);
-        this.setCubicCoords(this.getMouseCoords(e), draggedCubic);
-      }
-    }
-  }
-
 
   /** From Editor.Main ------------------------------- */
 
@@ -248,99 +352,6 @@ export class CORE {
   }
 
 
-  handleMousedown = (e) => {
-    // console.log('handleMousedown');
-    e.preventDefault();
-
-    /**@type {string[]} */
-    const classList = [...e.target.classList];
-    /**@type {string} */
-    const index = e.target.dataset.index; //point index value
-
-    console.log(classList);
-
-    if (classList.includes('ad-Anchor-point')) {
-      //if the target has an anchor, it is Cubic
-      const anchor = e.target.dataset.anchor ? e.target.dataset.anchor : null;
-
-      // console.log(`index: ${index}, anchor: ${anchor}`);
-
-      if (anchor) {
-        /** for Cubic - props = index, anchor */
-        const lineindex = e.target.parentElement.parentElement.parentElement.dataset.lineindex;
-
-        this.setDraggedCubic(index, anchor, lineindex);
-      } else {
-        /** for Quadratic - props = index */
-        const lineindex = e.target.parentElement.parentElement.parentElement.dataset.lineindex;
-
-        this.setDraggedQuadratic(index, lineindex);
-      }
-    } /** This is a regular Point */
-    else if (classList.includes('ad-Point')) {
-      // console.log('ad-Point classList');
-      const lineindex = e.target.parentElement.parentElement.dataset.lineindex;
-      // console.log(`lineindex: ${lineindex}`);
-
-      this.setDraggedPoint(index, lineindex);
-    } else if (classList.includes('ad-SVG')) {
-      //This is the canvas area
-      /** Add the AddPoint Event */
-      // console.log(`this.state.ctrl:${this.getState().ctrl}, true:${true}, equal:${this.getState().ctrl == true}`);
-      // console.log(`this.state.shift:${this.getState().shift}, true:${true}, equal:${this.getState().shift == true}`);
-
-      if (this.getState().ctrl && !this.getState().shift) {
-        this.addPoint(e);
-      } else if (this.getState().ctrl && this.getState().shift) {
-        console.log(`addLine`);
-        this.addLine(e);
-      }
-
-    } else {
-      console.log(`There might be an error here`);
-    }
-  };
-
-
-  handleKeyDown = (e) => {
-    // console.log(`Editor handleKeyDown: ${e.key}`);
-
-    if (e.key === 'Alt' || e.key === 'Meta') {
-      // console.log('meta or alt');
-      this.setState({ ctrl: true });
-    }
-    if (e.key === 'Shift') {
-      // console.log('shift');
-      this.setState({ shift: true });
-    }
-
-    //If Enter is pressed in the Add Tag Div CONTROLS -> LINES
-    // if (e.key === 'Enter' && document.activeElement.id === 'newTagText') {
-    //   // handle the Add Tag
-    //   console.log('Enter');
-    //   // this.controls.handleAddTag(e.target);
-    // }
-
-    //If Enter is pressed in the LineId Div CONTROLS -> LINE
-    // if (e.key === 'Enter' && document.activeElement.id === 'lineId') {
-    //   // handle the Add Tag
-    //   this.controls.handleLineIdUpdate(e.target);
-    // }
-
-  }
-
-
-  handleKeyUp = () => {
-    // console.log(`handleKeyUp`);
-    if (this.getState().ctrl === true) {
-      this.setState({ ctrl: false });
-    }
-    if (this.getState().shift === true) {
-      this.setState({ shift: false });
-    }
-  }
-
-
   // EVENTS CALLED BY LISTENERS
   cancelDragging = () => {
     // console.log(`cancelDragging`);
@@ -413,21 +424,24 @@ export class CORE {
    * Called from mousedown event
    * calls setState
    * @param {MouseEvent} e
-   * @param {string} id
    */
-  addLine = (e, id) => {
-    const coords = this.getMouseCoords(e);
-    let { lines, activeLineIndex } = this.getState();
+  addLine = (e) => {
+    let { lines, lineStartingBasis } = this.getState();
+    const nextID = this.getLineId(lineStartingBasis);
 
-    // const newLine = new Line();
+    const newLine = new Line({
+      coords: this.getMouseCoords(e),
+      tags: [],
+      id: nextID
+    });
 
-    const newPoints = { points: [coords], tags: [] };
-    lines.push(newPoints);
+    lines.push(newLine);
 
     this.setState({
-      lines,
-      activePointIndex: 0, //first point
-      activeLineIndex: lines.length - 1 // on new line
+      lines, // add new line to rest
+      activePointIndex: 0, // on first point
+      activeLineIndex: lines.length - 1, // on new line
+      lineStartingBasis: nextID, //set the new currentId
     });
   }
 
@@ -733,15 +747,27 @@ export class CORE {
  * @property {string} line.z - z-index for css
  */
 export class Line {
-  constructor() {
+  /**
+   * @param {object} props 
+   * @param {{x:number,y:number}} props.coords
+   * @param {line["id"]} [props.id]
+   * @param {line["tags"]} [props.tags]
+   * @param {line["z"]} [props.z]
+   */
+  constructor(props) {
+    const { coords, tags = [], z = '1', id } = props;
+
     /**@type {line["points"]} */
-    this.points = [{ x: null, y: null }];
+    this.points = [coords];
+
     /**@type {line["z"]} */
-    this.z = null;
+    this.z = z;
+
     /**@type {line["tags"]} */
-    this.tags = [null];
+    this.tags = tags;
+
     /**@type {line["id"]} */
-    this.id = null;
+    this.id = id;
 
   }
 

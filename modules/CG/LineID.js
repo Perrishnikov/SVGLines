@@ -49,32 +49,33 @@ export default class LineID extends ControlGroup {
 
 
 
+  /* Keep this around for now */
   setLineId = () => {
-    /**@type {State} */
-    const { lineRules, lines } = this.getState();
-    //returns the value of the first element in the array.value
+    // /**@type {State} */
+    // const { lineRules, lines } = this.getState();
+    // //returns the value of the first element in the array.value
 
-    /** @type {string} */
-    const startingLineBasis = lineRules.find(rule => rule.id == 'lineStartingBasis').value;
-    // console.log(`startingLineBasis: ${startingLineBasis}; type: ${typeof(startingLineBasis)} `);
-    const padLength = startingLineBasis.length;
+    // /** @type {string} */
+    // const startingLineBasis = lineRules.find(rule => rule.id == 'lineStartingBasis').value;
+    // // console.log(`startingLineBasis: ${startingLineBasis}; type: ${typeof(startingLineBasis)} `);
+    // const padLength = startingLineBasis.length;
 
-    let count = parseInt(startingLineBasis);
-    // const parsed = parseInt(startingLineBasis);
-    // if (isNaN(parsed)) { return 0; }
+    // let count = parseInt(startingLineBasis);
+    // // const parsed = parseInt(startingLineBasis);
+    // // if (isNaN(parsed)) { return 0; }
 
-    const updatedLines = lines.map(line => {
+    // const updatedLines = lines.map(line => {
 
-      line.id = count.toString().padStart(padLength, '0');
-      count++;
+    //   line.id = count.toString().padStart(padLength, '0');
+    //   count++;
 
-      return line;
-    });
+    //   return line;
+    // });
 
-    // console.log(`startingLineBasis: ${startingLineBasis}`);
-    this.setState({
-      lines: updatedLines,
-    });
+    // // console.log(`startingLineBasis: ${startingLineBasis}`);
+    // this.setState({
+    //   lines: updatedLines,
+    // });
 
   }
 
