@@ -490,17 +490,27 @@ export class CORE {
 
 
   removeActiveLine = () => {
-    const { lines, activeLineIndex } = this.getState();
+    const { lines = [], activeLineIndex } = this.getState();
 
-    lines.splice(activeLineIndex, 1);
-    const newActiveLineIndex = 0;
-    const newIndex = lines[newActiveLineIndex].points.length - 1;
+    console.log(lines);
+    console.log(`activeLineIndex: ${activeLineIndex}`);
+    if (lines.length > 0) {
 
-    this.setState({
-      activeLineIndex: newActiveLineIndex, //reset this to 0 TODO: make sure there is another Line
-      lines,
-      activePointIndex: newIndex
-    });
+      lines.splice(activeLineIndex, 1);
+
+      const newActiveLineIndex = 0;
+      const newIndex = lines.length - 1;
+
+      this.setState({
+        activeLineIndex: newActiveLineIndex, //reset this to 0 TODO: make sure there is another Line
+        lines,
+        activePointIndex: newIndex
+      });
+    }
+
+
+
+
   }
 
 

@@ -3,6 +3,7 @@
 import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
 import { Button } from './_Components.js';
+import { Line } from '../CORE.js';
 
 /**
  * @typedef {import('../Editor').State} State
@@ -78,42 +79,46 @@ export default class PointTypes extends ControlGroup {
    */
   render = (state) => {
     const { lines, activeLineIndex, activePointIndex } = state;
-    const activeLine = lines[activeLineIndex];
-    const activePoint = activeLine.points[activePointIndex];
 
-    /**@type {PointType} */
-    let pointType = 'l'; //default
+    // must have a line
+    if (lines.length > 0) {
 
-    if (activePoint.q) {
-      // console.log(`Hello Active Q`);
-      pointType = 'q';
-    } else if (activePoint.c) {
-      // console.log(`Hello Active C!`);
-      pointType = 'c';
-    } else if (activePoint.a) {
-      // console.log(`Hello Active A!`);
-      pointType = 'a';
-    }
+      const activeLine = lines[activeLineIndex]; 
+      const activePoint = activeLine.points[activePointIndex]; 
 
-    const options = [
-      { name: 'L', value: 'l', checked: pointType == 'l' },
-      { name: 'Q', value: 'q', checked: pointType == 'q' },
-      { name: 'C', value: 'c', checked: pointType == 'c' },
-      { name: 'A', value: 'a', checked: pointType == 'a' }
-    ];
+      /**@type {PointType} */
+      let pointType = 'l'; //default
 
-    let choices = options.map(c => {
-      return `
+      if (activePoint.q) {
+        // console.log(`Hello Active Q`);
+        pointType = 'q';
+      } else if (activePoint.c) {
+        // console.log(`Hello Active C!`);
+        pointType = 'c';
+      } else if (activePoint.a) {
+        // console.log(`Hello Active A!`);
+        pointType = 'a';
+      }
+
+      const options = [
+        { name: 'L', value: 'l', checked: pointType == 'l' },
+        { name: 'Q', value: 'q', checked: pointType == 'q' },
+        { name: 'C', value: 'c', checked: pointType == 'c' },
+        { name: 'A', value: 'a', checked: pointType == 'a' }
+      ];
+
+      let choices = options.map(c => {
+        return `
         <input data-action="${this.setPointType}" type="radio" name="null" data-value="${ c.value }"
         ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
         <label class="choices-label" for="">${ c.name }</label>
       `;
-    }).join('');
+      }).join('');
 
-    return this.wrapper({
-      title: this.name,
-      id: this.id,
-      html: `
+      return this.wrapper({
+        title: this.name,
+        id: this.id,
+        html: `
       <div class="control">
         <div class="control-row">
           ${choices}
@@ -138,6 +143,8 @@ export default class PointTypes extends ControlGroup {
         </div>  
       </div>
       `
-    });
+      });
+
+    }
   }
 }

@@ -97,7 +97,7 @@ export default class LineID extends ControlGroup {
 
   generateNewLineId = () => {
 
-  
+
   }
 
 
@@ -147,21 +147,25 @@ export default class LineID extends ControlGroup {
    */
   render = (state) => {
     const { lines, activeLineIndex } = state;
-    const activeLine = lines[activeLineIndex];
-    const value = activeLine.id || '*';
 
-    return this.wrapper({
-      title: this.name,
-      id: this.id,
-      html: `
-      <div class="control">
-        <div class="control-row">
-          <div data-tag="" data-value="" class="">
-            <div id="${this.idInput}" class="textInput" contenteditable="true" >${value}</div>
+    if (lines.length > 0) {
+      const activeLine = lines[activeLineIndex];
+      const value = activeLine.id || '*';
+
+      return this.wrapper({
+        title: this.name,
+        id: this.id,
+        html: `
+        <div class="control">
+          <div class="control-row">
+            <div data-tag="" data-value="" class="">
+              <div id="${this.idInput}" class="textInput" contenteditable="true" >${value}</div>
+            </div>
           </div>
         </div>
-      </div>
-      `
-    });
+        `
+      });
+
+    }
   }
 }

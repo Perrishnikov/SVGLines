@@ -74,7 +74,7 @@ export default class TagLine extends ControlGroup {
 
     activeLine.tags.push(addTag);
 
-    this.setLocalState({ 
+    this.setLocalState({
       ACTIVE: this.getLocalState().LINE
     });
 
@@ -104,29 +104,33 @@ export default class TagLine extends ControlGroup {
 
 
   render() {
-    const { tags = [] } = this.getState();
+    const { lines, tags = [] } = this.getState();
 
-    const mappedTags = tags.map(tag => {
-      const activeLine = this.getState().lines[this.getState().activeLineIndex]
-      //make sure that Active Line has Tags, if Line Tag matches App Tag...
-      const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
+    if (lines.length > 0) {
 
-      return `
+      const mappedTags = tags.map(tag => {
+        const activeLine = this.getState().lines[this.getState().activeLineIndex]
+        //make sure that Active Line has Tags, if Line Tag matches App Tag...
+        const active = activeLine.tags && activeLine.tags.includes(tag) ? true : false;
+
+        return `
         <div data-tag="${tag}" data-value="${active}" class="line-tag">
           <span class="" style="line-height:24px">${tag}</span>
           <span role="button">${active ? Icon_Check(tag) : ''}</span>
         </div>
       `;
-    }).join('');
+      }).join('');
 
-    return this.wrapper({
-      title: this.name,
-      id: this.id,
-      html: `
+      return this.wrapper({
+        title: this.name,
+        id: this.id,
+        html: `
       <div id="used_to_be_just_lineTags" class="tag-row">
         ${mappedTags}
       </div>
       `
-    });
+      });
+      
+    }
   }
 }
