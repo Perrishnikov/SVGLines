@@ -44,6 +44,11 @@ export default class PointTypes extends ControlGroup {
 
 
   handleClick = (e) => {
+    /**@type {State} */
+    const { lines, activePointIndex, activeLineIndex } = this.getState();
+    const activeLine = lines[activeLineIndex];
+    const activePoint = activeLine.points[activePointIndex];
+
     /**@type {HTMLElement} */
     const pointOptions = e.target.closest(`[data-action="${this.setPointType}"]`);
 
@@ -55,6 +60,18 @@ export default class PointTypes extends ControlGroup {
 
     if (toggleClose) {
       this.toggleClosePath();
+    }
+
+    //refactor this
+    const laf = e.target.closest('[data-action="laf"]');
+    if(laf) {
+      this.CORE.setArcParam({ lines, activePoint, value:'laf' });
+    }
+
+    const sf = e.target.closest('[data-action="sf"]');
+    if(sf) {
+      console.log('sf');
+      this.CORE.setArcParam({ lines, activePoint, value:'sf' });
     }
 
     /**@type {HTMLElement} */
@@ -87,22 +104,6 @@ export default class PointTypes extends ControlGroup {
     activeLine.closePath = !activeLine.closePath;
 
     this.setState({ lines });
-  }
-
-
-  handleArc = (props) => {
-    const { activeLine, activePoint } = props;
-
-    return `
-    <div class="control-row">
-      ${CheckBox({
-        action: 'largeSweep',
-        value: activeLine.closePath,
-        name: 'Large Sweep'
-      })}
-    </div>
-    `;
-
   }
 
 
@@ -167,8 +168,20 @@ export default class PointTypes extends ControlGroup {
             </div>
             
             ${pointType == 'a' ? 
-            this.handleArc({activeLine, activePoint}) : 
-            ''}
+            `<div class="control-row">
+              ${CheckBox({
+                action: 'laf',
+                value: activePoint.a.laf,
+                name: 'Large Sweep'
+              })}
+              ${CheckBox({
+                action: 'sf',
+                value: activePoint.a.sf,
+                name: 'Sweep'
+              })}
+            </div>`
+            : ''
+            }
             
             <div class="control-row">
             Press Meta and click to add Point

@@ -29,7 +29,7 @@ export class CORE {
     /**@type {string} */
     const index = e.target.dataset.index; //point index value
 
-    console.log(classList);
+    // console.log(classList);
 
     if (classList.includes('ad-Anchor-point')) {
       //if the target has an anchor, it is Cubic
@@ -637,19 +637,28 @@ export class CORE {
   }
 
 
-  setArcParam = (param, e) => {
-    const { lines, activePointIndex, activeLineIndex } = this.getState();
-    const ap = lines[activeLineIndex];
+  /**
+   * @param {object} param
+   * @param {Array<Line>} param.lines
+   * @param {Point} param.activePoint
+   * @param {"laf"|"sf"} param.value
+   * @memberof CORE
+   */
+  setArcParam = (param) => {
+    const { activePoint, lines, value } = param;
 
+    /**@type {1|0} */
     let v;
 
-    if (['laf', 'sf'].indexOf(param) > -1) {
-      v = e.target.checked ? 1 : 0;
-    } else {
-      v = this.positiveNumber(e.target.value);
-    }
+    if (['laf', 'sf'].includes(value)) {
+      // v = e.target.checked ? 1 : 0;
+      v = activePoint.a[value] == 0 ? 1 : 0;
+    } 
+    // else {
+    //   v = this.positiveNumber(value);
+    // }
 
-    ap.points[activePointIndex].a[param] = v;
+    activePoint.a[value] = v;
 
     this.setState({ lines });
   }
@@ -729,6 +738,7 @@ export class CORE {
   /** End Editor.Controls---------------------------- */
 
   /** Utility - Used by several --------------------- */
+
   /**
    * Grid
    * Parse a string number
@@ -746,12 +756,27 @@ export class CORE {
 
 
 /**
+ * @typedef {object} Point
+ * @property {number} Point.x
+ * @property {number} Point.y
+ * @property {Coords} [Point.q]
+ * @property {Array<Coords>} [Points.c]
+ * @property {{rx:number,ry:number,rot:number,laf:1|0,sf:1|0}} [Points.a]
+ */
+
+/**
  * @typedef {object} line
- * @property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:Array<{x:number,y:number}, {x:number,y:number}>, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>}line.points
+ * property {Array<{x:number,y:number, q?:{x:number,y:number}, c?:Array<{x:number,y:number}, {x:number,y:number}>, a?:{rx:number,ry:number,rot:number,laf:number,sf: number}}>}line.points
+ * @property {Array<Point>} line.points
  * @property {Array<string>} line.tags - array of strings
  * @property {string} line.id - unique id
  * @property {string} line.z - z-index for css
  * @property {boolean} line.closePath - each line..
+ * property {number} line.rx - arc only
+ * property {number} line.ry - arc only
+ * property {1|0} line.rot - arc only 
+ * property {1|0} line.laf -arc only
+ * property {1|0} line.sf - arc only
  */
 export class Line {
   /**
@@ -761,6 +786,11 @@ export class Line {
    * @param {line["tags"]} [props.tags]
    * @param {line["z"]} [props.z]
    * @param {line["closePath"]} [props.closePath]
+   * param {line["laf"]} [props.laf]
+   * param {line["sf"]} [props.sf]
+   * param {line["rot"]} [props.rot]
+   * param {line["rx"]} [props.rx]
+   * param {line["ry"]} [props.ry]
    */
   constructor(props) {
     const { coords, tags = [], z = '1', id, closePath = false } = props;

@@ -9,6 +9,7 @@
  */
 export function Button(props) {
   const { action, name } = props;
+  
   return `
   <button data-action="${action}"
     class="control-button">
