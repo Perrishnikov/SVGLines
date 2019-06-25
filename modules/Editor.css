@@ -18,7 +18,7 @@ Custom properties do inherit.
     --color-icon-hover: #999;
     --color-icon-active: white;
 
-    --font-size: 1em;
+    --font-size: .8em;
     --pad-standard: 8px;
     --pad-half: 4px;
     --icon-dimension: 48px;

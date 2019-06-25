@@ -266,7 +266,7 @@ button:focus {
 /* placeholder text */
 #newTagText:empty::before {
     content: attr(data-value) '';
-    font-size: calc(var(--font-size) * .8);
+    /* font-size: calc(var(--font-size) * .8); */
     line-height: 24px;
 }
 /* hide placeholder text when 'focused'*/
