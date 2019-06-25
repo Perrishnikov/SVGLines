@@ -7,14 +7,22 @@
     "subway","taxi","666","bus","💩"
   ],
   "style": { "default": "styles" },
-  "lines": [{
+  "lines": [
+    {
+      "points": [
+        { "x": 100, "y": 400 },
+        { "x": 100, "y": 500, "a": { "rx": 100, "ry": 50, "rot": 0, "laf":1, "sf":0 } }
+      ]
+    },
+    {
       "points": [
         { "x": 100, "y": 300 },
         { "x": 200, "y": 300, "q": { "x": 150, "y": 50 } }
       ],
       "z":100,
       "tags":["taxi"],
-      "id": "666"
+      "id": "666",
+      "closePath": true
     },
     {
       "points": [

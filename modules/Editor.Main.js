@@ -66,16 +66,17 @@ export default class Main {
       
       <svg class="ad-SVG" width="${w +300}" height="${h}">
       ${grid}
-        ${lines.map((line, index) => {
-          let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
-          const path = this.CORE.generatePath(line.points);
-          const circles = this.CORE.generateCircles(line.points, activePointIndex.toString(), al );
-          
-          return `
-            <path class="ad-Path" d="${path}"></path>
-            <g data-lineindex="${index}" class="ad-Points">${circles}</g>
-          `;
-        }).join('')}
+
+      ${lines.map((line, index) => {
+        let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
+        const path = this.CORE.generatePath(line.points, line.closePath);
+        const circles = this.CORE.generateCircles(line.points, activePointIndex.toString(), al );
+        
+        return `
+          <path class="ad-Path" d="${path}"></path>
+          <g data-lineindex="${index}" class="ad-Points">${circles}</g>
+        `;
+      }).join('')}
 
       </svg>
     </div>

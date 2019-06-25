@@ -246,10 +246,10 @@ export class CORE {
   /**
    * Pass in a line's points. Returns the path
    * @param {object} points
+   * @param {boolean} closePath
    * @returns {string} - a single path
    */
-  generatePath = (points) => {
-    // let { points, closePath } = props;
+  generatePath = (points, closePath) => {
     let d = '';
 
     points.forEach((p, i) => {
@@ -272,7 +272,7 @@ export class CORE {
       d += `${ p.x } ${ p.y } `;
     });
 
-    // if (closePath) { d += 'Z'; }
+    if (closePath) { d += 'Z'; }
 
     return d;
   }
@@ -507,10 +507,6 @@ export class CORE {
         activePointIndex: newIndex
       });
     }
-
-
-
-
   }
 
 
@@ -755,6 +751,7 @@ export class CORE {
  * @property {Array<string>} line.tags - array of strings
  * @property {string} line.id - unique id
  * @property {string} line.z - z-index for css
+ * @property {boolean} line.closePath - each line..
  */
 export class Line {
   /**
@@ -763,9 +760,10 @@ export class Line {
    * @param {line["id"]} [props.id]
    * @param {line["tags"]} [props.tags]
    * @param {line["z"]} [props.z]
+   * @param {line["closePath"]} [props.closePath]
    */
   constructor(props) {
-    const { coords, tags = [], z = '1', id } = props;
+    const { coords, tags = [], z = '1', id, closePath = false } = props;
 
     /**@type {line["points"]} */
     this.points = [coords];
@@ -779,6 +777,8 @@ export class Line {
     /**@type {line["id"]} */
     this.id = id;
 
+    /**@type {line["closePath"]} */
+    this.closePath = closePath;
   }
 
 }

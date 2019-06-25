@@ -2,7 +2,7 @@
 
 import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
-import { Button } from './_Components.js';
+import { Button, Range, CheckBox } from './_Components.js';
 import { Line } from '../CORE.js';
 
 /**
@@ -51,6 +51,12 @@ export default class PointTypes extends ControlGroup {
       this.CORE.setPointType(pointOptions.dataset.value);
     }
 
+    const toggleClose = e.target.closest('[data-action="closePath"]');
+
+    if (toggleClose) {
+      this.toggleClosePath();
+    }
+
     /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
     // console.dir(buttonClick);
@@ -72,6 +78,34 @@ export default class PointTypes extends ControlGroup {
     }
   }
 
+
+  toggleClosePath = () => {
+    /**@type {State} */
+    const { activeLineIndex, lines } = this.getState();
+
+    let activeLine = lines[activeLineIndex];
+    activeLine.closePath = !activeLine.closePath;
+
+    this.setState({ lines });
+  }
+
+
+  handleArc = (props) => {
+    const { activeLine, activePoint } = props;
+
+    return `
+    <div class="control-row">
+      ${CheckBox({
+        action: 'largeSweep',
+        value: activeLine.closePath,
+        name: 'Large Sweep'
+      })}
+    </div>
+    `;
+
+  }
+
+
   /**
    * param {object} props
    * @param {State} state
@@ -83,8 +117,8 @@ export default class PointTypes extends ControlGroup {
     // must have a line
     if (lines.length > 0) {
 
-      const activeLine = lines[activeLineIndex]; 
-      const activePoint = activeLine.points[activePointIndex]; 
+      const activeLine = lines[activeLineIndex];
+      const activePoint = activeLine.points[activePointIndex];
 
       /**@type {PointType} */
       let pointType = 'l'; //default
@@ -100,6 +134,7 @@ export default class PointTypes extends ControlGroup {
         pointType = 'a';
       }
 
+      //TODO: make these constants somewhere else
       const options = [
         { name: 'L', value: 'l', checked: pointType == 'l' },
         { name: 'Q', value: 'q', checked: pointType == 'q' },
@@ -107,42 +142,54 @@ export default class PointTypes extends ControlGroup {
         { name: 'A', value: 'a', checked: pointType == 'a' }
       ];
 
-      let choices = options.map(c => {
+      const choices = options.map(c => {
         return `
-        <input data-action="${this.setPointType}" type="radio" name="null" data-value="${ c.value }"
-        ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
-        <label class="choices-label" for="">${ c.name }</label>
-      `;
+        <input data-action="${this.setPointType}" type="radio" name="points" data-value="${ c.value }" ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
+        <label class="choices-label" for="">${ c.name }</label>   `;
       }).join('');
 
       return this.wrapper({
         title: this.name,
         id: this.id,
         html: `
-      <div class="control">
-        <div class="control-row">
-          ${choices}
-        </div>
-        <div class="control-row">
-        Press Meta and click to add Point
-        <br>Press Shift-Meta to add new Line 
-        </div>
-        <div class="control-row">
-        ${Button({
-          action:'removePoint',
-          name:'Remove Point',
-        })}
-        ${Button({
-          action:'undoPoint',
-          name:'Undo Remove',
-        })}
-        ${Button({
-          action: 'resetPoint',
-          name: 'Reset Point'
-        })}
-        </div>  
-      </div>
-      `
+          <div class="control">
+
+            <div class="control-row">
+              ${choices}
+            </div>
+
+            <div class="control-row">
+              ${CheckBox({
+                action: 'closePath',
+                value: activeLine.closePath,
+                name: 'Close Path'
+              })}
+            </div>
+            
+            ${pointType == 'a' ? 
+            this.handleArc({activeLine, activePoint}) : 
+            ''}
+            
+            <div class="control-row">
+            Press Meta and click to add Point
+            <br>Press Shift-Meta to add new Line 
+            </div>
+            <div class="control-row button-row">
+            ${Button({
+              action:'removePoint',
+              name:'Remove Point',
+            })}
+            ${Button({
+              action:'undoPoint',
+              name:'Undo Remove',
+            })}
+            ${Button({
+              action: 'resetPoint',
+              name: 'Reset Point'
+            })}
+            </div>  
+          </div>
+        `
       });
 
     }

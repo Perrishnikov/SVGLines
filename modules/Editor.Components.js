@@ -189,26 +189,26 @@ function Checkbox(props) {
 `;
 }
 
-function Range(props) {
-  // onChange={ props.onChange } />
-  return `
-  <div class="ad-Range">
-    <input
-      class="ad-Range-input"
-      type="range"
-      min="${ props.min }"
-      max="${ props.max }"
-      step="${ props.step }"
-      value="${ props.value }"
-      />
-    <input
-      class="ad-Range-text ad-Text"
-      type="text"
-      value="${ props.value }"
-      />
-  </div>
-  `;
-}
+// function Range(props) {
+//   // onChange={ props.onChange } />
+//   return `
+//   <div class="ad-Range">
+//     <input
+//       class="ad-Range-input"
+//       type="range"
+//       min="${ props.min }"
+//       max="${ props.max }"
+//       step="${ props.step }"
+//       value="${ props.value }"
+//       />
+//     <input
+//       class="ad-Range-text ad-Text"
+//       type="text"
+//       value="${ props.value }"
+//       />
+//   </div>
+//   `;
+// }
 
 
 //TAGS
@@ -264,4 +264,4 @@ function Range(props) {
 //     `;
 // }
 
-export { Grid, Control, Range, Checkbox, Choices };
+export { Grid, Control, Checkbox, Choices };

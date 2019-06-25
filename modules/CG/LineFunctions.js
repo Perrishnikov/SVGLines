@@ -83,7 +83,7 @@ export default class LineFunctions extends ControlGroup {
       title: this.name,
       id: this.id,
       html: `
-      <div class="control-row">
+      <div class="control-row button-row">
         ${Button({
           action:'removeLine',
           name:'Remove Line',

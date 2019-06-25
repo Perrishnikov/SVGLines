@@ -50,9 +50,9 @@ export default class Controls {
       setState: this.setState,
       getLocalState: this.getLocalState,
       setLocalState: this.setLocalState,
-      addGlobalTag: editor.addGlobalTag,
-      removeGlobalTag: editor.removeGlobalTag,
-      updateGlobalTag: editor.updateGlobalTag,
+      // addGlobalTag: editor.addGlobalTag,
+      // removeGlobalTag: editor.removeGlobalTag,
+      // updateGlobalTag: editor.updateGlobalTag,
     });
 
     const cg_tagManager = new TagManager({
@@ -60,9 +60,9 @@ export default class Controls {
       getState: this.getState,
       getLocalState: this.getLocalState,
       setLocalState: this.setLocalState,
-      addGlobalTag: editor.addGlobalTag,
-      removeGlobalTag: editor.removeGlobalTag,
-      updateGlobalTag: editor.updateGlobalTag,
+      // addGlobalTag: editor.addGlobalTag,
+      // removeGlobalTag: editor.removeGlobalTag,
+      // updateGlobalTag: editor.updateGlobalTag,
     });
 
     const cg_pointTypes = new PointTypes({

@@ -87,7 +87,10 @@ nav {
     flex-direction: row;
     flex: 1 0 auto;
     padding: var(--pad-standard);
-    justify-content: space-between;
+    /* justify-content: space-between; */
+}
+.button-row{
+  justify-content: space-between;
 }
 .control {
     /* background-color: var(--color-3); */
@@ -367,4 +370,12 @@ code {
     /* cursor: pointer; */
     margin-right: var(--pad-standard);
     margin-left: calc(var(--pad-half) * -1);
+}
+.form-checkbox
+{
+     border-radius: 3px;
+}
+.form-radio
+{
+     border-radius: 50px;
 }
