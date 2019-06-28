@@ -70,7 +70,7 @@ export default class TagLine extends ControlGroup {
     let activeLine = lines[activeLineIndex];
 
     //Make sure that activeLine is not null
-    activeLine.tags ? activeLine.tags : [];
+    activeLine.tags ? activeLine.tags : activeLine.tags = [];
 
     activeLine.tags.push(addTag);
 

@@ -625,8 +625,8 @@ export class CORE {
               rx: 50,
               ry: 50,
               rot: 0,
-              laf: 1,
-              sf: 1
+              laf: 0,
+              sf: 0
             }
           };
           break;
@@ -638,6 +638,7 @@ export class CORE {
 
 
   /**
+   * When PointType 'A' is clicked, maek arc
    * @param {object} param
    * @param {Array<Line>} param.lines
    * @param {Point} param.activePoint
@@ -648,7 +649,7 @@ export class CORE {
     const { activePoint, lines, value } = param;
 
     /**@type {1|0} */
-    let v;
+    let v = 0;
 
     if (['laf', 'sf'].includes(value)) {
       // v = e.target.checked ? 1 : 0;
@@ -659,6 +660,7 @@ export class CORE {
     // }
 
     activePoint.a[value] = v;
+    console.log(activePoint.a[value]);
 
     this.setState({ lines });
   }

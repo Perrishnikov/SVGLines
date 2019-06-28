@@ -9,7 +9,7 @@
  */
 export function Button(props) {
   const { action, name } = props;
-  
+
   return `
   <button data-action="${action}"
     class="control-button">
@@ -18,12 +18,19 @@ export function Button(props) {
   `;
 }
 
-
+/**
+ * 
+ * @param {object} props 
+ * @param {string} props.action - data-${action}
+ * @param {0|1|boolean} props.value - checked er no
+ * @param {string} props.name - label DOM
+ * @param {string} [props.info] - tooltip
+ */
 export function CheckBox(props) {
-  const { action, value, name } = props;
+  const { action, value, name, info = null} = props;
 
   return `
-    <input type="checkbox" data-action="${action}" class="form-radio-points" id="" ${value ? 'checked' : ''}><label style="">${name}</label>
+    <input type="checkbox" data-action="${action}" class="form-radio-points" id="" ${value ? 'checked' : ''}><label ${info ? `data-tooltip="${info}"` : ''} style="">${name}</label>
   `;
 }
 

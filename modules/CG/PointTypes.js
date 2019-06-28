@@ -172,12 +172,14 @@ export default class PointTypes extends ControlGroup {
               ${CheckBox({
                 action: 'laf',
                 value: activePoint.a.laf,
-                name: 'Large Sweep'
+                name: 'Large Sweep',
+                info:'Determines if the arc should be greater than or less than 180 degrees; direction arc will travel around circle.'
               })}
               ${CheckBox({
                 action: 'sf',
                 value: activePoint.a.sf,
-                name: 'Sweep'
+                name: 'Sweep',
+                info: 'Should arc begin moving at positive angles or negative ones.'
               })}
             </div>`
             : ''
