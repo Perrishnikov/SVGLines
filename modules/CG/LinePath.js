@@ -2,6 +2,7 @@
 
 import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
+import { Button, Range, CheckBox } from './_Components.js';
 
 /**
  * @typedef {import('../Editor').State} State
@@ -75,7 +76,22 @@ export default class LinePath extends ControlGroup {
         <div class="tag-row">
           < ${path.toString()}/>          
         </div>
-      
+
+        <div class="control-row">
+          ${CheckBox({
+            dataType: null,
+            value: 1,
+            name: 'With Outer'
+          })}
+        </div>
+
+        <div class="control-row">
+        ${Button({
+          action: 'copyPath',
+          name: 'Copy Path'
+        })}
+        </div>
+        
       </div>
       `
     });

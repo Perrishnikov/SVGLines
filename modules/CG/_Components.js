@@ -3,15 +3,15 @@
 /**
  * Creates Button 
  * @param {object} props 
- * @param {string} props.action
+ * @param {string} props.dataAction
  * @param {string} props.name
  * @returns {string}
  */
 export function Button(props) {
-  const { action, name } = props;
+  const { dataAction, name } = props;
 
   return `
-  <button data-action="${action}"
+  <button data-action="${dataAction}"
     class="control-button">
     ${ name }
   </button>
