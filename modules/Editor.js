@@ -1,9 +1,17 @@
 //@ts-check
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
-import { CORE, Line } from './CORE.js';
+import { CORE } from './CORE.js';
 
-
+/**
+ * Validate
+ * @typedef {Object} Validate
+ * @property {(str1: string ) => boolean} Validate.isNotEmpty
+ * @property {(str1: string ) => boolean} Validate.isNumber
+ * @property {(str1: string, str2: string ) => boolean} Validate.isNotSame
+ * @property {(str1: string, max: number ) => boolean} Validate.isLessThan
+ * @property {(str1: string, min: number ) => boolean} Validate.isGreaterThan
+ */
 
 
 /**
@@ -15,6 +23,7 @@ import { CORE, Line } from './CORE.js';
  * @property {Controls} editor.controls
  * @property {Array<Listener>} editor.registeredListeners
  * @property {CORE} editor.core
+ * @property {Validate} editor.validate
  */
 export default class Editor {
   /**
@@ -22,6 +31,33 @@ export default class Editor {
    * @param {{state:State,id:Element}} props
    */
   constructor(props) {
+
+    /** @type {editor["validate"]} */
+    this.validate = {
+      isNotEmpty: (str1) => {
+        const pattern = /\S+/;
+        console.assert(pattern.test(str1), `! isNotEmpty`);
+        return pattern.test(str1);
+      },
+      isNumber: (str1) => {
+        const pattern = /^\d+$/;
+        console.assert(pattern.test(str1), '! isNumber');
+        return pattern.test(str1);
+      },
+      isNotSame: (str1, str2) => {
+        console.assert(str1 !== str2, '! isNotSame');
+        return str1 !== str2;
+      },
+      isLessThan: (str1, max) => {
+        console.assert(str1.length < max, '! isLessThan');
+        return str1.length < max;
+      },
+      isGreaterThan: (str1, min) => {
+        console.assert(str1.length > min, '! isGreaterThan');
+        return str1.length > min;
+      }
+    };
+
     /**@type {editor["id"]} */
     this.id = props.id;
 
@@ -114,7 +150,7 @@ export default class Editor {
 
         });
 
-      }  else {
+      } else {
         console.error(`Error on Event for '${listener.type}'`);
       }
     });
@@ -171,6 +207,35 @@ export default class Editor {
       this.render(newState);
     });
   }
+
+
+  /* VALIDATTION ------------ */
+
+  // validate = (str1, str2 = '') => {
+  //   const hello = {
+  //     ho
+  //     : 'ho'
+  //   };
+
+  //   const validation = {
+  //     isNotEmpty: function(str1) {
+  //       const pattern = /\S+/;
+  //       return pattern.test(str1); // returns a boolean
+  //     },
+  //     isNumber: function(str) {
+  //       const pattern = /^\d+$/;
+  //       return pattern.test(str); // returns a boolean
+  //     },
+  //     isSame: function(str1, str2) {
+  //       return str1 === str2;
+  //     }
+  //   };
+
+
+  //   return this;
+
+  // }
+
 
 
   /* TAGS ---------------------------- */

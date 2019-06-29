@@ -642,7 +642,7 @@ export class CORE {
    * @param {object} param
    * @param {Array<Line>} param.lines
    * @param {Point} param.activePoint
-   * @param {"laf"|"sf"|"rot"|"rx"|"ry"} param.action
+   * @param {string} param.action - {"laf"|"sf"|"rot"|"rx"|"ry"} 
    * @param {*} [param.value] comes from e.target.value
    * @memberof CORE
    */

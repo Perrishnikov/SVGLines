@@ -442,3 +442,11 @@ code {
   visibility: visible;
   opacity: 1;
 }
+
+/* CanvasSettings */
+#canvasErrorMess {
+  display: none;
+}
+#canvasErrorMess.active {
+  display: block;
+}

@@ -9,6 +9,7 @@ import PointTypes from './CG/PointTypes.js';
 import LineID from './CG/LineID.js';
 import Export from './CG/Export.js';
 import LinePath from './CG/LinePath.js';
+import CanvasSettings from './CG/CanvasSettings.js';
 
 
 export default class Controls {
@@ -16,11 +17,11 @@ export default class Controls {
    * @param {import('./Editor').default} editor 
    */
   constructor(editor) {
-
     // this.editor = editor;
     this.getState = editor.getState;
     this.setState = editor.setState;
     this.CORE = editor.CORE;
+    this.validate = editor.validate;
 
     /**@type {LocalState} */
     this.localState = {
@@ -28,7 +29,7 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'line',
+      ACTIVE: 'settings',
       TAG_TO_DELETE: ''
     };
 
@@ -84,6 +85,13 @@ export default class Controls {
       CORE: this.CORE,
     });
 
+    const cg_canvasSettings = new CanvasSettings({
+      setState: this.setState,
+      getState: this.getState,
+      validate: this.validate,
+    });
+
+
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -111,7 +119,8 @@ export default class Controls {
         title: this.localState.SETTINGS,
         icon: Icon_Settings(),
         controlGroups: [
-          cg_export
+          cg_export,
+          cg_canvasSettings,
         ],
       }),
       new Section({

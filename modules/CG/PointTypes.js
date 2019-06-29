@@ -58,7 +58,7 @@ export default class PointTypes extends ControlGroup {
     ];
   }
 
-  
+
   handleInputDrag = (e) => {
     /**@type {State} */
     const { lines, activePointIndex, activeLineIndex } = this.getState();
@@ -200,6 +200,59 @@ export default class PointTypes extends ControlGroup {
         { name: 'A', value: 'a', checked: pointType == 'a' }
       ];
 
+      const arc = `
+      <div class="control-row">
+        ${CheckBox({
+          dataType: this.OPTIONS.FLAG,
+          dataAction: 'laf',
+          value: activePoint.a.laf, //0|1
+          name: 'Large Sweep',
+          info:'Determines if the arc should be greater than or less than 180 degrees; direction arc will travel around circle.'
+        })}
+        ${CheckBox({
+          dataType: this.OPTIONS.FLAG,
+          dataAction: 'sf',
+          value: activePoint.a.sf, //0|1
+          name: 'Sweep',
+          info: 'Should arc begin moving at positive angles or negative ones.'
+        })}
+      </div>
+
+      <div class="control-row">
+        ${Range({
+          dataType: this.OPTIONS.ARCTYPE,
+          dataAction: 'rx',
+          value: activePoint.a.rx,
+          name: 'X Radius',
+          min: 0,
+          max: w,
+          step: grid.size,
+        })}
+      </div>
+      <div class="control-row">
+        ${Range({
+          dataType: this.OPTIONS.ARCTYPE,
+          dataAction: 'ry',
+          value: activePoint.a.ry,
+          name: 'Y Radius',
+          min: 0,
+          max: h,
+          step: grid.size,
+        })}
+      </div>
+      <div class="control-row">
+        ${Range({
+          dataType: this.OPTIONS.ARCTYPE,
+          dataAction: 'rot',
+          value: activePoint.a.rot,
+          name: 'Rotation',
+          min: 0,
+          max: 360,
+          step: 1,
+        })}
+      </div>
+      `;
+
       const choices = options.map(c => {
         return `
         <input data-type="${this.OPTIONS.POINTYPES}" type="radio" name="points" data-value="${ c.value }" ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
@@ -226,61 +279,7 @@ export default class PointTypes extends ControlGroup {
               })}
             </div>
             
-            ${pointType == 'a' ? 
-            `<div class="control-row">
-              ${CheckBox({
-                dataType: this.OPTIONS.FLAG,
-                dataAction: 'laf',
-                value: activePoint.a.laf, //0|1
-                name: 'Large Sweep',
-                info:'Determines if the arc should be greater than or less than 180 degrees; direction arc will travel around circle.'
-              })}
-              ${CheckBox({
-                dataType: this.OPTIONS.FLAG,
-                dataAction: 'sf',
-                value: activePoint.a.sf, //0|1
-                name: 'Sweep',
-                info: 'Should arc begin moving at positive angles or negative ones.'
-              })}
-            </div>
-
-            <div class="control-row">
-              ${Range({
-                dataType: this.OPTIONS.ARCTYPE,
-                dataAction: 'rx',
-                value: activePoint.a.rx,
-                name: 'X Radius',
-                min: 0,
-                max: w,
-                step: grid.size,
-              })}
-            </div>
-            <div class="control-row">
-            ${Range({
-              dataType: this.OPTIONS.ARCTYPE,
-              dataAction: 'ry',
-              value: activePoint.a.ry,
-              name: 'Y Radius',
-              min: 0,
-              max: h,
-              step: grid.size,
-            })}
-            </div>
-            <div class="control-row">
-            ${Range({
-              dataType: this.OPTIONS.ARCTYPE,
-              dataAction: 'rot',
-              value: activePoint.a.rot,
-              name: 'Rotation',
-              min: 0,
-              max: 360,
-              step: 1,
-            })}
-            </div>
-            `
-            : ''
-            }
-            
+            ${pointType == 'a' ? arc : ''}
             
             <div class="control-row">
             Press Meta and click to add Point

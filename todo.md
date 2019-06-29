@@ -1,9 +1,11 @@
-[ ] adjust size of canvas
-[ ] canvas overflow
+[x] adjust size of canvas
 [ ] export json. Options: tags, ids, meta, etc
 [ ] add background image. move and scale image.
 [ ] active line styling
+[ ] list of all lines
 
+[ ] canvas overflow
+[ ] scale canvas
 [ ] styling options
 [ ] import
 [ ] fill svg
