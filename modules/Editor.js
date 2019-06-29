@@ -101,7 +101,7 @@ export default class Editor {
           console.error(`Keys required for cgId '${listener.cgId}'`);
         }
 
-      } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove'].includes(type)) {
+      } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove', 'ondragstart'].includes(type)) {
         // @ts-ignore
         document.addEventListener(type, event => {
           /**@type {HTMLElement} */
@@ -114,7 +114,7 @@ export default class Editor {
 
         });
 
-      } else {
+      }  else {
         console.error(`Error on Event for '${listener.type}'`);
       }
     });

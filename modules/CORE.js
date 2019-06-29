@@ -642,25 +642,32 @@ export class CORE {
    * @param {object} param
    * @param {Array<Line>} param.lines
    * @param {Point} param.activePoint
-   * @param {"laf"|"sf"} param.value
+   * @param {"laf"|"sf"|"rot"|"rx"|"ry"} param.action
+   * @param {*} [param.value] comes from e.target.value
    * @memberof CORE
    */
   setArcParam = (param) => {
-    const { activePoint, lines, value } = param;
+    const { activePoint, lines, action, value = null } = param;
 
-    /**@type {1|0} */
+    /**@type {number|0|1} */
     let v = 0;
 
-    if (['laf', 'sf'].includes(value)) {
+    if (['laf', 'sf'].includes(action)) {
       // v = e.target.checked ? 1 : 0;
-      v = activePoint.a[value] == 0 ? 1 : 0;
-    } 
+      v = activePoint.a[action] == 0 ? 1 : 0;
+    }
     // else {
     //   v = this.positiveNumber(value);
     // }
+    // rot, rx, ry
+    else if (['rot', 'rx', 'ry'].includes(action)) {
+      v = this.positiveNumber(value);
 
-    activePoint.a[value] = v;
-    console.log(activePoint.a[value]);
+    }
+
+    activePoint.a[action] = v;
+
+    // console.log(`activePoint.a[value]: ${activePoint.a[action]}`);
 
     this.setState({ lines });
   }

@@ -8,6 +8,7 @@ import TagManager from './CG/TagManager.js';
 import PointTypes from './CG/PointTypes.js';
 import LineID from './CG/LineID.js';
 import Export from './CG/Export.js';
+import LinePath from './CG/LinePath.js';
 
 
 export default class Controls {
@@ -77,6 +78,12 @@ export default class Controls {
       // CORE: this.editor.CORE,
     });
 
+    const cg_linePath = new LinePath({
+      setState: this.setState,
+      getState: this.getState,
+      CORE: this.CORE,
+    });
+
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -87,10 +94,9 @@ export default class Controls {
         icon: Icon_Line(),
         controlGroups: [
           cg_pointTypes,
+          cg_linePath,
           cg_lineId,
           cg_tagLine,
-
-
           cg_lineFunctions,
         ],
       }),
@@ -239,66 +245,8 @@ export default class Controls {
   render = (props) => {
     const { h, grid, } = props.state;
 
-    const step = grid.snap ? grid.size : 1;
+    // const step = grid.snap ? grid.size : 1;
 
-    // let path = `d="${this.editor.CORE.generatePath(lines[activeLineIndex].points)}"`;
-
-    {
-      // params.push(
-      //     <div className="ad-Controls-container">
-      //         <Control
-      //             name="X Radius"
-      //             type="range"
-      //             min={ 0 }
-      //             max={ props.w }
-      //             step={ step }
-      //             value={ active.a.rx }
-      //             onChange={ (e) => props.setArcParam("rx", e) } />
-      //     </div>
-      // )
-      // params.push(
-      //     <div className="ad-Controls-container">
-      //         <Control
-      //             name="Y Radius"
-      //             type="range"
-      //             min={ 0 }
-      //             max={ props.h }
-      //             step={ step }
-      //             value={ active.a.ry }
-      //             onChange={ (e) => props.setArcParam("ry", e) } />
-      //     </div>
-      // )
-      // params.push(
-      //     <div className="ad-Controls-container">
-      //         <Control
-      //             name="Rotation"
-      //             type="range"
-      //             min={ 0 }
-      //             max={ 360 }
-      //             step={ 1 }
-      //             value={ active.a.rot }
-      //             onChange={ (e) => props.setArcParam("rot", e) } />
-      //     </div>
-      // )
-      // params.push(
-      //     <div className="ad-Controls-container">
-      //         <Control
-      //             name="Large arc sweep flag"
-      //             type="checkbox"
-      //             checked={ active.a.laf }
-      //             onChange={ (e) => props.setArcParam("laf", e) } />
-      //     </div>
-      // )
-      // params.push(
-      //     <div className="ad-Controls-container">
-      //         <Control
-      //             name="Sweep flag"
-      //             type="checkbox"
-      //             checked={ active.a.sf }
-      //             onChange={ (e) => props.setArcParam("sf", e) } />
-      //     </div>
-      // )
-    }
 
     const sections = this.sections.map(section => {
 

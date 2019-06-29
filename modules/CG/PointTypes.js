@@ -3,7 +3,6 @@
 import ControlGroup from './_ControlGroup.js';
 import Listener from '../Listener.js';
 import { Button, Range, CheckBox } from './_Components.js';
-import { Line } from '../CORE.js';
 
 /**
  * @typedef {import('../Editor').State} State
@@ -24,7 +23,12 @@ export default class PointTypes extends ControlGroup {
     this.id = 'pointTypes';
     this.selector = `#${this.id}`;
 
-    this.setPointType = 'setPointType';
+    this.OPTIONS = {
+      POINTYPES: 'pointTypes',
+      ARCTYPE: 'arcTypes',
+      FLAG: 'flag',
+      CLOSEPATH: 'closePath',
+    };
 
     this.setState = props.setState;
     this.getState = props.getState;
@@ -35,48 +39,101 @@ export default class PointTypes extends ControlGroup {
     return [
       new Listener({
         type: 'click',
-        callback: this.handleClick,
+        callback: this.handleButtonClick,
+        cgId: this.selector,
+        keys: null
+      }),
+      new Listener({
+        type: 'ondragstart',
+        callback: this.handleInputDrag,
+        cgId: this.selector,
+        keys: null
+      }),
+      new Listener({
+        type: 'mouseup',
+        callback: this.handleClicks,
         cgId: this.selector,
         keys: null
       })
     ];
   }
 
-
-  handleClick = (e) => {
+  
+  handleInputDrag = (e) => {
     /**@type {State} */
     const { lines, activePointIndex, activeLineIndex } = this.getState();
     const activeLine = lines[activeLineIndex];
     const activePoint = activeLine.points[activePointIndex];
 
     /**@type {HTMLElement} */
-    const pointOptions = e.target.closest(`[data-action="${this.setPointType}"]`);
+    const type = e.target.closest(`[data-type]`);
 
-    if (pointOptions && pointOptions.dataset.value) {
-      this.CORE.setPointType(pointOptions.dataset.value);
+    if (type) {
+      /**@type {string} - {"laf"|"sf"|"rot"|"rx"|"ry"} */
+      const action = type.dataset.action ? type.dataset.action : '';
+
+      switch (type.dataset.type) {
+        case this.OPTIONS.ARCTYPE:
+          this.CORE.setArcParam({
+            lines,
+            activePoint,
+            action,
+            value: e.target.value
+          });
+          break;
+
+        default:
+          console.log(`Hello World!`);
+          break;
+      }
     }
+  }
 
-    const toggleClose = e.target.closest('[data-action="closePath"]');
 
-    if (toggleClose) {
-      this.toggleClosePath();
-    }
-
-    //refactor this
-    const laf = e.target.closest('[data-action="laf"]');
-    if(laf) {
-      this.CORE.setArcParam({ lines, activePoint, value:'laf' });
-    }
-
-    const sf = e.target.closest('[data-action="sf"]');
-    if(sf) {
-      console.log('sf');
-      this.CORE.setArcParam({ lines, activePoint, value:'sf' });
-    }
+  handleClicks = (e) => {
+    /**@type {State} */
+    const { lines, activePointIndex, activeLineIndex } = this.getState();
+    const activeLine = lines[activeLineIndex];
+    const activePoint = activeLine.points[activePointIndex];
 
     /**@type {HTMLElement} */
+    const type = e.target.closest(`[data-type]`);
+
+    if (type) {
+      /**@type {string} - {"laf"|"sf"|"rot"|"rx"|"ry"} */
+      const action = type.dataset.action ? type.dataset.action : '';
+      const value = type.dataset.value; //boolean or number
+
+      switch (type.dataset.type) {
+        case this.OPTIONS.ARCTYPE:
+          this.CORE.setArcParam({
+            lines,
+            activePoint,
+            action,
+            value: e.target.value
+          });
+          break;
+        case this.OPTIONS.CLOSEPATH:
+          this.toggleClosePath();
+          break;
+        case this.OPTIONS.FLAG:
+          this.CORE.setArcParam({ lines, activePoint, action });
+          break;
+        case this.OPTIONS.POINTYPES:
+          this.CORE.setPointType(value); //checked or no
+          break;
+
+        default:
+          console.log(`Hello World!`);
+          break;
+      }
+    }
+  }
+
+
+  handleButtonClick = () => {
+    /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
-    // console.dir(buttonClick);
 
     if (buttonClick) {
       switch (buttonClick.dataset.action) {
@@ -113,7 +170,7 @@ export default class PointTypes extends ControlGroup {
    * @returns {string} HTML to render
    */
   render = (state) => {
-    const { lines, activeLineIndex, activePointIndex } = state;
+    const { lines, activeLineIndex, activePointIndex, grid, w, h } = state;
 
     // must have a line
     if (lines.length > 0) {
@@ -145,9 +202,11 @@ export default class PointTypes extends ControlGroup {
 
       const choices = options.map(c => {
         return `
-        <input data-action="${this.setPointType}" type="radio" name="points" data-value="${ c.value }" ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
+        <input data-type="${this.OPTIONS.POINTYPES}" type="radio" name="points" data-value="${ c.value }" ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
         <label class="choices-label" for="">${ c.name }</label>   `;
       }).join('');
+
+      // const step = grid.snap ? grid.size : 1;
 
       return this.wrapper({
         title: this.name,
@@ -161,7 +220,7 @@ export default class PointTypes extends ControlGroup {
 
             <div class="control-row">
               ${CheckBox({
-                action: 'closePath',
+                dataType: this.OPTIONS.CLOSEPATH,
                 value: activeLine.closePath,
                 name: 'Close Path'
               })}
@@ -170,20 +229,58 @@ export default class PointTypes extends ControlGroup {
             ${pointType == 'a' ? 
             `<div class="control-row">
               ${CheckBox({
-                action: 'laf',
-                value: activePoint.a.laf,
+                dataType: this.OPTIONS.FLAG,
+                dataAction: 'laf',
+                value: activePoint.a.laf, //0|1
                 name: 'Large Sweep',
                 info:'Determines if the arc should be greater than or less than 180 degrees; direction arc will travel around circle.'
               })}
               ${CheckBox({
-                action: 'sf',
-                value: activePoint.a.sf,
+                dataType: this.OPTIONS.FLAG,
+                dataAction: 'sf',
+                value: activePoint.a.sf, //0|1
                 name: 'Sweep',
                 info: 'Should arc begin moving at positive angles or negative ones.'
               })}
-            </div>`
+            </div>
+
+            <div class="control-row">
+              ${Range({
+                dataType: this.OPTIONS.ARCTYPE,
+                dataAction: 'rx',
+                value: activePoint.a.rx,
+                name: 'X Radius',
+                min: 0,
+                max: w,
+                step: grid.size,
+              })}
+            </div>
+            <div class="control-row">
+            ${Range({
+              dataType: this.OPTIONS.ARCTYPE,
+              dataAction: 'ry',
+              value: activePoint.a.ry,
+              name: 'Y Radius',
+              min: 0,
+              max: h,
+              step: grid.size,
+            })}
+            </div>
+            <div class="control-row">
+            ${Range({
+              dataType: this.OPTIONS.ARCTYPE,
+              dataAction: 'rot',
+              value: activePoint.a.rot,
+              name: 'Rotation',
+              min: 0,
+              max: 360,
+              step: 1,
+            })}
+            </div>
+            `
             : ''
             }
+            
             
             <div class="control-row">
             Press Meta and click to add Point
@@ -206,7 +303,6 @@ export default class PointTypes extends ControlGroup {
           </div>
         `
       });
-
     }
   }
 }
