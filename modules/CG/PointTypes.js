@@ -131,7 +131,7 @@ export default class PointTypes extends ControlGroup {
   }
 
 
-  handleButtonClick = () => {
+  handleButtonClick = (event) => {
     /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
 
@@ -288,15 +288,15 @@ export default class PointTypes extends ControlGroup {
             </div>
             <div class="control-row button-row">
             ${Button({
-              action:'removePoint',
+              dataAction:'removePoint',
               name:'Remove Point',
             })}
             ${Button({
-              action:'undoPoint',
+              dataAction:'undoPoint',
               name:'Undo Remove',
             })}
             ${Button({
-              action: 'resetPoint',
+              dataAction: 'resetPoint',
               name: 'Reset Point'
             })}
             </div>  
