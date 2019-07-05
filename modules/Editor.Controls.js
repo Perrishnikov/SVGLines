@@ -283,7 +283,7 @@ class Section {
    * @param {object} props 
    * @param {string} props.title
    * @param {string} props.icon
-   * @param {Array<import('./CG/_ControlGroup').default>} props.controlGroups
+   * @param {Array<import('./CG/.ControlGroup').default>} props.controlGroups
    */
   constructor(props) {
     this.title = props.title;

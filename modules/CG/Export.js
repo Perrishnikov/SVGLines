@@ -1,8 +1,8 @@
 //@ts-check
 
-import ControlGroup from './_ControlGroup.js';
+import ControlGroup from './.ControlGroup.js';
 import Listener from '../Listener.js';
-import { Button, CheckBox } from './_Components.js';
+import { Button, CheckBox } from './.Components.js';
 
 /**
  * @typedef {import('../Editor').State} State
