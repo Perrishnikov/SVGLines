@@ -1,66 +1,66 @@
 //@ts-check
 
 
-function Grid(props) {
-  // console.log(props);
-  const { show, snap, size, numbers } = props.grid;
-  const { h, w } = props;
+// function Grid(props) {
+//   // console.log(props);
+//   const { show, snap, size, numbers } = props.grid;
+//   const { h, w } = props;
 
-  // let grid = [];
-  let grid = '';
-  let text = '';
+//   // let grid = [];
+//   let grid = '';
+//   let text = '';
 
-  if (show) {
-    for (let i = 1; i < (w / size); i++) {
-      grid +=
-        `<line
-            class="grid_line"
-            x1="${i * size }"
-            y1="0"
-            x2="${i * size }"
-            y2="${h}"/>
-          `;
+//   if (show) {
+//     for (let i = 1; i < (w / size); i++) {
+//       grid +=
+//         `<line
+//             class="grid_line"
+//             x1="${i * size }"
+//             y1="0"
+//             x2="${i * size }"
+//             y2="${h}"/>
+//           `;
 
-      if (numbers) {
-        text +=
-          `<text x="${i*size}" y="10" class="small">${i*size}</text>`;
-      }
+//       if (numbers) {
+//         text +=
+//           `<text x="${i*size}" y="10" class="small">${i*size}</text>`;
+//       }
 
-    }
+//     }
 
-    for (let i = 1; i < (h / size); i++) {
-      grid +=
-        `<line
-          class="grid_line"
-          x1="0"
-          y1="${i * size}"
-          x2="${w}"
-          y2="${i * size}"/>
-        `;
+//     for (let i = 1; i < (h / size); i++) {
+//       grid +=
+//         `<line
+//           class="grid_line"
+//           x1="0"
+//           y1="${i * size}"
+//           x2="${w}"
+//           y2="${i * size}"/>
+//         `;
 
-      if (numbers) {
-        text +=
-          `<text x="10" y="${i*size}" class="small">${i*size}</text>`;
-      }
+//       if (numbers) {
+//         text +=
+//           `<text x="10" y="${i*size}" class="small">${i*size}</text>`;
+//       }
 
-    }
+//     }
 
 
-    // grid.push(
-    //     <line
-    //         x1={ 0 }
-    //         y1={ i * size }
-    //         x2={ props.w }
-    //         y2={ i * size } />
-    // );
-  }
-  return `
-    <g class="grid ${!show ? ' is-hidden"' : ''}">
-      ${grid}
-      ${text}
-    </g>
-  `;
-}
+//     // grid.push(
+//     //     <line
+//     //         x1={ 0 }
+//     //         y1={ i * size }
+//     //         x2={ props.w }
+//     //         y2={ i * size } />
+//     // );
+//   }
+//   return `
+//     <g class="grid ${!show ? ' is-hidden"' : ''}">
+//       ${grid}
+//       ${text}
+//     </g>
+//   `;
+// }
 
 
 // Controls stuff
@@ -264,4 +264,4 @@ function Checkbox(props) {
 //     `;
 // }
 
-export { Grid, Control, Checkbox, Choices };
+export { Control, Checkbox, Choices };

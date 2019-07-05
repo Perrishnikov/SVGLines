@@ -87,6 +87,8 @@ export default class CanvasSettings extends ControlGroup {
       this.validate.isLessThan(newWidth, 6) &&
       this.validate.isGreaterThan(newWidth, 2)
     ) {
+      console.log(`newWidth: ${newWidth}`);
+      console.log(`newHeight: ${newHeight}`);
       this.setState({
         h: newHeight,
         w: newWidth,

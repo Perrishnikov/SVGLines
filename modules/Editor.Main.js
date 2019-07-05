@@ -1,7 +1,6 @@
 //@ts-check
 
 import Listener from './Listener.js';
-import { Grid } from './Editor.Components.js';
 
 
 export default class Main {
@@ -50,6 +49,57 @@ export default class Main {
   }
 
 
+  Grid = (width) => {
+    const { h } = this.getState(); //dont use State width, use modified version
+    const {size, numbers, show} = this.getState().grid;
+
+    let grid = '';
+    let text = '';
+
+    // if (show) {
+    for (let i = 1; i < (width / size); i++) {
+      grid +=
+        `<line
+              class="grid_line"
+              x1="${i * size }"
+              y1="0"
+              x2="${i * size }"
+              y2="${h}"/>
+            `;
+
+      if (numbers) {
+        text +=
+          `<text x="${i*size}" y="10" class="small">${i*size}</text>`;
+      }
+    }
+
+    for (let i = 1; i < (h / size); i++) {
+      grid +=
+        `<line
+            class="grid_line"
+            x1="0"
+            y1="${i * size}"
+            x2="${width}"
+            y2="${i * size}"/>
+          `;
+
+      if (numbers) {
+        text +=
+          `<text x="10" y="${i*size}" class="small">${i*size}</text>`;
+      }
+
+    }
+
+    // }
+    return `
+      <g class="grid ${!show ? ' is-hidden"' : ''}">
+        ${grid}
+        ${text}
+      </g>
+    `;
+  }
+
+
   /**
    * Render this on every State change
    * @param {object} props
@@ -57,15 +107,18 @@ export default class Main {
    * @returns {string}
    */
   render = (props) => {
-    const { w, h, activePointIndex, activeLineIndex } = props.state;
-    const grid = Grid(props.state);
-    const lines = props.state.lines;
+    const { w, h, activePointIndex, activeLineIndex, grid } = props.state;
 
+    const lines = props.state.lines;
+    const width = parseInt(w.toString()) + 300;
+
+    // console.log(`width: ${width}`);
     return `
-    <div style="min-height:${h}px; min-width:${w + 300}px" id="main" class="main_wrap">
+    <div style="min-height:${h}px; min-width:${width}px" id="main" class="main_wrap">
       
-      <svg class="ad-SVG" width="${w +300}" height="${h}">
-      ${grid}
+      <svg class="ad-SVG" width="${width}" height="${h}">
+      
+      ${grid.show ? this.Grid(width): ''}
 
       ${lines.map((line, index) => {
         let al = activeLineIndex == index ? true : false; //if the line matches, we are halfway there. Still need to match point index
@@ -84,4 +137,3 @@ export default class Main {
   }
 
 }
-

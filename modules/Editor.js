@@ -344,7 +344,7 @@ export default class Editor {
  * @property {string} name
  * @property {number} w
  * @property {number} h
- * @property {{snap: boolean, size: number,show: boolean}} grid
+ * @property {{snap: boolean, size: number,show: boolean, numbers:boolean}} grid
  * @property {Array<*>} lineRules
  * @property {string} lineStartingBasis
  */

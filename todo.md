@@ -1,7 +1,7 @@
 [x] adjust size of canvas
 [ ] export json. Options: tags, ids, meta, etc
 [ ] add background image. move and scale image.
-[ ] active line styling
+[ ] active line styling https://css-tricks.com/change-color-of-svg-on-hover/
 [ ] list of all lines
 
 [ ] canvas overflow
