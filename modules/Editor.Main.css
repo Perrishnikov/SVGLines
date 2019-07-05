@@ -27,10 +27,9 @@
 }
 .ad-Point {
     cursor: grab;
-    fill: var(--color-dark);
-    stroke: var(--color-dark);
-    /* stroke-width: 4px; */
-    transition: fill .2s;
+    fill: var(--color-3-comp);
+    
+    /* transition: fill .2s; */
     z-index: 10;
 }
 .ad-Point:hover,
@@ -38,7 +37,9 @@
     fill: var(--color-3);
 }
 .ad-PointGroup--first .ad-Point {
-    stroke: var(--color-3);
+    /* stroke: var(--color-3-comp); */
+    stroke: var(--color-dark);
+    stroke-width: 2px;
 }
 .ad-Anchor {
     opacity: .5;

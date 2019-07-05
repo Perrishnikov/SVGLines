@@ -29,7 +29,7 @@ export default class Controls {
       LINES: 'lines',
       SETTINGS: 'settings',
       HELP: 'help',
-      ACTIVE: 'settings',
+      ACTIVE: 'line',
       TAG_TO_DELETE: ''
     };
 

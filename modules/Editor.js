@@ -339,7 +339,7 @@ export default class Editor {
  * @property {boolean} shift
  * @property {number} activeLineIndex 
  * @property {number} activePointIndex  
- * @property {Line[]} lines
+ * @property {import('./CORE').Line[]} lines
  * @property {Array<string>} tags
  * @property {string} name
  * @property {number} w

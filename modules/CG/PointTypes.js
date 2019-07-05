@@ -8,6 +8,8 @@ import { Button, Range, CheckBox } from './_Components.js';
  * @typedef {import('../Editor').State} State
  * @typedef {import('../CORE').PointType} PointType
  * @typedef {import('../CORE').CORE} CORE
+ * @typedef {import('../CORE').Line} Line
+ * @typedef {import('../CORE').Point} Point
  */
 export default class PointTypes extends ControlGroup {
   /**
@@ -164,6 +166,61 @@ export default class PointTypes extends ControlGroup {
   }
 
 
+  getArc = ({ activePoint, grid, w, h }) => {
+    return `
+    <div class="control-row">
+      ${CheckBox({
+        dataType: this.OPTIONS.FLAG,
+        dataAction: 'laf',
+        value: activePoint.a.laf ? activePoint.a.laf : 0, //0|1
+        name: 'Large Sweep',
+        info:'Determines if the arc should be greater than or less than 180 degrees; direction arc will travel around circle.'
+      })}
+      ${CheckBox({
+        dataType: this.OPTIONS.FLAG,
+        dataAction: 'sf',
+        value: activePoint.a.sf ? activePoint.a.sf : 0, //0|1
+        name: 'Sweep',
+        info: 'Should arc begin moving at positive angles or negative ones.'
+      })}
+    </div>
+
+    <div class="control-row">
+      ${Range({
+        dataType: this.OPTIONS.ARCTYPE,
+        dataAction: 'rx',
+        value: activePoint.a.rx,
+        name: 'X Radius',
+        min: 0,
+        max: w,
+        step: grid.size,
+      })}
+    </div>
+    <div class="control-row">
+      ${Range({
+        dataType: this.OPTIONS.ARCTYPE,
+        dataAction: 'ry',
+        value: activePoint.a.ry,
+        name: 'Y Radius',
+        min: 0,
+        max: h,
+        step: grid.size,
+      })}
+    </div>
+    <div class="control-row">
+      ${Range({
+        dataType: this.OPTIONS.ARCTYPE,
+        dataAction: 'rot',
+        value: activePoint.a.rot,
+        name: 'Rotation',
+        min: 0,
+        max: 360,
+        step: 1,
+      })}
+    </div>
+    `;
+
+  }
   /**
    * param {object} props
    * @param {State} state
@@ -175,20 +232,24 @@ export default class PointTypes extends ControlGroup {
     // must have a line
     if (lines.length > 0) {
 
+      /**@type {Line} */
       const activeLine = lines[activeLineIndex];
+      /**@type {Point} */
       const activePoint = activeLine.points[activePointIndex];
+      console.log(activeLine);
+      console.log(activePoint);
 
       /**@type {PointType} */
       let pointType = 'l'; //default
 
       if (activePoint.q) {
-        // console.log(`Hello Active Q`);
+        console.log(`Hello Active Q`);
         pointType = 'q';
       } else if (activePoint.c) {
-        // console.log(`Hello Active C!`);
+        console.log(`Hello Active C!`);
         pointType = 'c';
       } else if (activePoint.a) {
-        // console.log(`Hello Active A!`);
+        console.log(`Hello Active A!`);
         pointType = 'a';
       }
 
@@ -200,63 +261,11 @@ export default class PointTypes extends ControlGroup {
         { name: 'A', value: 'a', checked: pointType == 'a' }
       ];
 
-      const arc = `
-      <div class="control-row">
-        ${CheckBox({
-          dataType: this.OPTIONS.FLAG,
-          dataAction: 'laf',
-          value: activePoint.a.laf, //0|1
-          name: 'Large Sweep',
-          info:'Determines if the arc should be greater than or less than 180 degrees; direction arc will travel around circle.'
-        })}
-        ${CheckBox({
-          dataType: this.OPTIONS.FLAG,
-          dataAction: 'sf',
-          value: activePoint.a.sf, //0|1
-          name: 'Sweep',
-          info: 'Should arc begin moving at positive angles or negative ones.'
-        })}
-      </div>
-
-      <div class="control-row">
-        ${Range({
-          dataType: this.OPTIONS.ARCTYPE,
-          dataAction: 'rx',
-          value: activePoint.a.rx,
-          name: 'X Radius',
-          min: 0,
-          max: w,
-          step: grid.size,
-        })}
-      </div>
-      <div class="control-row">
-        ${Range({
-          dataType: this.OPTIONS.ARCTYPE,
-          dataAction: 'ry',
-          value: activePoint.a.ry,
-          name: 'Y Radius',
-          min: 0,
-          max: h,
-          step: grid.size,
-        })}
-      </div>
-      <div class="control-row">
-        ${Range({
-          dataType: this.OPTIONS.ARCTYPE,
-          dataAction: 'rot',
-          value: activePoint.a.rot,
-          name: 'Rotation',
-          min: 0,
-          max: 360,
-          step: 1,
-        })}
-      </div>
-      `;
 
       const choices = options.map(c => {
         return `
-        <input data-type="${this.OPTIONS.POINTYPES}" type="radio" name="points" data-value="${ c.value }" ${ c.checked ? 'checked' : ''} id="" class="form-radio-points">
-        <label class="choices-label" for="">${ c.name }</label>   `;
+        <input data-type="${this.OPTIONS.POINTYPES}" type="radio" name="points" data-value="${ c.value }" ${ c.checked ? 'checked' : ''} id="" class="form-radio-points" ${activePointIndex === 0 && c.value !== 'l' ?' disabled' : ''}>
+        <label class="choices-label">${ c.name }</label>   `;
       }).join('');
 
       // const step = grid.snap ? grid.size : 1;
@@ -279,7 +288,7 @@ export default class PointTypes extends ControlGroup {
               })}
             </div>
             
-            ${pointType == 'a' ? arc : ''}
+            ${pointType === 'a' ? this.getArc({activePoint, grid, w, h}) : ''}
             
             <div class="control-row">
             Press Meta and click to add Point

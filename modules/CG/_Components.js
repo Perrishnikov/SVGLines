@@ -5,13 +5,14 @@
  * @param {object} props 
  * @param {string} props.dataAction
  * @param {string} props.name
+ * @param {string} [props.info] - tooltip
  * @returns {string}
  */
 export function Button(props) {
-  const { dataAction, name } = props;
+  const { dataAction, name, info = null } = props;
 
   return `
-  <button data-action="${dataAction}"
+  <button ${info ? `data-tooltip="${info}"` : ''} data-action="${dataAction}"
     class="control-button">
     ${ name }
   </button>
