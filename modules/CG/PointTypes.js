@@ -236,20 +236,20 @@ export default class PointTypes extends ControlGroup {
       const activeLine = lines[activeLineIndex];
       /**@type {Point} */
       const activePoint = activeLine.points[activePointIndex];
-      console.log(activeLine);
-      console.log(activePoint);
+      // console.log(activeLine);
+      // console.log(activePoint);
 
       /**@type {PointType} */
       let pointType = 'l'; //default
 
       if (activePoint.q) {
-        console.log(`Hello Active Q`);
+        // console.log(`Hello Active Q`);
         pointType = 'q';
       } else if (activePoint.c) {
-        console.log(`Hello Active C!`);
+        // console.log(`Hello Active C!`);
         pointType = 'c';
       } else if (activePoint.a) {
-        console.log(`Hello Active A!`);
+        // console.log(`Hello Active A!`);
         pointType = 'a';
       }
 
