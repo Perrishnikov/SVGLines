@@ -1,5 +1,5 @@
 //@ts-check
-import ControlGroup from './_ControlGroup.js';
+import ControlGroup from './xControlGroup.js';
 import Listener from '../Listener.js';
 import { Icon_Check } from '../../icons/index.js';
 

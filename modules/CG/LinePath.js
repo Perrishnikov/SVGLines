@@ -1,8 +1,8 @@
 //@ts-check
 
-import ControlGroup from './_ControlGroup.js';
+import ControlGroup from './xControlGroup.js';
 import Listener from '../Listener.js';
-import { Button, Range, CheckBox } from './_Components.js';
+import { Button, Range, CheckBox } from './xComponents.js';
 
 /**
  * @typedef {import('../Editor').State} State
@@ -87,7 +87,7 @@ export default class LinePath extends ControlGroup {
 
         <div class="control-row">
         ${Button({
-          action: 'copyPath',
+          dataAction: 'copyPath',
           name: 'Copy Path'
         })}
         </div>

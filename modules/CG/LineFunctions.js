@@ -1,6 +1,6 @@
 //@ts-check
 
-import ControlGroup from './.ControlGroup.js';
+import ControlGroup from './xControlGroup.js';
 import Listener from '../Listener.js';
 import { Button } from './xComponents.js';
 
@@ -85,15 +85,15 @@ export default class LineFunctions extends ControlGroup {
       html: `
       <div class="control-row button-row">
         ${Button({
-          action:'removeLine',
+          dataAction:'removeLine',
           name:'Remove Line',
         })}
         ${Button({
-          action:'undoLine',
+          dataAction:'undoLine',
           name:'Undo Remove',
         })}
         ${Button({
-          action: 'resetLine',
+          dataAction: 'resetLine',
           name: 'Reset Line'
         })}
       </div>

@@ -1,6 +1,6 @@
 //@ts-check
 
-import ControlGroup from './.ControlGroup.js';
+import ControlGroup from './xControlGroup.js';
 import Listener from '../Listener.js';
 import { Button, Range, CheckBox } from './xComponents.js';
 
