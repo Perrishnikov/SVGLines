@@ -2,7 +2,7 @@
 
 import ControlGroup from './.ControlGroup.js';
 import Listener from '../Listener.js';
-import { Button, Range, CheckBox } from './_Components.js';
+import { Button, Range, CheckBox } from './xComponents.js';
 
 /**
  * @typedef {import('../Editor').State} State

@@ -2,7 +2,7 @@
 
 import ControlGroup from './.ControlGroup.js';
 import Listener from '../Listener.js';
-import { Button } from './_Components.js';
+import { Button } from './xComponents.js';
 
 /**
  * @typedef {import('../CORE').CORE} CORE
