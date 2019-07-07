@@ -170,6 +170,7 @@ export default class TagManager extends ControlGroup {
     const cleanedTags = tags.filter(tag => tag !== target);
 
     const cleanedLines = lines.map(line => {
+      if(!line.tags) line.tags = [];
 
       //remove the removed Tag from all Lines
       const filteredTags = line.tags.filter(tag => tag !== target);
