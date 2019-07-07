@@ -62,10 +62,14 @@ export default class LinePath extends ControlGroup {
   render = (state) => {
     // Insert the variables here
     const activeLine = state.lines[state.activeLineIndex];
+    let path = '';
 
-    const path = `d="${this.CORE.generatePath(
-      activeLine.points, activeLine.closePath
-      )}"`;
+    if (activeLine) {
+      path = `d="${this.CORE.generatePath(
+        activeLine.points, activeLine.closePath
+        )}"`;
+    }
+    
 
     return this.wrapper({
       title: this.name,
