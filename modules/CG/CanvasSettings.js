@@ -159,6 +159,15 @@ export default class CanvasSettings extends ControlGroup {
         })}
         </div>
 
+        <div class="control-row">
+        ${CheckBox({
+          dataType: 'exportOptions',
+          dataAction: '',
+          value: '',
+          name: 'TODO: Show grid'
+        })}
+        </div>
+
         <div class="control-row button-row">
           ${Button({
             dataAction: this.C.updateCanvas,

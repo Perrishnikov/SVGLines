@@ -35,9 +35,9 @@ export default class Export extends ControlGroup {
     this.CHOICES = ['JSON', 'String']; //or String
 
     this.OPTIONS = {
-      EXPORT_ID: { id: 'exportID', value: 1, name: 'Export ID\'s' },
-      EXPORT_TAG: { id: 'exportTag', value: 1, name: 'Export Tags' },
-      EXPORT_Z: { id: 'exportZ', value: 1, name: 'Export Z' }
+      EXPORT_ID: { id: 'exportID', value: 1, name: 'Export ID\'s (JSON)' },
+      EXPORT_TAG: { id: 'exportTag', value: 1, name: 'Export Tags (JSON)' },
+      EXPORT_Z: { id: 'exportZ', value: 1, name: 'Export Z (JSON)' }
     };
   }
 

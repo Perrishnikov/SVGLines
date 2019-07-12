@@ -14,6 +14,12 @@
     "size": 50,
     "numbers": true
   },
+  "background":{
+    "imagePath": "url(\"../icons/lizard.jpeg\");",
+    "position": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-position",
+    "repeat": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-repeat",
+    "size": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-size"
+  },
   "lineStartingBasis": "0001",
   "lineRules": [{
       "id": "verifyUniqueId",
