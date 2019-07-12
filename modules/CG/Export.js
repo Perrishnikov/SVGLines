@@ -32,7 +32,13 @@ export default class Export extends ControlGroup {
     /**@type {Number} */
     this.toggleNumber = 0; //used for toggle     
     /**@type {Array<String>} */
-    this.choices = ['JSON', 'String']; //or String
+    this.CHOICES = ['JSON', 'String']; //or String
+
+    this.OPTIONS = {
+      EXPORT_ID: { id: 'exportID', value: 1, name: 'Export ID\'s' },
+      EXPORT_TAG: { id: 'exportTag', value: 1, name: 'Export Tags' },
+      EXPORT_Z: { id: 'exportZ', value: 1, name: 'Export Z' }
+    };
   }
 
   /**
@@ -52,12 +58,15 @@ export default class Export extends ControlGroup {
   }
 
   handleClick = (e) => {
-    /**@type {HTMLElement} */
+    /**
+     * JSON or string toggle
+     * @type {HTMLElement} 
+     */
     const toggleContainer = e.target.closest('#toggle-container');
 
     if (toggleContainer) {
 
-      //toggle the choice index
+      //toggle the choice [string | JSON] index
       this.toggleNumber = this.toggleNumber === 0 ? 1 : 0;
 
       [...toggleContainer.children].forEach(kid => {
@@ -71,6 +80,28 @@ export default class Export extends ControlGroup {
       });
     }
 
+    /**
+     * Export options
+     * @type {HTMLElement} 
+     */
+    const option = e.target.closest(`[data-type="exportOptions"]`);
+
+    if (option) {
+
+      switch (option.dataset.action) {
+        case this.OPTIONS.EXPORT_ID.id:
+          this.OPTIONS.EXPORT_ID.value = this.OPTIONS.EXPORT_ID.value === 0 ? 1 : 0;
+          break;
+        case this.OPTIONS.EXPORT_TAG.id:
+          this.OPTIONS.EXPORT_TAG.value = this.OPTIONS.EXPORT_TAG.value === 0 ? 1 : 0;
+          break;
+        case this.OPTIONS.EXPORT_Z.id:
+          this.OPTIONS.EXPORT_Z.value = this.OPTIONS.EXPORT_Z.value === 0 ? 1 : 0;
+          break;
+        default:
+          '';
+      }
+    }
 
     /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
@@ -78,7 +109,7 @@ export default class Export extends ControlGroup {
     if (buttonClick) {
       switch (buttonClick.dataset.action) {
         case 'export':
-          this.export(this.choices[this.toggleNumber]);
+          this.export(this.CHOICES[this.toggleNumber]);
           break;
         default:
           console.error('Couldnt find button');
@@ -88,10 +119,35 @@ export default class Export extends ControlGroup {
 
   export = (choice) => {
     let source = '';
+    let lines = this.getState().lines;
+
+    //Filter out id's if unchecked
+    if (!this.OPTIONS.EXPORT_ID.value) {
+      lines.map(line => {
+        delete line.id;
+        return line;
+      });
+    }
+
+    //Filter out tags if unchecked
+    if (!this.OPTIONS.EXPORT_TAG.value) {
+      lines.map(line => {
+        delete line.tags;
+        return line;
+      });
+    }
+
+    //Filter out z if unchecked
+    if (!this.OPTIONS.EXPORT_Z.value) {
+      lines.map(line => {
+        delete line.z;
+        return line;
+      });
+    }
 
     console.log(`choice: ${choice}`);
     if (choice === 'JSON') {
-      source = JSON.stringify(this.getState().lines, null, ' ');
+      source = JSON.stringify(lines, null, ' ');
       // console.log(source);
     } else if (choice === 'String') {
       source = document.querySelector('.ad-SVG').innerHTML;
@@ -99,11 +155,11 @@ export default class Export extends ControlGroup {
 
     /** Write the Pipeified text to the source box and copy it to clipboard */
     navigator.clipboard.writeText(source)
-    .then(function() {
-      /* clipboard successfully set */
-    }, function() {
-      /* clipboard write failed */
-    });
+      .then(function() {
+        /* clipboard successfully set */
+      }, function() {
+        /* clipboard write failed */
+      });
   }
 
 
@@ -121,9 +177,30 @@ export default class Export extends ControlGroup {
     `;
 
     const jsonOptions = `
-    <div class="control-row button-row">
-        <p>json; grid</p>
-    </div> 
+      <div class="control-row">
+      ${CheckBox({
+        dataType: 'exportOptions',
+        dataAction: this.OPTIONS.EXPORT_ID.id,
+        value: this.OPTIONS.EXPORT_ID.value,
+        name: this.OPTIONS.EXPORT_ID.name,
+      })}
+      </div>
+      <div class="control-row">
+      ${CheckBox({
+        dataType: 'exportOptions',
+        dataAction: this.OPTIONS.EXPORT_TAG.id,
+        value: this.OPTIONS.EXPORT_TAG.value,
+        name: this.OPTIONS.EXPORT_TAG.name
+      })}
+      </div>
+      <div class="control-row">
+      ${CheckBox({
+        dataType: 'exportOptions',
+        dataAction: this.OPTIONS.EXPORT_Z.id,
+        value: this.OPTIONS.EXPORT_Z.value,
+        name: this.OPTIONS.EXPORT_Z.name
+      })}
+      </div>
     `;
 
     return this.wrapper({
@@ -136,7 +213,7 @@ export default class Export extends ControlGroup {
           
           <div id="exportContainer">
             <div class="inner-container">
-              ${this.choices.map(choice => {
+              ${this.CHOICES.map(choice => {
                 return `
                 <div class="toggle">
                   <p>${choice}</p>
@@ -146,7 +223,7 @@ export default class Export extends ControlGroup {
             </div>
             
             <div class="inner-container" id="toggle-container">
-              ${this.choices.map((choice, index) => {
+              ${this.CHOICES.map((choice, index) => {
                 return `
                 <div data-value="${index === this.toggleNumber ? 'active' : ''}" class="toggle">
                   <p>${choice}</p>
@@ -159,7 +236,7 @@ export default class Export extends ControlGroup {
           
         </div>
 
-        ${this.choices[this.toggleNumber] === 'String' ? stringOptions : jsonOptions}
+        ${this.CHOICES[this.toggleNumber] === 'String' ? stringOptions : jsonOptions}
 
         <div class="control-row button-row">
         ${Button({

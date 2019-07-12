@@ -23,7 +23,7 @@ export function Button(props) {
 /**
  * 
  * @param {object} props 
- * @param {string} props.dataType - data-${type} (Category)
+ * @param {string} props.dataType - added to DOM "data-${type}" (Category)
  * @param {string} [props.dataAction] - data-${action}
  * @param {0|1|boolean} props.value - checked er no 
  * @param {string} props.name - label DOM
