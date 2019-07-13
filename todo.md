@@ -1,8 +1,12 @@
 [x] adjust size of canvas
 [x] export json. Options: tags, ids, meta, etc
+[ ] move active Section to global state
 [ ] add background image. move and scale image.
+  transparency range
 [ ] active line styling https://css-tricks.com/change-color-of-svg-on-hover/
 [ ] list of all lines
+[ ] Grid size and toggle
+
 
 [ ] canvas overflow
 [ ] scale canvas

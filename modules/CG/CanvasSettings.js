@@ -136,13 +136,13 @@ export default class CanvasSettings extends ControlGroup {
       <div class="control">
 
         <div class="tag-row">
-          <div style="line-height:24px" data-action="${this.C.canvasHeight}" class="line-tag" contenteditable="true" >${h}</div>
-          <label> Canvas Height : ${h}px</label>
+            <div style="line-height:24px" data-action="${this.C.canvasWidth}" class="line-tag" contenteditable="true" >${w}</div>
+            <label> Canvas Width : ${w}px </label>
         </div>
 
         <div class="tag-row">
-          <div style="line-height:24px" data-action="${this.C.canvasWidth}" class="line-tag" contenteditable="true" >${w}</div>
-          <label> Canvas Width : ${w}px </label>
+          <div style="line-height:24px" data-action="${this.C.canvasHeight}" class="line-tag" contenteditable="true" >${h}</div>
+          <label> Canvas Height : ${h}px</label>
         </div>
 
         <div id="${this.C.canvasErrorMess}" class="tag-row">

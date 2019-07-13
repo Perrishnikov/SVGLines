@@ -6,8 +6,6 @@
   "draggedCubic": false,
   "activePointIndex": 1,
   "activeLineIndex": 0,
-  "edit_w": 1000,
-  "edit_h": 600,
   "grid": {
     "snap": true,
     "show": true,
@@ -15,7 +13,7 @@
     "numbers": true
   },
   "background":{
-    "imagePath": "url(\"../icons/lizard.jpeg\");",
+    "imagePath": "url(\"../icons/sl map.jpg\");",
     "position": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-position",
     "repeat": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-repeat",
     "size": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-size"

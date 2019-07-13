@@ -1,12 +1,15 @@
-.ad-SVG{
-  background-image: url("../icons/lizard.jpeg");
-}
 .main_wrap {
-    overflow: scroll;
-    /* position: fixed; */
-    /* min-width: 1900px; */
-    /*Overwritten in */
-    /* min-height: 1200px; */
+  /* margin:0;
+  padding:0; */
+  overflow: scroll;
+}
+.ad-SVG{
+  background-image: url("../icons/slmap.jpg");
+  background-size: cover;
+}
+
+.filler{
+  min-width: 300px;
 }
 .grid {
     /* fill: none; */

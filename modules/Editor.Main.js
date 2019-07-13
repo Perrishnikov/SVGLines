@@ -110,11 +110,13 @@ export default class Main {
     const { w, h, activePointIndex, activeLineIndex, grid } = props.state;
 
     const lines = props.state.lines;
-    const width = parseInt(w.toString()) + 300;
+    const cpWidth = 300;
+    const width = parseInt(w.toString());
 
     // console.log(`width: ${width}`);
+    // <div style="min-height:${h}px; min-width:${width}px" 
     return `
-    <div style="min-height:${h}px; min-width:${width}px" id="main" class="main_wrap">
+    <div id="main" style="min-width:${width + cpWidth}px" class="main_wrap">
       
       <svg class="ad-SVG" width="${width}" height="${h}">
       
@@ -132,7 +134,9 @@ export default class Main {
       }).join('')}
 
       </svg>
+      <div style="min-width:${cpWidth}px"></div>
     </div>
+    
     `;
   }
 
