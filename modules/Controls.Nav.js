@@ -1,5 +1,5 @@
 //@ts-check
-import Listener from './Listener.js';
+import {Listener, LISTENERS} from './Listener.js';
 
 /**
  * @typedef {import('./Editor.Controls').LocalState["ACTIVE"]} Active
@@ -21,11 +21,15 @@ export default class Nav {
   /**
    * Creates the Single Navigation Element
    * @param {object} props 
-   * @param {Active} props.active
+   * param {*} props.active
+   * @param {function} props.setActive
    * @param {Sections} props.sections
    */
   constructor(props) {
-    this.ACTIVE = props.active;
+    // this.ACTIVE = props.active;
+    
+    // this.getActive = props.getActive;
+    this.setActive = props.setActive;
     this.sections = props.sections;
     this.NAV = 'nav'; // <nav data-action="nav"></nav>
     this.SELECTOR = `[data-action="${this.NAV}"]`; //for listener
@@ -39,7 +43,7 @@ export default class Nav {
   listeners() {
 
     return new Listener({
-      type: 'click',
+      type: LISTENERS.CLICK,
       callback: this.handleNavClick.bind(this),
       cgId: '#nav',
       keys: null
@@ -47,7 +51,7 @@ export default class Nav {
   }
 
 
-  /**@param {} e */
+  /**@param {HTMLElementEventMap} e */
   handleNavClick(e) {
 
     const taggedAncestor = e.target.closest('div[data-action=nav]');
@@ -58,18 +62,17 @@ export default class Nav {
 
     if (nav) {
       /** @type {LocalState['HELP']} */
-      // const value = e.target.dataset.value;
-      // console.log(`${this.NAV}: data-value: ${value}`);
+      const value = e.target.dataset.value;
+      console.log(`${this.NAV}: data-value: ${value}`);
 
       if (taggedAncestor) {
         activateThisIcon(dataset.value);
         showThisSection(dataset.value);
 
         //Important to update localState...
-        this.ACTIVE = dataset.value;
+        this.setActive({ACTIVE: dataset.value});
       }
     }
-
 
   }
 

@@ -1,7 +1,7 @@
 //@ts-check
 
 import ControlGroup from './xControlGroup.js';
-import Listener from '../Listener.js';
+import {Listener, LISTENERS} from '../Listener.js';
 
 /**
  * @typedef {import('../Editor').State} State
@@ -39,7 +39,7 @@ export default class LineID extends ControlGroup {
   listeners = () => {
     return [
       new Listener({
-        type: 'keydown',
+        type: LISTENERS.KEYDOWN,
         callback: this.updateLineId,
         cgId: this.selector,
         keys: ['Enter'],

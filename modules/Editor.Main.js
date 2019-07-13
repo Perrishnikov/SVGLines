@@ -1,6 +1,6 @@
 //@ts-check
 
-import Listener from './Listener.js';
+import {Listener, LISTENERS} from './Listener.js';
 
 
 export default class Main {
@@ -11,37 +11,38 @@ export default class Main {
     this.CORE = editor.CORE;
     this.setState = editor.setState;
     this.getState = editor.getState;
-    this.id = 'main';
+    this.name = 'main';
+    this.id = `#${this.name}`;
 
     editor.registerListener([
       new Listener({
-        type: 'keydown',
+        type: LISTENERS.KEYDOWN,
         callback: this.CORE.handleKeyDown,
-        cgId: '#main',
+        cgId: this.id,
         keys: ['Alt', 'Shift', 'Meta'],
       }),
       new Listener({
-        type: 'keyup',
+        type: LISTENERS.KEYUP,
         callback: this.CORE.handleKeyUp,
-        cgId: '#main',
+        cgId: this.id,
         keys: null,
       }),
       new Listener({
-        type: 'mouseup',
+        type: LISTENERS.MOUSEUP,
         callback: this.CORE.cancelDragging,
-        cgId: '#main',
+        cgId: this.id,
         keys: null
       }),
       new Listener({
-        type: 'mousedown',
+        type: LISTENERS.MOUSEDOWN,
         callback: this.CORE.handleMousedown,
-        cgId: '#main',
+        cgId: this.id,
         keys: null
       }),
       new Listener({
-        type: 'mousemove',
+        type: LISTENERS.MOUSEMOVE,
         callback: this.CORE.handleMousemove,
-        cgId: '#main',
+        cgId: this.id,
         keys: null
       })
     ]);

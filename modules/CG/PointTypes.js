@@ -1,7 +1,7 @@
 //@ts-check
 
 import ControlGroup from './xControlGroup.js';
-import Listener from '../Listener.js';
+import {Listener, LISTENERS} from '../Listener.js';
 import { Button, Range, CheckBox } from './xComponents.js';
 
 /**
@@ -40,19 +40,19 @@ export default class PointTypes extends ControlGroup {
   listeners = () => {
     return [
       new Listener({
-        type: 'click',
+        type: LISTENERS.CLICK,
         callback: this.handleButtonClick,
         cgId: this.selector,
         keys: null
       }),
       new Listener({
-        type: 'ondragstart',
+        type: LISTENERS.ONDRAGSTART,
         callback: this.handleInputDrag,
         cgId: this.selector,
         keys: null
       }),
       new Listener({
-        type: 'mouseup',
+        type: LISTENERS.MOUSEUP,
         callback: this.handleClicks,
         cgId: this.selector,
         keys: null

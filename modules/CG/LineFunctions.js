@@ -1,7 +1,7 @@
 //@ts-check
 
 import ControlGroup from './xControlGroup.js';
-import Listener from '../Listener.js';
+import {Listener, LISTENERS} from '../Listener.js';
 import { Button } from './xComponents.js';
 
 /**
@@ -35,7 +35,7 @@ export default class LineFunctions extends ControlGroup {
    */
   listeners() {
     return new Listener({
-      type: 'click',
+      type: LISTENERS.CLICK,
       callback: this.handleClick.bind(this),
       cgId: '#lineFunctions',
       keys: null

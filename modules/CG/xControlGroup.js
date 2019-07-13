@@ -2,7 +2,7 @@
 /**
  * @typedef {import('../Editor.Controls').LocalState["ACTIVE"]} Active
  * @typedef {import('../Editor').State} State
- * @typedef {import('../Listener').default} Listener
+ * @typedef {import('../Listener').Listener} Listener
  */
 
 export default class ControlGroup {

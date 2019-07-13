@@ -1,7 +1,7 @@
 //@ts-check
 
 import ControlGroup from './xControlGroup.js';
-import Listener from '../Listener.js';
+import {Listener, LISTENERS} from '../Listener.js';
 import { Icon_Delete, Icon_ThumbsUp, Icon_ThumbsDown } from '../../icons/index.js';
 
 /**
@@ -43,19 +43,19 @@ export default class TagManager extends ControlGroup {
   listeners() {
     return [
       new Listener({
-        type: 'click',
+        type: LISTENERS.CLICK,
         callback: this.handleClick,
         cgId: this.selector,
         keys: null
       }),
       new Listener({
-        type: 'keydown',
+        type: LISTENERS.KEYDOWN,
         callback: this.handleKeyDown,
         cgId: this.selector,
         keys: ['Enter'],
       }),
       new Listener({
-        type: 'focusin',
+        type: LISTENERS.FOCUSIN,
         callback: this.focusIn,
         cgId: this.selector,
         keys: null

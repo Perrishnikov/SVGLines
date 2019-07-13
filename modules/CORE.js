@@ -223,7 +223,7 @@ export class CORE {
    */
   getMouseCoords = (e) => {
     const { grid } = this.getState();
-    const rect = document.querySelector(`#${this.mainId}`);
+    const rect = document.querySelector(this.mainId);
     const top = rect.getBoundingClientRect().top;
 
     if (e) {

@@ -1,6 +1,7 @@
 {
   "ctrl": false,
   "shift": false,
+  "sectionActive": null,
   "draggedPoint": false,
   "draggedQuadratic": false,
   "draggedCubic": false,

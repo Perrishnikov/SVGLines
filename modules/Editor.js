@@ -353,5 +353,5 @@ export default class Editor {
  * Misc
  * typedef {HTMLElement} Element
  * typedef {{x:number,y:number}} Coords
- * @typedef {import('./Listener').default} Listener
+ * @typedef {import('./Listener').Listener} Listener
  */

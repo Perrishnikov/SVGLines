@@ -1,7 +1,7 @@
 //@ts-check
 
 import ControlGroup from './xControlGroup.js';
-import Listener from '../Listener.js';
+import {Listener, LISTENERS} from '../Listener.js';
 import { Button, Range, CheckBox } from './xComponents.js';
 
 /**
@@ -41,7 +41,7 @@ export default class LinePath extends ControlGroup {
   listeners = () => {
     return [
       new Listener({
-        type: 'click',
+        type: LISTENERS.CLICK,
         callback: this.handleClick, //dont need to bid
         cgId: this.selector, //or key - dont need both
         keys: null

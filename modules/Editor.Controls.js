@@ -144,7 +144,9 @@ export default class Controls {
      * Then register the event handler for Nav
      */
     this.nav = new Nav({
-      active: this.localState.ACTIVE,
+      // active: this.localState.ACTIVE,
+      // getActive: this.getLocalState().ACTIVE,
+      setActive: this.setLocalState,
       sections: this.sections
     });
     editor.registerListener(this.nav.listeners());
@@ -157,7 +159,9 @@ export default class Controls {
   }
 
   setLocalState = (obj) => {
+    console.log(`Hello World!`);
     this.localState = Object.assign({}, this.localState, obj);
+    console.log(this.localState);
   }
 
   // handleGenerateLineId() {
@@ -252,23 +256,21 @@ export default class Controls {
    * @param {import('./Editor').State} props.state
    */
   render = (props) => {
-    const { h, grid, } = props.state;
+    // const { h, grid, } = props.state;
 
     // const step = grid.snap ? grid.size : 1;
 
-
     const sections = this.sections.map(section => {
-
       // Sections are in Controls.Wrappers
       return section.render({
-        active: this.localState.ACTIVE,
+        active: this.getLocalState().ACTIVE,
         state: props.state
       });
     }).join('');
 
     return `
     <div id="controls" class="controls_wrap">
-      ${this.nav.render(this.localState.ACTIVE)}
+      ${this.nav.render(this.getLocalState().ACTIVE)}
       ${sections}
     </div>
     

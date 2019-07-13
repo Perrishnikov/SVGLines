@@ -1,7 +1,7 @@
 //@ts-check
 
-import ControlGroup from './_ControlGroup.js';
-import Listener from '../Listener.js';
+import ControlGroup from './xControlGroup.js';
+import {Listener, LISTENERS} from '../Listener.js';
 
 /**
  * @typedef {import('../Editor').State} State
@@ -22,8 +22,8 @@ export default class Template extends ControlGroup {
     super();
     this.wrapper = super.wrapper;
     this.name = 'TODO:';
-    this.id = 'TODO:';
-    this.selector = `#${this.id}`;
+    this.id = `#${this.id}`;
+    // this.selector = `#${this.id}`;
 
     this.setState = props.setState;
     this.getState = props.getState;
@@ -37,16 +37,16 @@ export default class Template extends ControlGroup {
   listeners = () => {
     return [
       new Listener({
-        type: 'click',
+        type: LISTENERS.CLICK,
         callback: this.handleClick, //dont need to bid
-        cgId: this.selector, //or key - dont need both
+        cgId: this.id, //or key - dont need both
         keys: null
       }),
     ];
   }
 
   handleClick = (e) => {
-    console.log(`Replace ${this.selector} click`);
+    console.log(`Replace ${this.id} click`);
   }
 
 

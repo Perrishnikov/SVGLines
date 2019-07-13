@@ -1,6 +1,6 @@
 //@ts-check
 import ControlGroup from './xControlGroup.js';
-import Listener from '../Listener.js';
+import {Listener, LISTENERS} from '../Listener.js';
 import { Icon_Check } from '../../icons/index.js';
 
 /**
@@ -34,7 +34,7 @@ export default class TagLine extends ControlGroup {
    */
   listeners() {
     return new Listener({
-      type: 'click',
+      type: LISTENERS.CLICK,
       callback: this.handleClick.bind(this),
       cgId: '#tagLine',
       keys: null
