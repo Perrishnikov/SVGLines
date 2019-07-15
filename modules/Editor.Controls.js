@@ -158,10 +158,9 @@ export default class Controls {
     return Object.assign({}, this.localState);
   }
 
+  /**@param {object} obj */
   setLocalState = (obj) => {
-    console.log(`Hello World!`);
     this.localState = Object.assign({}, this.localState, obj);
-    console.log(this.localState);
   }
 
   // handleGenerateLineId() {
@@ -278,14 +277,14 @@ export default class Controls {
   }
 }
 
-
+/** @type {SECTION} */
 class Section {
   /**
    * Sections do not get listeners() - just Control Groups
    * @param {object} props 
-   * @param {string} props.title
-   * @param {string} props.icon
-   * @param {Array<import('./CG/xControlGroup').default>} props.controlGroups
+   * @param {Title} props.title
+   * @param {Icon} props.icon
+   * @param {ControlGroups} props.controlGroups
    */
   constructor(props) {
     this.title = props.title;
@@ -323,4 +322,13 @@ class Section {
 
 /**
  * @typedef {{LINE:string, LINES:string,  SETTINGS:string, HELP:string, ACTIVE:string, TAG_TO_DELETE:string }} LocalState
+ * 
+ * @typedef {Array<import('./CG/xControlGroup').default>} ControlGroups
+ * @typedef {string} Title
+ * @typedef {string} Icon
+ * 
+ * @typedef {object} SECTION
+ * @prop {Title} title
+ * @prop {Icon} icon
+ * @prop {ControlGroups} controlGroups
  */

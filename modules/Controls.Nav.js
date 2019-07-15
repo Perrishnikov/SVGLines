@@ -3,7 +3,7 @@ import {Listener, LISTENERS} from './Listener.js';
 
 /**
  * @typedef {import('./Editor.Controls').LocalState["ACTIVE"]} Active
- * @typedef {import('./Editor.Controls').Sections} Sections
+ * @typedef {import('./Editor.Controls').SECTION} Section
  * @typedef {import('./Editor.Controls').LocalState} LocalState
  * @typedef {import('./Editor.Controls').Icon} Icon
  * @typedef {import('./Editor.Controls').Title} Title
@@ -13,7 +13,7 @@ import {Listener, LISTENERS} from './Listener.js';
 /**
  * @typedef {object} This
  * @property {Active} ACTIVE
- * @property {Sections} sections
+ * @property {Array<Section>} sections
  * @property {NAV} nav
  * @property {string} SELECTOR
  */
@@ -23,7 +23,7 @@ export default class Nav {
    * @param {object} props 
    * param {*} props.active
    * @param {function} props.setActive
-   * @param {Sections} props.sections
+   * @param {Array<Section>} props.sections
    */
   constructor(props) {
     // this.ACTIVE = props.active;
@@ -51,19 +51,20 @@ export default class Nav {
   }
 
 
-  /**@param {HTMLElementEventMap} e */
+  /**@param {Event} e */
   handleNavClick(e) {
-
+    // const t = e.target.
     const taggedAncestor = e.target.closest('div[data-action=nav]');
     const dataset = e.target.dataset;
+    
     // console.log(taggedAncestor);
     // console.log(dataset);
     const nav = e.target.closest('#nav');
 
     if (nav) {
-      /** @type {LocalState['HELP']} */
-      const value = e.target.dataset.value;
-      console.log(`${this.NAV}: data-value: ${value}`);
+      /** type {LocalState['HELP']} */
+      // const value = e.target.dataset.value;
+      // console.log(`${this.NAV}: data-value: ${value}`);
 
       if (taggedAncestor) {
         activateThisIcon(dataset.value);

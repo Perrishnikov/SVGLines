@@ -4,7 +4,7 @@
 [ ] add background image. move and scale image.
   transparency range
   scale with viewport
-[ ] active line styling https://css-tricks.com/change-color-of-svg-on-hover/
+[ ] active (and non) line styling https://css-tricks.com/change-color-of-svg-on-hover/
 [ ] list of all lines
 [ ] Grid size and toggle in settings
 
