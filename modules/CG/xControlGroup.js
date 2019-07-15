@@ -29,8 +29,8 @@ export default class ControlGroup {
    * 
    * @param {object} props 
    * @param {string} props.html
-   * @param {string} props.title
-   * @param {string} props.id
+   * @param {string} props.title - friendly title
+   * @param {string} props.id - no #
    */
   wrapper(props) {
     const {html, title, id} = props;

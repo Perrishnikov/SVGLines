@@ -22,13 +22,14 @@ export class Listener {
 export const LISTENERS = {
   KEYDOWN: 'keydown',
   KEYUP: 'keyup',
+  KEYPRESS: 'keypress',
   CLICK: 'click',
   FOCUSIN: 'focusin',
   MOUSEUP: 'mouseup',
   MOUSEDOWN: 'mousedown',
   MOUSEMOVE: 'mousemove',
-  ONDRAGSTART: 'ondragstart',
-  ONCHANGE: 'onchange'
+  DRAGSTART: 'dragstart',
+  INPUT: 'input'
 };
 
 /**

@@ -45,6 +45,7 @@ export default class Template extends ControlGroup {
     ];
   }
 
+  /**@param {Event} e */
   handleClick = (e) => {
     console.log(`Replace ${this.id} click`);
   }

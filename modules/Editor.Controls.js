@@ -10,6 +10,7 @@ import LineID from './CG/LineID.js';
 import Export from './CG/Export.js';
 import LinePath from './CG/LinePath.js';
 import CanvasSettings from './CG/CanvasSettings.js';
+import  BackgroundImage from './CG/BackgroundImage.js';
 
 
 export default class Controls {
@@ -52,9 +53,6 @@ export default class Controls {
       setState: this.setState,
       getLocalState: this.getLocalState,
       setLocalState: this.setLocalState,
-      // addGlobalTag: editor.addGlobalTag,
-      // removeGlobalTag: editor.removeGlobalTag,
-      // updateGlobalTag: editor.updateGlobalTag,
     });
 
     const cg_tagManager = new TagManager({
@@ -62,9 +60,6 @@ export default class Controls {
       getState: this.getState,
       getLocalState: this.getLocalState,
       setLocalState: this.setLocalState,
-      // addGlobalTag: editor.addGlobalTag,
-      // removeGlobalTag: editor.removeGlobalTag,
-      // updateGlobalTag: editor.updateGlobalTag,
     });
 
     const cg_pointTypes = new PointTypes({
@@ -76,7 +71,6 @@ export default class Controls {
     const cg_export = new Export({
       setState: this.setState,
       getState: this.getState,
-      // CORE: this.editor.CORE,
     });
 
     const cg_linePath = new LinePath({
@@ -91,7 +85,10 @@ export default class Controls {
       validate: this.validate,
     });
 
-
+    const cg_backgroundImage = new BackgroundImage({
+      setState: this.setState,
+      getState: this.getState,
+    })
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -119,6 +116,7 @@ export default class Controls {
         title: this.localState.SETTINGS,
         icon: Icon_Settings(),
         controlGroups: [
+          cg_backgroundImage,
           cg_export,
           cg_canvasSettings,
         ],

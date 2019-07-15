@@ -2,6 +2,7 @@
 import Controls from './Editor.Controls.js';
 import Main from './Editor.Main.js';
 import { CORE } from './CORE.js';
+import { LISTENERS } from './Listener.js';
 
 /**
  * Validate
@@ -120,15 +121,15 @@ export default class Editor {
       /**@type {Listener} */
       const { type, callback, cgId } = listener;
 
-      if (['keydown', 'keypress', 'keyup'].includes(type)) {
+      if ([LISTENERS.KEYDOWN, LISTENERS.KEYPRESS, LISTENERS.KEYUP].includes(type)) {
 
         if (listener.keys) {
           keypressTypes.add(type);
           keyListeners.push(listener);
 
-        } else if (type === 'keyup') {
+        } else if (type === LISTENERS.KEYUP) {
 
-          document.addEventListener('keyup', event => {
+          document.addEventListener(type, event => {
             // console.log(`Hello World!`);
             return callback(event);
           });
@@ -137,12 +138,17 @@ export default class Editor {
           console.error(`Keys required for cgId '${listener.cgId}'`);
         }
 
-      } else if (['click', 'focusin', 'mouseup', 'mousedown', 'mousemove', 'ondragstart'].includes(type)) {
-        // @ts-ignore
+      } else if ([
+          LISTENERS.CLICK,
+          LISTENERS.FOCUSIN,
+          LISTENERS.MOUSEUP,
+          LISTENERS.MOUSEDOWN,
+          LISTENERS.MOUSEMOVE
+        ].includes(type)) {
         document.addEventListener(type, event => {
           /**@type {HTMLElement} */
           const cg = event.target.closest(cgId);
-
+          // console.log(`cgId:${cgId}`);
           //if the closeset location finds this id, go.
           if (cg) {
             return callback(event);
@@ -150,6 +156,23 @@ export default class Editor {
 
         });
 
+      } else if ([
+          LISTENERS.DRAGSTART,
+          LISTENERS.INPUT
+        ].includes(type)) {
+
+        document.querySelector(cgId)
+        // console.dir(eleventElement);
+        .addEventListener(type, event => {
+          // console.log(event);
+          /**@type {HTMLElement} */
+          const cg = event.target.closest(cgId);
+          //if the closeset location finds this id, go.
+          if (cg) {
+            return callback(event);
+          }
+
+        });
       } else {
         console.error(`Error on Event for '${listener.type}'`);
       }

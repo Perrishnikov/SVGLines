@@ -46,7 +46,7 @@ export default class PointTypes extends ControlGroup {
         keys: null
       }),
       new Listener({
-        type: LISTENERS.ONDRAGSTART,
+        type: LISTENERS.DRAGSTART,
         callback: this.handleInputDrag,
         cgId: this.selector,
         keys: null
@@ -61,6 +61,7 @@ export default class PointTypes extends ControlGroup {
   }
 
 
+  /**@param {Event} e */
   handleInputDrag = (e) => {
     /**@type {State} */
     const { lines, activePointIndex, activeLineIndex } = this.getState();
@@ -90,15 +91,14 @@ export default class PointTypes extends ControlGroup {
       }
     }
   }
-
-
+ 
+  /**@param {Event} e */
   handleClicks = (e) => {
     /**@type {State} */
     const { lines, activePointIndex, activeLineIndex } = this.getState();
     const activeLine = lines[activeLineIndex];
     const activePoint = activeLine.points[activePointIndex];
 
-    /**@type {HTMLElement} */
     const type = e.target.closest(`[data-type]`);
 
     if (type) {
