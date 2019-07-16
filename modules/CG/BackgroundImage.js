@@ -130,6 +130,8 @@ export default class BackgroundImage extends ControlGroup {
   handleClick = (e) => {
     /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
+    const action = e.target.closest(`[data-action]`);
+    const dataset = action.dataset;
 
     if (buttonClick) {
       switch (buttonClick.dataset.action) {
@@ -139,6 +141,13 @@ export default class BackgroundImage extends ControlGroup {
         default:
           console.error('Couldnt find button');
       }
+    } else if (dataset.action == 'showBgImage') {
+      /**@type {State} */
+      const { background } = this.getState();
+
+      background.show = !background.show;
+      this.setState({ background });
+      // console.dir(type);
     }
   }
 
@@ -165,6 +174,16 @@ export default class BackgroundImage extends ControlGroup {
           dataAction:'addImage',
           name:'Add Image',
           info: 'Not Implemented'
+        })}
+        </div>
+
+        <div class="control-row">
+        ${CheckBox({
+          dataType: 'show',
+          dataAction: 'showBgImage',
+          value: background.show,
+          name: 'Show Background Image',
+          info:'Do you want to see the background image?'
         })}
         </div>
 
