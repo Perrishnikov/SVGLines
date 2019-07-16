@@ -131,7 +131,7 @@ export default class BackgroundImage extends ControlGroup {
     /**@type {HTMLElement} */
     const buttonClick = event.target.closest('button');
     const action = e.target.closest(`[data-action]`);
-    const dataset = action.dataset;
+    const dataset = action ? action.dataset : null;
 
     if (buttonClick) {
       switch (buttonClick.dataset.action) {
