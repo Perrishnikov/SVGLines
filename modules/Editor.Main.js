@@ -1,6 +1,6 @@
 //@ts-check
 
-import {Listener, LISTENERS} from './Listener.js';
+import { Listener, LISTENERS } from './Listener.js';
 
 
 export default class Main {
@@ -52,7 +52,7 @@ export default class Main {
 
   Grid = (width) => {
     const { h } = this.getState(); //dont use State width, use modified version
-    const {size, numbers, show} = this.getState().grid;
+    const { size, numbers, show } = this.getState().grid;
 
     let grid = '';
     let text = '';
@@ -101,6 +101,15 @@ export default class Main {
   }
 
 
+  setBackgroundImage(props) {
+    const { width, h, background } = props;
+    const { top, left, imagePath, opacity, } = background;
+
+    return `
+    <img style="background-size: cover; position:absolute; z-index: -5; opacity: ${opacity}; top:${top}px; left:${left}px; background-image:url(${imagePath}); background-color:black; background-blend-mode: normal;" width="${width}px" height="${h}px">
+    `;
+  }
+
   /**
    * Render this on every State change
    * @param {object} props
@@ -108,7 +117,7 @@ export default class Main {
    * @returns {string}
    */
   render = (props) => {
-    const { w, h, activePointIndex, activeLineIndex, grid } = props.state;
+    const { w, h, activePointIndex, activeLineIndex, grid, background } = props.state;
 
     const lines = props.state.lines;
     const cpWidth = 300;
@@ -118,7 +127,8 @@ export default class Main {
     // <div style="min-height:${h}px; min-width:${width}px" 
     return `
     <div id="main" style="min-width:${width + cpWidth}px" class="main_wrap">
-      
+      ${background.show ? this.setBackgroundImage({width, h, background}) : ''}
+
       <svg class="ad-SVG" width="${width}" height="${h}">
       
       ${grid.show ? this.Grid(width): ''}

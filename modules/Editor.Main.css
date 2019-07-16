@@ -2,15 +2,17 @@
   /* margin:0;
   padding:0; */
   overflow: scroll;
+  position: relative;
 }
 .ad-SVG{
-  background-image: url("../icons/slmap.jpg");
-  background-size: cover;
+  /* background-image: url("../icons/slmap.jpg");
+  background-size: cover; */
+  /* z-index: 5; */
 }
 
-.filler{
+/* .filler{
   min-width: 300px;
-}
+} */
 .grid {
     /* fill: none; */
     stroke: var(--color-mdgray);

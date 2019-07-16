@@ -161,18 +161,17 @@ export default class Editor {
           LISTENERS.INPUT
         ].includes(type)) {
 
-        document.querySelector(cgId)
-        // console.dir(eleventElement);
-        .addEventListener(type, event => {
-          // console.log(event);
-          /**@type {HTMLElement} */
-          const cg = event.target.closest(cgId);
-          //if the closeset location finds this id, go.
-          if (cg) {
-            return callback(event);
-          }
+        document
+          // document.querySelector(cgId) -- Cant use tis because DOM gets nuked
+          .addEventListener(type, event => {
+            /**@type {HTMLElement} */
+            const cg = event.target.closest(cgId);
+            //if the closeset location finds this id, go.
+            if (cg) {
+              return callback(event);
+            }
 
-        });
+          });
       } else {
         console.error(`Error on Event for '${listener.type}'`);
       }
@@ -370,6 +369,7 @@ export default class Editor {
  * @property {{snap: boolean, size: number,show: boolean, numbers:boolean}} grid
  * @property {Array<*>} lineRules
  * @property {string} lineStartingBasis
+ * @property {{show: boolean, opacity: number, left: number, top: number, imagePath: string, size: string}} background
  */
 
 /**

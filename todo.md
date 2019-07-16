@@ -2,7 +2,8 @@
 [x] export json. Options: tags, ids, meta, etc
 [x] move active Section to global state
 [ ] add background image. move and scale image.
-  transparency range
+  x transparency range
+  x move
   scale with viewport
 [ ] active (and non) line styling https://css-tricks.com/change-color-of-svg-on-hover/
 [ ] list of all lines

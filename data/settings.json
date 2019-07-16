@@ -13,8 +13,12 @@
     "size": 50,
     "numbers": true
   },
-  "background":{
-    "imagePath": "url(\"../icons/sl map.jpg\");",
+  "background": {
+    "show": true,
+    "opacity": 1,
+    "left": 0,
+    "top": 0,
+    "imagePath": "../icons/slmap.jpg",
     "position": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-position",
     "repeat": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-repeat",
     "size": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-size"

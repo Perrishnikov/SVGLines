@@ -30,11 +30,17 @@ export default class BackgroundImage extends ControlGroup {
     this.getState = props.getState;
 
     this.OPTIONS = {
-      TRANSP: 'Transparency',
-      TRANSP_ID: '#bgImageTrans'
+      OPAC: 'Opacity',
+      OPAC_ID: 'bgImageOpac',
+      OPAC_SEL: '#bgImageOpac',
+      LEFT: 'X Axis',
+      LEFT_ID: 'bgImageX',
+      LEFT_SEL: '#bgImageX',
+      TOP: 'Y Axis',
+      TOP_ID: 'bgImageY',
+      TOP_SEL: '#bgImageY'
     };
 
-    this.bgImageAlpha = 1;
   }
 
   /**
@@ -53,39 +59,100 @@ export default class BackgroundImage extends ControlGroup {
       new Listener({
         type: LISTENERS.INPUT,
         callback: this.handleInput,
-        cgId: this.OPTIONS.TRANSP_ID,
+        cgId: this.OPTIONS.OPAC_SEL,
+        keys: null
+      }),
+      new Listener({
+        type: LISTENERS.INPUT,
+        callback: this.handleInput,
+        cgId: this.OPTIONS.LEFT_SEL,
+        keys: null
+      }),
+      new Listener({
+        type: LISTENERS.INPUT,
+        callback: this.handleInput,
+        cgId: this.OPTIONS.TOP_SEL,
         keys: null
       }),
     ];
   }
 
+
   /**@param {Event} e */
   handleInput = (e) => {
+    /**@type {State} */
+    const { background } = this.getState();
+    const action = e.target.closest(`[data-action]`);
+    const dataset = action.dataset.action;
+    const value = action.value;
 
-    const type = e.target.closest(`[data-type]`);
-
-    this.bgImageAlpha = type.value;
-
-    const svg = document.querySelector('.ad-SVG');
-    svg.setAttribute('style', `opacity: ${type.value}`);
-    // console.log(type.value);
-
-
+    switch (dataset) {
+      case this.OPTIONS.OPAC:
+        this.handleOpactiy(background, value);
+        break;
+      case this.OPTIONS.LEFT:
+        this.handleLeft(background, value);
+        break;
+      case this.OPTIONS.TOP:
+        this.handleTop(background, value);
+        break;
+      default:
+        break;
+    }
   }
+
+  handleTop(background, value) {
+    const main = document.querySelector('#main img');
+    main.style.top = value;
+
+    background.top = value;
+    this.setState({ background });
+  }
+
+  handleLeft(background, value) {
+    const main = document.querySelector('#main img');
+    main.style.left = value;
+
+    background.left = value;
+    this.setState({ background });
+  }
+
+  handleOpactiy(background, value) {
+    const main = document.querySelector('#main img');
+    main.style.opacity = value;
+
+    background.opacity = value;
+    this.setState({ background });
+  }
+
 
   /**@param {Event} e */
   handleClick = (e) => {
-    console.log(`Replace ${this.id} click`);
+    /**@type {HTMLElement} */
+    const buttonClick = event.target.closest('button');
+
+    if (buttonClick) {
+      switch (buttonClick.dataset.action) {
+        case 'addImage':
+          console.log('add Image');
+          break;
+        default:
+          console.error('Couldnt find button');
+      }
+    }
   }
 
+  addBackgroundImage() {
+    const { backgroundImage } = this.getState();
+  }
 
   /**
    * param {object} props
-   * @param {State} state
+   * @param {State} [state]
    * @returns {string} HTML to render
    */
   render = (state) => {
-    // Insert the variables here
+    const { background } = state;
 
     return this.wrapper({
       title: this.name,
@@ -97,19 +164,44 @@ export default class BackgroundImage extends ControlGroup {
         ${Button({
           dataAction:'addImage',
           name:'Add Image',
+          info: 'Not Implemented'
         })}
         </div>
 
         <div class="control-row">
           ${Range({
             dataType: 'bgImage',
-            dataAction: this.OPTIONS.TRANSP,
-            name: this.OPTIONS.TRANSP,
-            value: this.bgImageAlpha,
+            dataAction: this.OPTIONS.OPAC,
+            name: this.OPTIONS.OPAC,
+            value: background.opacity,
             min: 0,
             max: 1,
             step: .1,
-            id: 'bgImageTrans'
+            id: this.OPTIONS.OPAC_ID
+          })}
+        </div>
+        <div class="control-row">
+          ${Range({
+            dataType: 'bgImage',
+            dataAction: this.OPTIONS.LEFT,
+            name: this.OPTIONS.LEFT,
+            value: background.left,
+            min: -100,
+            max: 100,
+            step: 10,
+            id: this.OPTIONS.LEFT_ID
+          })}
+        </div>
+        <div class="control-row">
+          ${Range({
+            dataType: 'bgImage',
+            dataAction: this.OPTIONS.TOP,
+            name: this.OPTIONS.TOP,
+            value: background.top,
+            min: -100,
+            max: 100,
+            step: 10,
+            id: this.OPTIONS.TOP_ID
           })}
         </div>
       
