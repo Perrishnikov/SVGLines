@@ -21,9 +21,9 @@ export default class Template extends ControlGroup {
   constructor(props) {
     super();
     this.wrapper = super.wrapper;
-    this.name = 'TODO:';
-    this.id = `#${this.id}`;
-    // this.selector = `#${this.id}`;
+    this.name = 'TODO:'; //Friendly
+    this.id = ''; //camelCase
+    this.selector = `#${this.id}`;
 
     this.setState = props.setState;
     this.getState = props.getState;
@@ -39,7 +39,7 @@ export default class Template extends ControlGroup {
       new Listener({
         type: LISTENERS.CLICK,
         callback: this.handleClick, //dont need to bid
-        cgId: this.id, //or key - dont need both
+        cgId: this.selector, //or key - dont need both
         keys: null
       }),
     ];
@@ -48,6 +48,7 @@ export default class Template extends ControlGroup {
   /**@param {Event} e */
   handleClick = (e) => {
     console.log(`Replace ${this.id} click`);
+    throw new Error('Method not implemented.');
   }
 
 

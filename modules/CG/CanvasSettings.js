@@ -163,7 +163,7 @@ export default class CanvasSettings extends ControlGroup {
         ${CheckBox({
           dataType: 'exportOptions',
           dataAction: '',
-          value: '',
+          dataValue: '',
           name: 'TODO: Show grid'
         })}
         </div>

@@ -52,8 +52,7 @@ export default class Main {
 
   Grid = (width) => {
     const { h } = this.getState(); //dont use State width, use modified version
-    const { size, numbers, show } = this.getState().grid;
-
+    const { size, numbers, steps } = this.getState().grid;
     let grid = '';
     let text = '';
 
@@ -68,9 +67,9 @@ export default class Main {
               y2="${h}"/>
             `;
 
-      if (numbers) {
+      if (numbers && i % steps == 0) {
         text +=
-          `<text x="${i*size}" y="10" class="small">${i*size}</text>`;
+          `<text x="${i * size}" y="10" class="small">${i * size}</text>`;
       }
     }
 
@@ -84,16 +83,16 @@ export default class Main {
             y2="${i * size}"/>
           `;
 
-      if (numbers) {
+      if (numbers && i % steps == 0) {
         text +=
-          `<text x="10" y="${i*size}" class="small">${i*size}</text>`;
+          `<text x="10" y="${i * size}" class="small">${i * size}</text>`;
       }
 
     }
 
     // }
     return `
-      <g class="grid ${!show ? ' is-hidden"' : ''}">
+      <g class="grid ">
         ${grid}
         ${text}
       </g>

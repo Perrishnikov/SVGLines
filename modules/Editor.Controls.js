@@ -11,6 +11,7 @@ import Export from './CG/Export.js';
 import LinePath from './CG/LinePath.js';
 import CanvasSettings from './CG/CanvasSettings.js';
 import  BackgroundImage from './CG/BackgroundImage.js';
+import GridSettings from './CG/GridSettings.js';
 
 
 export default class Controls {
@@ -88,7 +89,14 @@ export default class Controls {
     const cg_backgroundImage = new BackgroundImage({
       setState: this.setState,
       getState: this.getState,
-    })
+    });
+
+    const cg_gridSettings = new GridSettings({
+      getState: this.getState,
+      setState: this.setState,
+      validate: this.validate,
+    });
+
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -116,6 +124,7 @@ export default class Controls {
         title: this.localState.SETTINGS,
         icon: Icon_Settings(),
         controlGroups: [
+          cg_gridSettings,
           cg_backgroundImage,
           cg_export,
           cg_canvasSettings,

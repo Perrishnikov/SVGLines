@@ -9,8 +9,8 @@ import { Button, Range, CheckBox } from './xComponents.js';
  */
 
 /**
- * //TODO: Replace Descriptions
- * @class 
+ * Editor.Main.js handles displaying the image
+ * @class BackgroundImage
  * @extends {ControlGroup}
  */
 export default class BackgroundImage extends ControlGroup {
@@ -101,6 +101,10 @@ export default class BackgroundImage extends ControlGroup {
     }
   }
 
+  /**  
+   * @param {State['background']} background
+   * @param {number} value
+   */
   handleTop(background, value) {
     const main = document.querySelector('#main img');
     main.style.top = value;
@@ -109,6 +113,10 @@ export default class BackgroundImage extends ControlGroup {
     this.setState({ background });
   }
 
+  /**  
+   * @param {State['background']} background
+   * @param {number} value
+   */
   handleLeft(background, value) {
     const main = document.querySelector('#main img');
     main.style.left = value;
@@ -117,6 +125,10 @@ export default class BackgroundImage extends ControlGroup {
     this.setState({ background });
   }
 
+  /**  
+   * @param {State['background']} background
+   * @param {number} value
+   */
   handleOpactiy(background, value) {
     const main = document.querySelector('#main img');
     main.style.opacity = value;
@@ -152,7 +164,8 @@ export default class BackgroundImage extends ControlGroup {
   }
 
   addBackgroundImage() {
-    const { backgroundImage } = this.getState();
+    /**@type {State} */
+    const { background } = this.getState();
   }
 
   /**

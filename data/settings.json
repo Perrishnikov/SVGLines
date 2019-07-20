@@ -11,11 +11,12 @@
     "snap": true,
     "show": true,
     "size": 50,
+    "steps": 5,
     "numbers": true
   },
   "background": {
     "show": true,
-    "opacity": 1,
+    "opacity": ".5",
     "left": 0,
     "top": 0,
     "imagePath": "./icons/slmap.jpg",

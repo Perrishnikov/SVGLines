@@ -7,7 +7,7 @@
   scale with viewport
 [ ] active (and non) line styling https://css-tricks.com/change-color-of-svg-on-hover/
 [ ] list of all lines
-[ ] Grid size and toggle in settings
+[x] Grid size and toggle in settings
 
 
 [ ] canvas overflow
