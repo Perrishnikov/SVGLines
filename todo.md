@@ -5,7 +5,7 @@
   x transparency range
   x move
   scale with viewport
-[ ] active (and non) line styling https://css-tricks.com/change-color-of-svg-on-hover/
+[ ] active (and non) line styling https://css-tricks.com/change-color-of-svg-on-hover/ use USE. Embed in export instead of css
 [ ] list of all lines
 [x] Grid size and toggle in settings
 [] data-id and data-tags not showing up in string
