@@ -43,6 +43,10 @@
 .ad-PointGroup.is-active .ad-Point {
     fill: var(--color-3);
 }
+.ad-Point:focus,
+.ad-PointGroup.is-active .ad-Point {
+    fill: black;
+}
 .ad-PointGroup--first .ad-Point {
     /* stroke: var(--color-3-comp); */
     stroke: var(--color-dark);

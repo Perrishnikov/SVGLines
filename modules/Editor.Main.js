@@ -56,7 +56,6 @@ export default class Main {
     let grid = '';
     let text = '';
 
-    // if (show) {
     for (let i = 1; i < (width / size); i++) {
       grid +=
         `<line
@@ -90,7 +89,6 @@ export default class Main {
 
     }
 
-    // }
     return `
       <g class="grid ">
         ${grid}
@@ -128,7 +126,7 @@ export default class Main {
     <div id="main" style="min-width:${width + cpWidth}px" class="main_wrap">
       ${background.show ? this.setBackgroundImage({width, h, background}) : ''}
 
-      <svg class="ad-SVG" width="${width}" height="${h}">
+      <svg viewBox="0 0 ${width + cpWidth} ${h}" class="ad-SVG">
       
       ${grid.show ? this.Grid(width): ''}
 
