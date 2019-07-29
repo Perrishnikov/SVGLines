@@ -170,7 +170,7 @@ console.log(newSize);
         </div>
         <div class="tag-row">
           <div style="line-height:24px" class="line-tag" id="${this.OPTIONS.GRIDSIZE_ID}" contenteditable="true" >${grid.size}</div>
-          <label> Size : ${grid.size}px</label>
+          <label> Grid Size : ${grid.size}px</label>
           
           ${Button({
             dataAction: this.OPTIONS.SET_GRIDSIZE,

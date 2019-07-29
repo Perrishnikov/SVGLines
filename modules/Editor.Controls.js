@@ -12,6 +12,7 @@ import LinePath from './CG/LinePath.js';
 import CanvasSettings from './CG/CanvasSettings.js';
 import  BackgroundImage from './CG/BackgroundImage.js';
 import GridSettings from './CG/GridSettings.js';
+import Info from './CG/Info.js';
 
 
 export default class Controls {
@@ -97,6 +98,11 @@ export default class Controls {
       validate: this.validate,
     });
 
+    const info = new Info({
+      setState: this.setState,
+      getState: this.getState,
+    });
+
     /**
      * SECTIONS
      * Make all the sections here. Place name in localState.
@@ -133,7 +139,9 @@ export default class Controls {
       new Section({
         title: this.localState.HELP,
         icon: Icon_Help(),
-        controlGroups: [],
+        controlGroups: [
+          info
+        ],
       })
     ];
 

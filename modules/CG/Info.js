@@ -2,33 +2,28 @@
 
 import ControlGroup from './xControlGroup.js';
 import {Listener, LISTENERS} from '../Listener.js';
-import { Button, Range, CheckBox } from './xComponents.js';
 
 /**
  * @typedef {import('../Editor').State} State
- * @typedef {import('../CORE').PointType} PointType
- * @typedef {import('../CORE').CORE} CORE
  */
+
 /**
- * @class LinePath
+
  * @extends {ControlGroup}
  */
-export default class LinePath extends ControlGroup {
+export default class Info extends ControlGroup {
   /**
    * @param {object} props
    * @param {function} props.setState
    * @param {function} props.getState
-   * @param {CORE} props.CORE
    */
   constructor(props) {
     super();
     this.wrapper = super.wrapper;
-    this.name = 'Line Path';
-    this.id = 'linePath';
+    this.name = 'Info'; //Friendly
+    this.id = 'info'; //camelCase
     this.selector = `#${this.id}`;
 
-
-    this.CORE = props.CORE;
     this.setState = props.setState;
     this.getState = props.getState;
   }
@@ -49,8 +44,10 @@ export default class LinePath extends ControlGroup {
     ];
   }
 
+  /**@param {Event} e */
   handleClick = (e) => {
-    console.log(`Replace ${this.selector} click`);
+    console.log(`Replace ${this.id} click`);
+    throw new Error('Method not implemented.');
   }
 
 
@@ -61,41 +58,28 @@ export default class LinePath extends ControlGroup {
    */
   render = (state) => {
     // Insert the variables here
-    const activeLine = state.lines[state.activeLineIndex];
-    let path = '';
-
-    if (activeLine) {
-      path = `d="${this.CORE.generatePath(
-        activeLine.points, activeLine.closePath
-        )}"`;
-    }
-    
 
     return this.wrapper({
       title: this.name,
       id: this.id,
       html: `
       <div class="control">
-      
+
         <div class="tag-row">
-          < ${path.toString()}/>          
+          What does this do?
+        <ul>
+        <li>Create SVG Lines cmd-shift-L</li>
+        <li>Add metadata to Lines</li>
+        <li>and/or</li>
+        <li>Create Points cmd-shift-P</li>
+        <li>Add metadata to Points</li>
+        <li>and/or</li>
+        <li>Create Relations between Points, Lines, and Points and Lines (M - M) cmd-shift-R</li>
+        <li>Export to string or json</li>
+        </ul>
+          <h1>Template</h1>
         </div>
-
-        <div class="control-row">
-          ${CheckBox({
-            dataType: null,
-            value: 1,
-            name: 'With Outer'
-          })}
-        </div>
-
-        <div class="control-row">
-        ${Button({
-          dataAction: 'copyPath',
-          name: 'Copy Path'
-        })}
-        </div>
-        
+      
       </div>
       `
     });

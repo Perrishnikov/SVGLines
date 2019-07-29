@@ -8,8 +8,15 @@
 [ ] active (and non) line styling https://css-tricks.com/change-color-of-svg-on-hover/
 [ ] list of all lines
 [x] Grid size and toggle in settings
+[] data-id and data-tags not showing up in string
+[] svg focus https://developer.mozilla.org/en-US/docs/Web/API/SVGElement 
+[] Create Points cmd-shift-P
+[] Create Relations cmd-shift-R
 
 
+
+[] Move closePath into CORE as 'Z' at the end...
+[] attr https://developer.mozilla.org/en-US/docs/Web/CSS/attr
 [ ] canvas overflow
 [ ] scale canvas
 [ ] styling options

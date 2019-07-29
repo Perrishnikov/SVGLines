@@ -366,10 +366,23 @@ export default class Editor {
  * @property {string} name
  * @property {number} w
  * @property {number} h
- * @property {{snap: boolean, size: number,show: boolean, numbers:boolean, steps:number}} grid
+ * @property {{
+ *  snap: boolean
+ *  size: number
+ *  show: boolean 
+ *  numbers:boolean
+ *  steps:number
+ * }} grid
  * @property {Array<*>} lineRules
  * @property {string} lineStartingBasis
- * @property {{show: boolean, opacity: number, left: number, top: number, imagePath: string, size: string}} background
+ * @property {{
+ *  show: boolean
+ *  opacity: number
+ *  left: number
+ *  top: number
+ *  imagePath: string
+ *  size: string
+ * }} background
  */
 
 /**
